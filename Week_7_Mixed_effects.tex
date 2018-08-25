@@ -1,0 +1,368 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+
+\documentclass{beamer}
+
+\mode<presentation> {
+
+% The Beamer class comes with a number of default slide themes
+% which change the colors and layouts of slides. Below this is a list
+% of all the themes, uncomment each in turn to see what they look like.
+
+%\usetheme{default}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{Dresden}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+% As well as themes, the Beamer class has a number of color themes
+% for any slide theme. Uncomment each of these in turn to see how it
+% changes the colors of your current slide theme.
+
+%\usecolortheme{albatross}
+%\usecolortheme{beaver}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%\usecolortheme{orchid}
+%\usecolortheme{rose}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+%\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+\usefonttheme{serif} 
+
+%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
+%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
+
+\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+}
+
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage[czech]{babel}
+\usepackage{lmodern}  
+\usepackage{rotating}
+\usepackage{scrextend}
+\usepackage{pifont}
+\usepackage{hyperref}
+\usepackage{bm}
+%
+\newcommand{\Rko}{\texttt{R~}} 
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[LME]{Praktikum z ekonometrie - Týden 7 \\Mixed effect models} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{VŠE Praha} % Your name
+\institute[4EK417] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+{
+% Your institution for the title page
+\medskip
+\textit{Tomáš Formánek} % Your email address
+}
+\date{} % Date, can be changed to a custom date
+
+\begin{document}
+
+\begin{frame}
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}
+\frametitle{Content} % Table of contents slide, comment this block out to remove it
+\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%---------------------------------------------------------------------
+\section{Introduction}
+\begin{frame}{Introduction}
+\textbf{Linear mixed model (LME)} is a generalization of linear model
+\medskip
+\begin{itemize}
+\item Standard linear model looks like:\\
+\medskip
+$y_i = \beta_0 + \beta_1 x_{i1} + \dots + \beta_k x_{ik} + \varepsilon_i$\\
+\medskip
+where $ 1 \leq i \leq n$, \\$\varepsilon_i$ are $iid$ normally distributed and uncorrelated with regressors.\\ 
+$\beta$-coefficients are considered fixed unknowns that must be
+estimated together with $\sigma^2$ (the variance of $\varepsilon$).
+\medskip
+\item In a mixed model, there are multiple groups (or panels or
+individuals) of observations. \\ \smallskip One or more $\beta$-coefficient can vary across groups (panels, individuals).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Introduction}
+\begin{itemize}
+\item Mixed models are called ``mixed'', because the $\beta$-coefficients are \\a mix of fixed parameters and random variables
+\smallskip 
+\begin{itemize}
+\item The terms ``fixed'' and ``random'' are being used in the statistics-biostatistics sense.
+\item A fixed coefficient is an unknown constant to be estimated.
+\item A random coefficient is one which varies from sample of groups to
+sample of groups.
+\end{itemize}
+\smallskip
+\item  LME models can have some added complexity:
+\smallskip
+\begin{itemize}
+\item Correlations between different random coefficients.
+\item Multiple levels of nesting withing the groups
+\end{itemize}
+\smallskip
+\item Random  coefficients are not estimated, but they can be predicted.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\section{LME model example}
+\begin{frame}{LME model example}
+\begin{itemize}
+\item Data: \\London Education Authority Junior School Project
+dataset, \\48 different schools ($i$) and 887 different students ($j$). \\We predict 5th-year math scores.
+\medskip
+\item We may start by simply ignoring the school grouping \\(\textit{single-mean} model):
+$$ y_{ij} = \beta_0~+~\varepsilon_{ij}, \qquad i=1,\dots,M, 
+   \qquad j=1,\dots, n_i, \qquad \varepsilon_{ij} \sim N(0,\sigma^2), $$
+
+where $y_{ij}$ is the observed $\texttt{math5}_{ij}$ score of $j$-th student at school $i$,\\
+$\beta_0$ is the mean math score across our population (being sampled).\\
+$\varepsilon_{ij}$ is the individual deviation from overall mean.\\
+\medskip
+In our sample, $M=48$ and $n_i$ may differ among schools.\\ 
+\medskip
+Population mean math score \& the variance of $\varepsilon$ are estimated by taking their sample counterparts.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LME model example - continued}
+\begin{itemize}
+\item The school effect (differences among schools) may be incorporated in the model by allowing the mean of each school to be represented by a separate parameter (\textit{fixed effect})
+$$ y_{ij} = \beta_{0i}~+~\varepsilon_{ij}, \qquad i=1,\dots,M, 
+   \qquad j=1,\dots, n_i, \qquad \varepsilon \sim N(0,\sigma^2), $$
+
+where $\beta_{0i}$ is the school-specific mean math score.\\
+$\varepsilon_{ij}$ is the individual deviation from the school-specific mean.\\
+\smallskip
+\begin{itemize}
+\item \Rko syntax: \texttt{lm(math5 $\sim$ School-1, data=...)}
+\item $M=48$ school-specific intercepts are estimated,
+\item \textbf{Estimated intercepts only model the specific sample}  of schools, while -usually- the main interest is in the population from which the sample was drawn.
+\item Regression does not provide an estimate of the between-school variability, which is also of central interest.
+\end{itemize}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LME model example - continued}
+\begin{itemize}
+\item \textit{Random effects} model can solve the above problems by treating the school effects as random variations around a population mean.
+\medskip
+\item \textit{Fixed effects} model can be reparametrized as: \\
+\smallskip
+$ y_{ij} = \beta_{0i} + \varepsilon_{ij}$ \\
+\smallskip
+$y_{ij} = \textcolor{orange}{\beta_0} + ( \beta_{0i} \textcolor{orange}{-\beta_0}) + \varepsilon_{ij}$\\
+\medskip
+\item Now, the \textit{random effect} $u_i$ can replace the the \textit{fixed effect} $\beta_{0i}\,$:\\
+\medskip
+$\beta_{0i} = \beta_0 + u_i ~~~ \Rightarrow ~~~ u_i = \beta_{0i} - \beta_0.$\\ 
+\medskip
+$u_i$ is the school-specific deviation from overall mean $\beta_0$. \\
+$u_i$ is a random variable, specific for the $i$-th school, with zero
+mean and unknown variance $\sigma^2_u$. \\ 
+$u_i$ is a \textit{random effect}, because it is associated with the particular sample units (schools are selected at random from the population).\\ 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LME model example - continued}
+\begin{itemize}
+\item The \textit{random effects} model is given as:
+$$ y_{ij} = \beta_{0} + u_i + \varepsilon_{ij}, \qquad u_i \sim N(0,\sigma^2_u), \qquad \varepsilon_{ij} \sim N(0,\sigma^2), $$
+and we assume $u_i$ are $iid$ and independent from $\varepsilon_{ij}$.\\
+\smallskip
+\begin{itemize}
+\item Observations in the same school share the same random effect $u_i$,\\ hence they are (positively) correlated with \textit{corr} = $\sigma^2_u \, / (\sigma^2_u + \sigma^2)$.
+\smallskip 
+\item This \textit{random effects} model has three parameters: $\beta_{0},~ \sigma^2_u$ and $\sigma^2$. (regardless of $M$, the number of schools).
+\smallskip 
+\item Note that the \textit{random effect} $u_i$ ``looks like'' a parameter, but we are interested in estimating $\sigma^2_u$.
+\smallskip 
+\item However, upon observed data (and estimated model), we do make predictions for $\hat{u}_i$.
+\end{itemize}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LME model example - continued}
+\begin{itemize}
+\item \textit{Random effects} model with random intercept:\\
+\bigskip
+Exogenous regressors are also used in LMEs (like in LRMs).\\
+\smallskip
+For example, \texttt{math5} grades depend on \texttt{math3} ($3{^{\textnormal{rd}}}$ year grades).\\
+\medskip
+$ y_{ij} = \beta_{0} + \beta_1 x_{ij} + u_i + \varepsilon_{ij}, $\\
+\medskip
+i.e.\\
+$ \texttt{math5}_{ij} = \beta_{0} + \beta_1 \texttt{math3}_{ij} + u_i + \varepsilon_{ij}, $\\
+\medskip
+\begin{itemize}
+\item Intercept is random.
+\smallskip
+\item Slope of the regression line for each school is fixed at $\beta_1$.\\
+\dots \texttt{math3} has a \textit{fixed effect}.
+\end{itemize}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LME model example - continued}
+\begin{itemize}
+\item \textit{Random effects} model with random intercept and slope:\\
+\medskip
+If teaching is different from school to school, it would make
+sense to have different slopes for each of the schools.\\
+\medskip
+Instead of \textit{fixed effects} (using interaction terms \texttt{math3:School}), \\we use random slopes: $ u_{1i} = \beta_{1i} - \beta_1 $. \\
+\medskip
+$ y_{ij} = \beta_{0} + \beta_1 x_{ij} + u_{0i} + u_{1i} x_{ij}+ \varepsilon_{ij}, $ \\
+\medskip
+i.e.\\
+\medskip
+$\texttt{math5}_{ij} = \underbrace{\beta_{0} + \beta_1 \texttt{math3}_{ij}}_{\textit{fixed}}
++ \underbrace{u_{0i} + u_{1i}\, \texttt{math3}_{ij}}_{\textit{random}} 
++ \varepsilon_{ij}, $ \\
+\medskip
+\begin{itemize}
+\item We can test whether this extra complexity is justified.
+\smallskip
+\item ${u}_{0i}$ and ${u}_{1i}$ are often correlated, their independence can be tested.
+\smallskip
+\item Fitted values of $\texttt{math5}_{ij}$ can be produced, along with $\hat{u}_{0i}$ and $\hat{u}_{1i}$.
+\end{itemize}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\section{LME model formal definition}
+\begin{frame}{LME model formal definition}
+\begin{itemize}
+\item Linear models 
+$$\bm{y} = \bm{X \beta} + \bm{\varepsilon} 
+\qquad \bm{\varepsilon} \sim N(\bm{0}, \,\sigma^2 \bm{I}),$$
+
+\item can be generalized into LME models
+$$\bm{y} = \bm{X \beta} + \bm{Z u} + \bm{\varepsilon} 
+\qquad \bm{u} \sim N(\bm{0}, \bm{G})
+\qquad \bm{\varepsilon} \sim N(\bm{0}, \bm{R}),$$
+where\\
+$\bm{X}$ is a $(n \! \times \! k)$ matrix, $k$ is the number of \textit{fixed effects},\\
+$\bm{Z}\,$ is a $(n \! \times \! p)$ matrix, $p$ is the number of \textit{random effects},\\
+$\bm{G}\,$ is a $(p \! \times \! p)$ variance-covariance matrix of the \textit{random effects},\\
+$\bm{R}\,$ is a $(n \! \times \! n)$ variance-covariance matrix of errors.\\
+\medskip
+Independence between $\bm{u}$ and $\bm{\varepsilon}$ is assumed,\\
+Often, $\bm{R}=\sigma^2 \bm{I}$, can be generalized for group-wise correlations,\\
+$\bm{G}\,$ is diagonal if \textit{random effects} are mutually independent.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\section{More complex LME models}
+\begin{frame}{More complex LME models - brief outline}
+Different types of LME models exist:\\
+\bigskip
+\begin{itemize}
+\item LME models with (multilevel) nested effects,
+\medskip
+\item LME models with crossed effects,
+\medskip
+\item Complex behavior of the error term in LME models can be addressed.
+\medskip
+\item LME models with non-Gaussian (Binary, Poisson, etc.).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LME models with (multilevel) nested effects}
+\textbf{Multi-level model example:} we follow a total of 48 individual states within 9 regions and across 17 years.
+\medskip
+\begin{itemize}
+\item $\texttt{GDP}_{ijt}$ represents individual GDP per capita measurements for:\\
+\smallskip
+$i$-th region ($i=1,\dots,9$),\\
+$j$-th state nested within region $i$ ($j=1,\dots,M_i$),\\
+$t$-th time period, e.g. with values ($t= 1990, \dots, 2006)$.\\
+
+\medskip
+\item We fit \texttt{GDP} as a function of productivity \texttt{P} and unemployment \texttt{U}.\\
+\smallskip
+We treat states as nested within regions, so we have 2 levels of random intercepts: one due to the regions, and another due to the state within region (random slopes can be added as well).
+\bigskip
+\item $\texttt{GDP}_{ijt} = \beta_0 + \beta_1 \texttt{P}_{ijt} 
++ \beta_2 \texttt{U}_{ijt} + u_i + v_{j(i)} + \varepsilon_{ijt}.$
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LME models with crossed random effects}
+Crossed \textit{random effects} example:\\
+\medskip
+\begin{itemize}
+\item Grunfeld (1958) analyzed data on 10 large U.S. corporations,
+collected annually from 1935 to 1954 to investigate how \\investment \texttt{I} depends on market value \texttt{M} and capital stock \texttt{C}.\\
+\medskip
+\item Here, we want \textit{random effects} for a given firm and year.\\
+\smallskip
+However, we want the year effect to be the same across all firms, i.e. not nested within firms.
+\bigskip
+\item $\texttt{I}_{it} = \beta_0 + \beta_1 \texttt{M}_{it} 
++ \beta_2 \texttt{C}_{it} + u_i + v_t + \varepsilon_{it}.$\\
+\medskip
+where $i=1, \dots, 10$ firms are followed over $t=1,\dots,20$ years.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+
+\end{document}
