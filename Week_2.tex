@@ -16,68 +16,11 @@
 %----------------------------------------------------------------------------------------
 
 \documentclass{beamer}
-
 \mode<presentation> {
-
-% The Beamer class comes with a number of default slide themes
-% which change the colors and layouts of slides. Below this is a list
-% of all the themes, uncomment each in turn to see what they look like.
-
-%\usetheme{default}
-%\usetheme{AnnArbor}
-%\usetheme{Antibes}
-%\usetheme{Bergen}
-%\usetheme{Berkeley}
-%\usetheme{Berlin}
-%\usetheme{Boadilla}
-%\usetheme{CambridgeUS}
-%\usetheme{Copenhagen}
-%\usetheme{Darmstadt}
-%\usetheme{Dresden}
-%\usetheme{Frankfurt}
-%\usetheme{Goettingen}
-%\usetheme{Hannover}
-%\usetheme{Ilmenau}
-%\usetheme{JuanLesPins}
-%\usetheme{Luebeck}
 \usetheme{Madrid}
-%\usetheme{Malmoe}
-%\usetheme{Marburg}
-%\usetheme{Montpellier}
-%\usetheme{PaloAlto}
-%\usetheme{Pittsburgh}
-%\usetheme{Rochester}
-%\usetheme{Singapore}
-%\usetheme{Szeged}
-%\usetheme{Warsaw}
-
-% As well as themes, the Beamer class has a number of color themes
-% for any slide theme. Uncomment each of these in turn to see how it
-% changes the colors of your current slide theme.
-
-%\usecolortheme{albatross}
-%\usecolortheme{beaver}
-%\usecolortheme{beetle}
-%\usecolortheme{crane}
-%\usecolortheme{dolphin}
-%\usecolortheme{dove}
-%\usecolortheme{fly}
-%\usecolortheme{lily}
-%\usecolortheme{orchid}
-%\usecolortheme{rose}
-%\usecolortheme{seagull}
-%\usecolortheme{seahorse}
-%\usecolortheme{whale}
-%\usecolortheme{wolverine}
-
 \usefonttheme{serif} 
-
-%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
-%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
-
-\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all}
 }
-
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage[T1]{fontenc}
@@ -96,7 +39,7 @@
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
 
-\title[Týden 4]{Praktikum z ekonometrie - Týden 4} % The short title appears at the bottom of every slide, the full title is only on the title page
+\title[]{Praktikum z ekonometrie} % The short title appears at the bottom of every slide, the full title is only on the title page
 
 \author{VŠE Praha} % Your name
 \institute[4EK417] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
@@ -118,10 +61,74 @@
 \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
 \end{frame}
 
-%----------------------------------------------------------------------------------------
-%	PRESENTATION SLIDES
+%---------------------------------------------
+\section{Theoretical basis for model selection algorithms}
+%---------------------------------------------
+\subsection{Alternative approaches to econometric modeling}
+\begin{frame}{Alternative approaches to econometric modeling}
+Simple-to-general approach\\
+\vspace{0.3cm}
+\begin{itemize}
+\item Traditional approach to econometric modeling
+\vspace{0.3cm}
+\item Starts with formulation of the simplest model consistent with the relevant economic theory.
+\vspace{0.3cm}
+\item If this initial model proves unsatisfactory, it is improved in some way – adding or changing variables, using different estimators etc.
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Alternative approaches to econometric modeling}
+ Criticism  of the simple-to-general approach\\
+\begin{itemize}
+\vspace{0.3cm}
+\item Revisions to the simple model are carried out arbitrarily and simply reflect investigator's prior beliefs: danger of always finding what you want to find.
+\vspace{0.3cm}
+\item It is open to accusation of data mining: researchers usually presents just the final model (true significance level is problematic).
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Alternative approaches to econometric modeling}
+General-to-specific approach\\
+\medskip
+\begin{itemize}
+\item Professor Hendry, London School of Economics \\started this approach in the 80ies.
+\medskip
+\item It starts with formulation of a very general and maybe quite complicated model.
+\medskip
+\item Starting model contains a series of simpler models, nested within it as special cases. 
+\medskip
+\item These simpler models should represent all the alternative economic hypotheses that require consideration.
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Alternative approaches to econometric modeling}
+General-to-specific approach\\
+\vspace{0.3cm}
+\begin{itemize}
+\item General model must be able to explain existing data and be able to satisfy various tests of misspecification.
+\vspace{0.3cm}
+\item What follows is simplification search (testing-down procedure). Through parameter restrictions, we test nested models against the containing model. If the nested model does not pass the tests, we can reject the whole branch of sub-nested models.
+\vspace{0.3cm}
+\item If we find more non-nested models satisfying tests, we can compare them using e.g. $F$-test.
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Alternative approaches to econometric modeling}
+Advantages of the general-to-specific approach\\
+\vspace{0.3cm}
+\begin{itemize}
+\item ``Data mining''  present in this approach is transparent (for all to see) and it is carried out in a systematic manner that avoids worst data mining problems. 
+\vspace{0.3cm}
+\item Researcher usually reports both the initial general model and all steps involved so it is possible to get some idea about the true significance levels.
+\vspace{0.3cm}
+\item Supporters of this approach stress the importance of both testing final models against new data and the ability of the model to provide adequate out-of-sample forecasts.
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+
 %---------------------------------------------------------------------
-\begin{frame}{Introduction}
+\section{Model selection algorithms}
+\begin{frame}{Model selection algorithms - Introduction}
 
 \begin{itemize}
 \item \textbf{Subset Selection} We identify a subset of the $p$ predictors
@@ -143,20 +150,9 @@ predictors to fit \\a linear regression model by least squares.
 \end{itemize}
 
 \end{frame}
-
-
-
-
-
-%----------------------------------------------------------------------------------------
-\section{Model selection algorithms} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
 %------------------------------------------------
-
-% \subsection{} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
-%------------------------------------------------
-
 \begin{frame}
-\frametitle{Model selection algorithms}
+\frametitle{Model selection algorithms - Subset selection}
 
 \begin{enumerate}
   \item Best subset selection
@@ -328,14 +324,18 @@ where $\lambda > 0$ is a tuning parameter, determined separately.
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Ridge regression}
+$$\min \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
+         - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
+         \! + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right]
+$$
 \begin{itemize}
-\item As with least squares, ridge regression seeks coefficient estimates that fit the data well, by making the RSS small.
-\medskip
-\item However, the second term, $\, \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \,$, called a shrinkage penalty, is small when $\hat{\beta}_1, \dots, \hat{\beta}_p$ are close to zero. Hence, $\lambda$ has the effect of shrinking $\hat{\beta}_j^2$ towards zero.
-\medskip
+\item Same way as OLS, ridge regression seeks coefficient estimates that fit the data well, by making the RSS small.
+\smallskip
 \item The tuning parameter $\lambda$ serves to control the relative impact of the two terms on the regression coefficient estimates.
-\medskip
-\item Selecting a good value for $\lambda$ is critical; cross-validation is used.
+\smallskip
+\item The second term, $\, \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \,$ is called a shrinkage penalty.\\It is small when $\hat{\beta}_1, \dots, \hat{\beta}_p$ are close to zero and/or $\lambda$ is small. \\High $\lambda$ has the effect of shrinking $\hat{\beta}_j^2$ towards zero.
+\smallskip
+\item For predictive properties, selecting a good value for $\lambda$ is critical; cross-validation is used.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
@@ -351,7 +351,7 @@ where $\lambda > 0$ is a tuning parameter, determined separately.
 %------------------------------------------------
 \begin{frame}{Ridge regression}
 \begin{itemize}
-\item The standard least squares coefficient estimates are scale
+\item The standard OLS coefficient estimates are scale
 equivariant: multiplying $x_j$ by a constant $c$ simply leads to
 a scaling of the least squares coefficient estimates by a
 factor of $1/c$.\\ 
@@ -411,12 +411,12 @@ estimates towards zero.
 \item In the case of the lasso, the $\ell_1$ penalty has the
 effect of forcing some of the coefficient estimates to be
 exactly equal to zero when the tuning parameter $\lambda$ is
-sufficiently large (see \textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR textbook}}})
+sufficiently large (see \textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR textbook}}}).
 \medskip
-\item Much like best subset selection, the lasso performs
+\item Much like best subset selection, the lasso regression performs
 variable selection.
 \medskip
-\item Lasso yields sparse models - that is, models that involve only a subset of the variables.
+\item Lasso yields sparse models - that is, models that involve only \\a subset of the variables.
 \medskip
 \item As in ridge regression, selecting a good value of $\lambda$ for the
 lasso is critical; cross-validation is used.
