@@ -57,7 +57,7 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Outline} % Table of contents slide, comment this block out to remove it
+\frametitle{Block 1 topics: Outline} % Table of contents slide, comment this block out to remove it
 \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
 \end{frame}
 
@@ -125,23 +125,117 @@ Advantages of the general-to-specific approach\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------
+\section{Model selection basics - repetition from previous courses}
+\begin{frame}{Model selection basics - repetition from previous courses}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Variance vs. Bias trade-off - repetition}
+Population equation example: $~y = \textnormal{sin}(x)+u$
+\vspace{-1cm}
+\begin{figure}
+\includegraphics[angle=270,scale=0.35]{IMG/VarBias.pdf}
+\end{figure}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Train sample \& Test sample - repetition}
 
-%---------------------------------------------------------------------
-\section{Model selection algorithms}
-\begin{frame}{Model selection algorithms - Introduction}
+Suppose we fit a model $\hat{f}(\bm{x})$ to some training data $\textnormal{Tr}=\left\lbrace y_i, \bm{x}_i \right\rbrace _1 ^n$ and we wish to see how well it performs.
 
 \begin{itemize}
-\item \textbf{Subset Selection} We identify a subset of the $p$ predictors
+\item We could compute $\textit{MSE}$ over $\textnormal{Tr}$:
+$$ \textit{MSE}_{\textnormal{Tr}} = \frac{1}{n}
+   \sum_{i \in \textnormal{Tr}}
+   \left[y_i - \hat{f}(\bm{x}_i) \right]^2 $$
+\end{itemize}
+
+When searching for the ``best'' model by minimizing $ \textit{MSE}$, the above statistic would lead to over-fit models.
+\vspace{0.3cm}
+\begin{itemize}
+\item Instead, we should (if possible) compute the $ \textit{MSE}$ using fresh test
+data $\textnormal{Te}=\left\lbrace y_i, \bm{x}_i \right\rbrace _1 ^m$:
+$$ \textit{MSE}_{\textnormal{Te}} = \frac{1}{m}
+    \sum_{i \in \textnormal{Te}}
+   \left[y_i - \hat{f}(\bm{x}_i) \right]^2 $$
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Variance vs. Bias trade-off - repetition}
+$\textnormal{E}(\textit{MSE}_0)
+   = \textit{var}(\hat{f}(\bm{x}_0))
+   + [\textit{Bias\,}(\hat{f}(\bm{x}_0))]^2
+   + \textnormal{var}(\varepsilon_0),$\\
+\begin{figure}
+\includegraphics[angle=0,scale=0.35]{IMG/biasvariance.png}
+\end{figure}
+\small{This is an illustration, $\textnormal{var}(\varepsilon_0)$ not shown explicitly. \\(lies at the /asymptotic/ minima of Variance and $\textnormal{Bias}^2$)}
+\end{frame}
+%------------------------------------------------
+\begin{frame}{$k$-Fold Cross Validation - repetition}
+\begin{itemize}
+\item Training error ($\textit{MSE}_{\textnormal{Tr}}$) can be calculated easily. 
+\item However, $\textit{MSE}_{\textnormal{Tr}}$ is not a good approximation for the $\textit{MSE}_{\textnormal{Te}}$ (out-of sample predictive properties of the model).
+\item Usually, $\textit{MSE}_{\textnormal{Tr}}$ dramatically underestimates $\textit{MSE}_{\textnormal{Te}}$.
+\end{itemize}
+\bigskip
+Cross-validation is based on re-sampling (similar to bootstrap).\\
+\medskip
+Repeatedly fit a model of interest to samples formed from the training set \& make ``test sample'' predictions, in order to obtain additional information about predictive properties of the model.\\
+\end{frame}
+%---------------------------------------------
+\begin{frame}{$k$-Fold Cross Validation - repetition}
+\begin{itemize}
+  \item In $k$-Fold Cross-Validation ($k$FCV), the original sample is randomly partitioned into $k$ roughly equal subsamples (divisibility). 
+  \item Of the $k$ subsamples, a single subsample is retained as the test sample, and the remaining $(k-1)$ subsamples are used as training data. 
+  \item The cross-validation process is then repeated $k$ times (the $k$ folds), with each of the $k$ subsamples used exactly once as the test sample. 
+  \item The $k$ results from the folds can then be averaged to produce a single estimation. 
+  \item $k = 5$ or $k=10$ is commonly used.
+\end{itemize}  
+\end{frame}
+%------------------------------------------------
+\begin{frame}{$k$-Fold Cross Validation - repetition}
+\begin{center}
+$k$FCV example for CS data \& $k=5$: \\
+(random sampling, no replacement)
+\begin{figure}
+\includegraphics[width=0.7\linewidth]{IMG/kFCV2.pdf}
+\end{figure}
+\vspace{-1cm}
+In TS, a similar ``Walk forward'' test procedure may be applied.
+\end{center}
+\end{frame}
+%------------------------------------------------
+\begin{frame}{$k$-Fold Cross Validation - repetition}
+$ \textit{CV}_{(k)}= \frac{1}{k}\displaystyle\sum_{s=1}^{k} \textit{MSE}_s \,,$
+\vspace{0.3cm}
+\\where:
+\begin{itemize}
+\item [~~] $\textit{CV}_{(k)}$ is the $k$-fold \textit{CV} estimate,
+\item [~~] $k$ is the number of folds used (e.g. 5 or 10),
+\item [~~] $\textit{MSE}_s = \frac{1}{m_s} \sum_{i \in C_s}^{}(y_i - \widehat{y}_i)^2 $ 
+\item [~~] $m_s$ and $C_s$ refer to test sample  observations for each \\of the $k$ train sample / test sample steps.
+\end{itemize}
+\vspace{0.3cm}
+As we evaluate predictions from two or more models, 
+\\we look for the lowest $\textit{CV}_{(k)}$. 
+\end{frame}
+%---------------------------------------------
+\section{Model selection algorithms}
+\begin{frame}{Model selection algorithms}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Model selection algorithms - Introduction}
+\begin{itemize}
+\item \textbf{Subset Selection:} We identify a subset of the $p$ predictors
 that we believe to be related to the response. We then fit a
 model using least squares on the reduced set of variables.
 \medskip
-\item \textbf{Shrinkage} We fit a model involving all $p$ predictors, but
+\item \textbf{Shrinkage:} We fit a model involving all $p$ predictors, but
 the estimated coefficients are shrunken towards zero
 relative to the least squares estimates. This shrinkage (also
 known as regularization) has the effect of reducing variance
 and can also perform variable selection.
 \medskip
-\item \textbf{Dimension Reduction} We project the $p$ predictors into a
+\item \textbf{Dimension Reduction:} We project the $p$ predictors into a
 $M$-dimensional subspace, where $M < p$. This is achieved by
 computing $M$ different linear combinations, or projections,
 of the variables. Then these $M$ projections are used as
@@ -162,8 +256,8 @@ predictors to fit \\a linear regression model by least squares.
   \item Backward stepwise selection
   \medskip
   \item Algorithms combining Forward and Backward stepwise selection\\
-  ~\\
- (Comparison \& computational complexity of methods)
+  \medskip
+  \item Comparison \& computational complexity of methods
 \end{enumerate}
 
 
@@ -293,14 +387,33 @@ Forward \& Backward stepwise [and their hybrid combinations] tends to do well in
 %------------------------------------------------
 \section{Parameter Shrinkage}
 \begin{frame}{Parameter shrinkage methods}
+\end{frame}
+%------------------------------------------------
+\begin{frame}{Parameter shrinkage methods}
+
+\textbf{Subset selection:} 
+\begin{itemize}
+\item Subset of predictors is retained, the rest is discarded.
+\item Generates interpretable models. 
+\item Selection is a discrete process: variables are either retained or discarded. \item Predictions based on models with different regressor-sets often exhibits high variance. Shrinkage
+methods are more continuous, and don’t suffer as much from high
+variability.
+\end{itemize}
+\medskip
+\textbf{Shrinkage methods} 
+\begin{itemize}
+    \item More continuous -- do not suffer as much from high variability.
+\end{itemize}
+\end{frame}
+%------------------------------------------------
+\begin{frame}{Parameter shrinkage methods}
 \textbf{Ridge regression and Lasso regression}
 \medskip
 \begin{itemize}
-\item As an alternative to stepwise selection, we can fit a model containing all $p$ predictors using a technique that constrains or regularizes the coefficient estimates, or equivalently, that shrinks the coefficient estimates towards zero.
+\item As an alternative to stepwise selection, we can fit a model containing all $p$ predictors using a shrinkage method that constrains or regularizes the coefficient estimates and/or that shrinks the coefficient estimates towards zero.
 \medskip
-\item It may not be immediately obvious why such a constraint
-should improve the fit, but it turns out that shrinking the
-coefficient estimates can significantly reduce their variance.
+\item It may not be immediately obvious why such constraints or shrinkage
+should improve the fit -- details discussed next.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
@@ -310,30 +423,51 @@ Consider a LRM: $y = f( x_1, x_2, \dots , x_p)$
 
 \begin{itemize}
 \item \textbf{OLS} can be used to estimate $\bm{\hat{\beta}}=(\hat{\beta}_0, \hat{\beta}_1, \dots , \hat{\beta}_p)^{\prime}$ by minimizing the RSS:
-$$ RSS = \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
+$$\underset{\bm{\beta}}{\textnormal{min:~}} RSS = \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
          - \sum_{j=1}^p  \hat{\beta}_j x_{ij}      \right)^2 $$
 \bigskip
-\item \textbf{Ridge regression} $\bm{\hat{\beta}}_{\!R}$ estimates 
+\item \textbf{Ridge regression} $\bm{\hat{\beta}}$ estimates 
 are the values that minimize:
-$$ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
-         - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
-         \! + \lambda \sum_{j=1}^p  \hat{\beta}_j^2
-         \, = \, RSS + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 ,$$
+$$\underset{\bm{\beta}}{\textnormal{min:~}} \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0  - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
+\! + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right]
+\, = \, \left( RSS + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right)$$
 where $\lambda > 0$ is a tuning parameter, determined separately.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Ridge regression}
-$$\min \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
-         - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
-         \! + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right]
+$$\underset{\bm{\beta}}{\textnormal{min:~}}
+\left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
+- \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
+\! + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right]
 $$
 \begin{itemize}
-\item Same way as OLS, ridge regression seeks coefficient estimates that fit the data well, by making the RSS small.
+\item Seeks $\beta_j$ estimates that fit the data well, by making the RSS small.
 \smallskip
-\item The tuning parameter $\lambda$ serves to control the relative impact of the two terms on the regression coefficient estimates.
+\item Shrinks regression coefficients by imposing penalty on their size. \\The ridge coefficients minimize a penalized RSS
 \smallskip
-\item The second term, $\, \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \,$ is called a shrinkage penalty.\\It is small when $\hat{\beta}_1, \dots, \hat{\beta}_p$ are close to zero and/or $\lambda$ is small. \\High $\lambda$ has the effect of shrinking $\hat{\beta}_j^2$ towards zero.
+\item $\lambda \geq 0$ is a complexity parameter -- controls the amount of shrinkage:
+larger value of $\lambda$ $~\rightarrow~$ greater amount of shrinkage.
+\smallskip
+\item $(\lambda \sum_{j=1}^p  \hat{\beta}_j^2)$ is a shrinkage penalty.\\It is small when $\hat{\beta}_1, \dots, \hat{\beta}_p$ are close to zero and/or $\lambda$ is small. \\High $\lambda$ shrinks $\hat{\beta}_j$ towards zero and towards each other.
+\end{itemize}
+\end{frame}
+%------------------------------------------------
+\begin{frame}{Ridge regression}
+$$\underset{\bm{\beta}}{\textnormal{min:~}} 
+\left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
+- \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
+\! + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right]
+$$
+\begin{itemize}
+\item With many correlated variables in a LRM (i.e. under multicollinearity),
+corresponding coefficients can become poorly determined and exhibit high variance.
+\begin{itemize}
+    \item A wildly large positive coefficient on one variable can be canceled by a
+similarly large negative coefficient on the correlated regressor(s).
+    \item Even with small sampling changes, such coefficients may change dramatically (even in sign).
+\end{itemize}
+\item By imposing a ridge penalty (size constraint on the coefficients), this problem is alleviated.
 \smallskip
 \item For predictive properties, selecting a good value for $\lambda$ is critical; cross-validation is used.
 \end{itemize}
@@ -355,8 +489,7 @@ $$
 equivariant: multiplying $x_j$ by a constant $c$ simply leads to
 a scaling of the least squares coefficient estimates by a
 factor of $1/c$.\\ 
-\medskip Regardless of $j$-th
-predictor scaling, $ \hat{\beta}_j x_{ij}$ will remain the same.
+\medskip Regardless of predictor scaling, $ ( \hat{\beta}_j x_{ij} )$ will remain the same.
 \medskip
 \item In contrast, the ridge regression coefficient estimates can
 change substantially when multiplying a given predictor by
@@ -372,6 +505,46 @@ $$ \widetilde{x}_{ij} = \frac{x_{ij}}{
 \end{itemize}
 \end{frame}
 %------------------------------------------------
+\begin{frame}{Ridge regression - final remarks}
+$$\underset{\bm{\beta}}{\textnormal{min:~}} 
+\left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
+- \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
+\! + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right]
+$$
+\begin{itemize}
+\item Ridge solutions are not equivariant under scaling of the inputs, 
+\\so we standardize the inputs before estimation \\(this just recaps previous page).
+\medskip
+\item The intercept $\beta_0$ has been left out of the penalty term. Penalization of the intercept would make the procedure depend \\on the origin chosen for $y$.
+\medskip
+\item Ridge penalty shrinks coefficients towards zero (except $\hat{\beta}_0$). \\Coefficients of correlated variables are shrunk toward each other. \\ (See 
+\textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{chapter 3 of ESLII}}} for detailed technical discussion.)
+\end{itemize}
+\end{frame}
+%------------------------------------------------
+\begin{frame}{Ridge regression - final remarks}
+For LRM, RSS and OLS may be easily written in matrix form as:
+\begin{itemize}
+\item $\textit{RSS}(\textnormal{OLS}) = (\bm{y}-\bm{X\beta})^{\prime}(\bm{y}-\bm{X\beta})$
+\item ~~~~~~~$\hat{\bm{\beta}}_{\textnormal{OLS}} = (\bm{X}^{\prime}\bm{X})^{-1}\bm{X}^{\prime}\bm{y}$ 
+\end{itemize}
+For ridge regression, this may be re-written as
+\begin{itemize}
+\item $\textit{RSS}(\lambda) = (\bm{y}-\bm{X\beta})^{\prime}(\bm{y}-\bm{X\beta}) 
++ \lambda \,\bm{\beta}^{\prime} \!\bm{\beta}$
+\item ~~$\,\hat{\bm{\beta}}_{\textnormal{ridge}} = (\bm{X}^{\prime}\bm{X} + \lambda \bm{I}_p )^{-1}\bm{X}^{\prime}\bm{y}$ 
+\end{itemize}
+
+With the choice of quadratic penalty $\bm{\beta}^{\prime} \!\bm{\beta}$, the ridge regression solution is again a linear function of $y$. 
+
+\medskip
+Ridge method adds a positive constant to the diagonal of $(\bm{X}^{\prime}\bm{X})$ before inversion. This makes the problem non-singular, even if $(\bm{X}^{\prime}\bm{X})$ is not of full rank (perfect multicollinearity, $p>n$, $p \gg n$).
+
+\medskip
+This was the main motivation for ridge regression when it was first introduced in statistics (Hoerl and Kennard, 1970)
+
+\end{frame}
+%------------------------------------------------
 \subsection{Lasso regression}
 \begin{frame}{Lasso regression}
 \begin{itemize}
@@ -383,11 +556,13 @@ will include all $p$ predictors in the final model.
 \item The Lasso is a relatively recent alternative to ridge
 regression that overcomes this disadvantage. The lasso
 coefficients,  $\bm{\hat{\beta}}_{\!L}$ estimates 
-are the values that minimize:
-$$ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
-         - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
-         \! + \lambda \sum_{j=1}^p  | \hat{\beta}_j |
-         \, = \, RSS + \lambda \sum_{j=1}^p  | \hat{\beta}_j |,$$
+are the values that minimize the penalized RSS:
+$$
+\underset{\bm{\beta}}{\textnormal{min:~}} 
+\left[
+\sum_{i=1}^n \left(y_i - \hat{\beta}_0 
+- \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
+\! + \lambda \sum_{j=1}^p  | \hat{\beta}_j | \right]$$
 again, $\lambda > 0$ is a tuning parameter, determined separately ($k$FCV).
 \item In statistical parlance, the lasso uses an $\ell_1$ (pronounced ``ell 1'') penalty instead of an $\ell_2$ penalty. The $\ell_1$ norm of a coefficient vector  is given by 
 $\| \beta \|_1 = \sum | \beta |$.
@@ -434,7 +609,7 @@ number of predictors.
 \item However, the number of predictors that is related to the
 response is never known a priori for real data sets.
 \medskip
-\item Cross-validation can be used in order to determine which approach is better on a particular data set.
+\item CV can be used in order to determine which approach is better on a particular data set.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
@@ -460,7 +635,51 @@ The above steps 1 and 2 can be performed for both ridge and lasso.\\
 
 \end{frame}
 %------------------------------------------------
-\section{Dimension Reduction}
+\subsection{Elastic net regression}
+\begin{frame}{Elastic net regression (penalty)}
+$$\min \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
+         - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
+         \! + \lambda \sum_{j=1}^p 
+         \left( \alpha |\beta_j| + (1-\alpha) \hat{\beta}_j^2 \right) \right]
+$$
+\begin{itemize}
+\item \textbf{Lasso penalty} encourages sparse solutions (in terms of coefficients), yet it is somewhat indifferent to the choice among a set of strong but correlated regressors.
+\smallskip
+\item \textbf{Ridge penalty} shrinks coefficients of correlated variables toward each other, no spare solution effect.
+\smallskip
+\item \textbf{Elastic net penalty} a compromise (combined method). The second term of the penalization element encourages highly correlated features to be averaged, while
+the first term encourages a sparse solution in the coefficients of these averaged features.
+\end{itemize}
+\end{frame}
+%------------------------------------------------
+\begin{frame}{Elastic net regression (penalty)}
+$$\min \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
+         - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
+         \! + \lambda \sum_{j=1}^p 
+         \left( \alpha |\beta_j| + (1-\alpha) \hat{\beta}_j^2 \right) \right]
+$$
+\begin{itemize}
+\item The elastic net penalty can be used with any linear model \\(LM, GLM), in particular for regression or classification.\\
+Logit (GLM/MLE) example of elastic net penalty generalization:\\
+\footnotesize{$\underset{\bm{\beta}}{\textnormal{max}}\!
+\left[
+\sum_{i=1}^n \!\left( y_i \log [G(\bm{x}_i\bm{\beta})] \!+\! 
+(1\!-\!y_i) \log [1\!-\!G(\bm{x}_i\bm{\beta})]
+\right)
+- \lambda \sum_{j=1}^p \!\left( \alpha |\beta_j|\!+\!(1\!-\!\alpha) \hat{\beta}_j^2 \right)
+\right]$}
+\smallskip
+\normalsize{
+\item Parameter $\alpha$ determines the relative mix of ridge and lasso penalties. It is set prior to model estimation.
+\medskip
+\item CV can be used to chose $\alpha$ and $\lambda$.}
+\end{itemize}
+\end{frame}
+%------------------------------------------------
+\section{Dimension reduction}
+\begin{frame}{High dimensionality \& dimension reduction methods}
+\end{frame}
+%------------------------------------------------
 \begin{frame}{Dimension reduction methods}
 \begin{itemize}
 \item Stepwise regression, ridge and lasso involve fitting linear regression models (by OLS or by parameter shrinkage) using the original predictors $X_1, X_2, \dots , X_p$.
@@ -747,10 +966,13 @@ represent the predictors $X_1, X_2, \dots , X_p$.
 \medskip
 Potential solutions to the problem:
 \begin{itemize}
-\item Partial least squares (not covered here, see \textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR, ch. 10}}})
+\item Partial least squares (\textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR, ch. 10}}})
 \end{itemize}
 \end{frame}
-
+%---------------------------------------------------------------------
+\subsection{Partial least squares (PLS)}
+\begin{frame}{Partial least squares (PLS)}
+\end{frame}
 %---------------------------------------------------------------------
 
 \end{document}
