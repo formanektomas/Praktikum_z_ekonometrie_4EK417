@@ -57,7 +57,7 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Block 1 topics: Outline} % Table of contents slide, comment this block out to remove it
+\frametitle{4EK417 Block 1 topics: Outline} % Table of contents slide, comment this block out to remove it
 \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
 \end{frame}
 
@@ -109,7 +109,7 @@ General-to-specific approach\\
 \vspace{0.3cm}
 \item What follows is simplification search (testing-down procedure). Through parameter restrictions, we test nested models against the containing model. If the nested model does not pass the tests, we can reject the whole branch of sub-nested models.
 \vspace{0.3cm}
-\item If we find more non-nested models satisfying tests, we can compare them using e.g. $F$-test.
+\item If we find more non-nested models satisfying tests, we can compare those (using information criteria, etc.).
 \end{itemize}
 \end{frame}
 %---------------------------------------------
@@ -187,8 +187,9 @@ Repeatedly fit a model of interest to samples formed from the training set \& ma
   \item In $k$-Fold Cross-Validation ($k$FCV), the original sample is randomly partitioned into $k$ roughly equal subsamples (divisibility). 
   \item Of the $k$ subsamples, a single subsample is retained as the test sample, and the remaining $(k-1)$ subsamples are used as training data. 
   \item The cross-validation process is then repeated $k$ times (the $k$ folds), with each of the $k$ subsamples used exactly once as the test sample. 
-  \item The $k$ results from the folds can then be averaged to produce a single estimation. 
+  \item The $k$ results from the folds can then be averaged to produce a single estimation -- the cross-validated error. 
   \item $k = 5$ or $k=10$ is commonly used.
+  \item Sometimes, $k$FCV process is repeated ($R$-times -- say, 1.0000) to get distribution of the cross-validated error term.
 \end{itemize}  
 \end{frame}
 %------------------------------------------------
@@ -212,13 +213,36 @@ $ \textit{CV}_{(k)}= \frac{1}{k}\displaystyle\sum_{s=1}^{k} \textit{MSE}_s \,,$
 \item [~~] $\textit{CV}_{(k)}$ is the $k$-fold \textit{CV} estimate,
 \item [~~] $k$ is the number of folds used (e.g. 5 or 10),
 \item [~~] $\textit{MSE}_s = \frac{1}{m_s} \sum_{i \in C_s}^{}(y_i - \widehat{y}_i)^2 $ 
-\item [~~] $m_s$ and $C_s$ refer to test sample  observations for each \\of the $k$ train sample / test sample steps.
+\item [~~] $m_s$ and $C_s$ refer to test sample  observations for each \\of the $k$FCV steps.
 \end{itemize}
 \vspace{0.3cm}
 As we evaluate predictions from two or more models, 
 \\we look for the lowest $\textit{CV}_{(k)}$. 
 \end{frame}
 %---------------------------------------------
+\begin{frame}{Comparison of estimation methods / models}
+\textbf{Comparison of models/methods (besides \textbf{\textit{k}FCV methods} ):} 
+\begin{equation} \notag
+\begin{aligned}
+ \textnormal{Mallow's} \hspace{0.2cm}
+ \textit{C}_{p} &=\frac{1}{n}(\textit{RSS}+2d\widehat{\sigma}^2), \\
+ \smallskip
+ \textit{AIC} &=\frac{1}{n\widehat{\sigma}^2}(\textit{RSS}+2d\widehat{\sigma}^2), \\
+ \smallskip
+ \textit{BIC} &=\frac{1}{n}(\textit{RSS}+\log(n)d\widehat{\sigma}^2),
+ \end{aligned}
+\end{equation}
+
+\begin{itemize}
+\item where $d$ is the number of regressors and $n$ is the sample size.
+\item Model selection: find a model where a statistic is minimized.
+\item $\log(n)>2$ $(n\!>\!7)$ $\Rightarrow$ generally, $\textit{BIC}$ penalizes complexity more.
+\item When comparing models, $\textit{AIC} \propto C_p$;~~ \\$\textit{AIC}$ and $\textit{BIC}$ may contradict 
+\item If $\widehat{\sigma}^2$ is an unbiased estimate of ${\sigma}^2$, then $C_p$ is an unbiased estimate of test $\textit{MSE}$ (training error is adjusted by a factor proportional to the number of basis functions used).
+\item Sometimes, models are selected using $C_p$ (\textit{AIC}) instead $k$FCV.
+\end{itemize}
+\end{frame}
+%------------------------------------------------
 \section{Model selection algorithms}
 \begin{frame}{Model selection algorithms}
 \end{frame}
@@ -278,7 +302,7 @@ predictors to fit \\a linear regression model by least squares.
   \item Choose the best among these $\binom{p}{k}$ models and call it $\mathcal{M}_{k}$.
         \\Here, best is defined as having smallest $\textit{RSS}$ or highest $R^2$.
 \end{enumerate}
-  \item Select a single best model from among $\mathcal{M}_0, \dots, \mathcal{M}_{p}$, using crossvalidated prediction error, $\textit{AIC}, \textit{BIC}$ or adjusted $R^2$.
+  \item Select a single best model from among $\mathcal{M}_0, \dots, \mathcal{M}_{p}$, using crossvalidated prediction error, $C_p$, $\textit{AIC}, \textit{BIC}$ or adj. $R^2$.
 
 \vspace{0.8cm}
 
@@ -303,7 +327,7 @@ predictors to fit \\a linear regression model by least squares.
         \\Here, best is defined as having smallest $\textit{RSS}$ or highest $R^2$.
 \end{enumerate}
   \item Select a single best model from among $\mathcal{M}_0, \dots, \mathcal{M}_{p}$, using crossvalidated
-prediction error, $\textit{AIC}, \textit{BIC}$ or adjusted $R^2$.
+prediction error, $C_p$, $\textit{AIC}, \textit{BIC}$ or adj. $R^2$.
 \end{enumerate}
 
 \end{frame}
@@ -324,51 +348,19 @@ in $\mathcal{M}_k$, for a total of $(k-1)$ predictors.
         \\Here, best is defined as having smallest $\textit{RSS}$ or highest $R^2$.
 \end{enumerate}
   \item Select a single best model from among $\mathcal{M}_0, \dots, \mathcal{M}_{p}$, using crossvalidated
-prediction error, $\textit{AIC}, \textit{BIC}$ or adjusted $R^2$.
+prediction error, $C_p$, $\textit{AIC}, \textit{BIC}$ or adj. $R^2$.
 \end{enumerate}
 
 \end{frame}
 
 %------------------------------------------------
-
 \begin{frame}
-\frametitle{Comparison \& computational complexity of methods}
-\textbf{Statistics for comparison of models/methods:} 
-
-\begin{equation} \notag
-\begin{aligned}
- \textnormal{Mallow's} \hspace{0.2cm}
- \textit{C}_{p} &=\frac{1}{n}(\textit{RSS}+2d\widehat{\sigma}^2), \\
- \smallskip
- \textit{AIC} &=\frac{1}{n\widehat{\sigma}^2}(\textit{RSS}+2d\widehat{\sigma}^2), \\
- \smallskip
- \textit{BIC} &=\frac{1}{n}(\textit{RSS}+log(n)d\widehat{\sigma}^2),
- \end{aligned}
-\end{equation}
-
-\begin{itemize}
-\item where $d$ is the number of regressors and $n$ is the sample size.
-\item Model selection: find a model where a statistic is minimized.
-\item $log(n) > 2$ for $n>7$. $\Rightarrow$ $\textit{BIC}$ penalizes model complexity more.
-\item $\textit{AIC} \propto C_p$;~~ $\textit{AIC}$ and $\textit{BIC}$ may contradict 
-\item If $\widehat{\sigma}^2$ is an unbiased estimate of ${\sigma}^2$, 
-\\then $C_p$ is an unbiased estimate of test $\textit{MSE}$.
-\end{itemize}
-\medskip
-\textbf{\textit{k}FCV methods}: $k$-fold cross validation
-
-
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{Comparison \& computational complexity of methods}
+\frametitle{Computational complexity of methods}
 
 \textbf{Computational complexity:} 
 \bigskip
 \begin{itemize}
-  \item Forward stepwise and Backward stepwise selection
+  \item Forward stepwise and Backward stepwise selection:
         \\ Greedy algorithms.
         \\$[1+p(p+1)/2] \approx p^2$ models need to be estimated and evaluated.
         \\Computationally feasible even for high $p$ values (large sets of potential regressors).
@@ -376,11 +368,8 @@ prediction error, $\textit{AIC}, \textit{BIC}$ or adjusted $R^2$.
   \item Best subset selection
         \\ $2^p$ models to be estimated and evaluated.
         \\ For large $p$, enormous search space can lead to over-fitting and high variance of the coefficient estimates.
-
 \end{itemize}
-
 \bigskip
-
 Forward \& Backward stepwise [and their hybrid combinations] tends to do well in practice (are efficient algorithms), yet they do not guarantee finding the best possible model out of all $2^p$ possible models.
 \end{frame}
 
@@ -407,7 +396,7 @@ variability.
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Parameter shrinkage methods}
-\textbf{Ridge regression and Lasso regression}
+\textbf{Ridge regression and lasso regression}
 \medskip
 \begin{itemize}
 \item As an alternative to stepwise selection, we can fit a model containing all $p$ predictors using a shrinkage method that constrains or regularizes the coefficient estimates and/or that shrinks the coefficient estimates towards zero.
