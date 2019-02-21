@@ -623,7 +623,7 @@ parameter $\lambda$.
 \bigskip
 The above steps 1 and 2 can be performed for both ridge and lasso.\\
 ~~\dots cross-validation errors are compared to select ``best'' $\lambda$ \\
-~~\dots and to chose between ridge and lasso.
+~~\dots and to choose between ridge and lasso.
 
 \end{frame}
 %------------------------------------------------
@@ -639,7 +639,7 @@ $$
 \smallskip
 \item \textbf{Ridge penalty} shrinks coefficients of correlated variables toward each other, no spare solution effect.
 \smallskip
-\item \textbf{Elastic net penalty} a compromise (combined method). The second term of the penalization element encourages highly correlated features to be averaged, while
+\item \textbf{Elastic net penalty} is a compromise (combined method). The second term of the penalization element encourages highly correlated features to be averaged, while
 the first term encourages a sparse solution in the coefficients of these averaged features.
 \end{itemize}
 \end{frame}
@@ -681,7 +681,7 @@ Logit (GLM/MLE) example of elastic net penalty generalization:\\
 \item \textbf{Factor analysis} is based on a formal model predicting observed variables from theoretical latent factors. We use FA for testing/estimating a theoretical model of latent factors causing observed variables.
 \end{itemize}
 \bigskip
-The following discussion only focuses on the PCA/PCR approach.
+The following discussion uses PCA-based approach.
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Dimension reduction methods}
@@ -1011,9 +1011,9 @@ $$ \bm{z}_1^{\textnormal{PLS}} = \sum_{j=1}^p \psi_{j1}\bm{x}_j$$
 \medskip
 where coefficients $\psi_{j1}$ are calculated in two steps:
 \begin{enumerate}
-\item Use OLS to estimate slope-coefficients of the ``simple'' \\linear regressions $\bm{y} \leftarrow \bm{x}_j$.\\
+\item Use OLS to estimate slope-coefficients $\psi_{j1}$ of the ``simple'' \\linear regressions $\bm{y} \leftarrow \bm{x}_j$.\\
 \medskip
-\item Standardize the coefficients so that $\sum_{j=1}^p \psi_{j1}^2=1$.
+\item Standardize the $\psi_{j1}$ coefficients so that $\sum_{j=1}^p \psi_{j1}^2=1$.
 \end{enumerate}
 \bigskip
 Note that with PLS, highest weights are on variables ($\bm{x}_j$) that are most related to the response. 
