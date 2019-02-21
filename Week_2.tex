@@ -63,6 +63,9 @@
 
 %---------------------------------------------
 \section{Theoretical basis for model selection algorithms}
+\begin{frame}{Theoretical basis for model selection algorithms}
+
+\end{frame}
 %---------------------------------------------
 \subsection{Alternative approaches to econometric modeling}
 \begin{frame}{Alternative approaches to econometric modeling}
@@ -669,18 +672,30 @@ Logit (GLM/MLE) example of elastic net penalty generalization:\\
 \begin{frame}{High dimensionality \& dimension reduction methods}
 \end{frame}
 %------------------------------------------------
+\begin{frame}{Principal component vs. Factor analysis}
+\textbf{PCA vs FA -- quick overview:}\\
+\medskip
+\begin{itemize}
+\item \textbf{Principal component analysis} involves extracting linear composites of observed variables. We use PCA to reduce \\a dataset of correlated observed variables to a smaller set of important independent composite variables.
+\bigskip
+\item \textbf{Factor analysis} is based on a formal model predicting observed variables from theoretical latent factors. We use FA for testing/estimating a theoretical model of latent factors causing observed variables.
+\end{itemize}
+\bigskip
+The following discussion only focuses on the PCA/PCR approach.
+\end{frame}
+%------------------------------------------------
 \begin{frame}{Dimension reduction methods}
 \begin{itemize}
-\item Stepwise regression, ridge and lasso involve fitting linear regression models (by OLS or by parameter shrinkage) using the original predictors $X_1, X_2, \dots , X_p$.
+\item Stepwise regression, ridge and lasso involve fitting linear regression models (by OLS or by parameter shrinkage) using the original predictors: $x_1, x_2, \dots , x_p$.
 \medskip
 \item \textbf{Dimension reduction methods} transform the
 predictors and then fit a least squares model using the
 transformed variables:
 \begin{enumerate}
 \bigskip
-\item \textbf{Principal components analysis} is used for data pre-processing, before supervised techniques are applied (dimension reduction).
+\item \textbf{Principal components analysis (PCA)} is used for data pre-processing, before supervised techniques are applied (dimension reduction).
 \bigskip
-\item \textbf{Principal component regression}:  In the LRM, the potentially many correlated original variables are replaced with a small set of principal components that capture their joint variation.
+\item \textbf{Principal component regression (PCR)}:  In the LRM, the potentially many correlated original variables are replaced with a small set of principal components that capture their joint variation.
 \end{enumerate}
 \end{itemize}
 \end{frame}
@@ -692,26 +707,62 @@ transformed variables:
 \bigskip
 \item Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization.
 \medskip
-\item Suppose we have a $(n \! \times \! p)$ dataset $\bm{X}$. Since we are mainly interested in variance here, we can assume that each of the variables in $\bm{X}$ has been \textbf{centered} to have mean zero (all column means of $\bm{X}$ are zero).\\
-\medskip
-If necessary, the transformation (centering) is straight-forward.
+\item Suppose we have a $(n \! \times \! p)$ dataset $\bm{X}$. Since we are mainly interested in variance here, we can assume that each of the variables in $\bm{X}$ has been \textbf{centered} to have mean zero \\(all column-means of $\bm{X}$ are zero). If necessary, the transformation (centering of $\bm{X}$) is straight-forward.
 
 \end{itemize}
 \end{frame}
-%----------------------------------------------------------------------
+%---------------------------------------------------------------------
+\begin{frame}{PCA motivation \& example}
+\vspace{-0.3cm}
+\begin{figure}
+\includegraphics[scale=0.30]{IMG/PCAexample.jpg}
+\end{figure}
+\vspace{-0.3cm}
+\centering Sample dataset with 2 variables. Green line indicates the first principal component, $Z_1$. Along $Z_1$, data varies the most (out of all directions possible -- in 2D). Blue dashed line indicates $Z_2$ (most variability orthogonal to $Z_1$).
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{PCA motivation \& example}
+\vspace{-1.0cm}
+\begin{figure}
+\includegraphics[scale=0.42]{IMG/PCAexample2.jpg}
+\end{figure}
+\vspace{-0.1cm}
+\centering Sample dataset with 2 variables.  \\$Z_1$ minimizes the squared perpendicular distances to observed data. Data vary most along $Z_1$ (data most spread-out along $Z_1$). \\Values of $z_{i1} \in Z_1$ and $z_{i2} \in Z_2$ are shown as distances from ``zero'' (blue dot). Right panel/plot is rotated for readability.
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{PCA motivation \& example}
+\vspace{-2.2cm}
+\begin{figure}
+\includegraphics[scale=0.40]{IMG/PCAExample3.pdf}
+\end{figure}
+\vspace{-2cm}
+\centering Sample dataset with 2 variables. First principal component is shown (on the $x$-axis) against \texttt{Population} and \texttt{Ad Spending} variables. \\Strong correlation is apparent in both plots, $ \rightarrow ~Z_1$ summarizes both series well and can be used as a single composite predictor for \texttt{Sales} \\(instead of the two observed regressors).
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{PCA motivation \& example}
+\vspace{-2.2cm}
+\begin{figure}
+\includegraphics[scale=0.40]{IMG/PCAExample4.pdf}
+\end{figure}
+\vspace{-2cm}
+\centering Sample dataset with 2 variables. Second principal component is shown (on the $x$-axis) against \texttt{Population} and \texttt{Ad Spending} variables. \\There is little relationship between $Z_2$ and the two regressors. \\Hence, $Z_1$ apparently summarizes both (strongly correlated) regressors well enough. 
+\end{frame}
+%---------------------------------------------------------------------
 \begin{frame}{Principal component analysis (PCA)}
 \begin{itemize}
-\item The \textbf{first principal component} of a set of centered variables
-$X_1, X_2, \dots, X_p$ is the normalized linear combination:
-$$ Z_1 = \phi_{11}X_1 + \phi_{21}X_2 + \dots + \phi_{p1}X_p$$
+\item $1^{\textnormal{st}}$ principal component vector $\bm{z}_1$ of a set of centered variables
+$\bm{x}_1, \bm{x}_2, \dots, \bm{x}_p$ (all $n\!\times\!1)$ is the normalized linear combination:
+\vspace{-0.1cm}
+$$ \bm{z}_1 = \phi_{11}\bm{x}_1 + \phi_{21}\bm{x}_2 + \dots + \phi_{p1}\bm{x}_p$$
+\vspace{-0.1cm}
 that has the largest variance. Hence, we solve:
 \begin{equation} \label{PCA1}
 \underset{\phi_{11},\dots,\phi_{p1}}{\textnormal{maximize}} \, 
-  \frac{1}{n} \sum_{i=1}^n \left( \sum_{i=1}^p  
-  \phi_{j1}x_{ij} \right)^2 \,\,\,\,\,\, s.\,t. \,\,\,\,\,\,     
+  \frac{1}{n} \sum_{i=1}^n \left( \sum_{j=1}^p  
+  \phi_{j1}x_{ij} \right)^{\!2} \,\,\,\,\,\, s.\,t. \,\,\,\,\,\,     
   \sum_{j=1}^p \phi_{j1}^2=1 
 \end{equation}
-\item The elements $\phi_{11}, \dots, \phi_{p1}$ are loadings of the first principal component and they make up the first principal component loading vector, $\bm{\phi}_1 = (\phi_{11}, \phi_{21},\dots, \phi_{p1})^\prime$.
+\item The $\phi_{j1}$ elements $\phi_{11}, \dots, \phi_{p1}$ are \textit{loadings} of the first principal component and they make up the first principal component loading vector, $\bm{\phi}_1 = (\phi_{11}, \phi_{21},\dots, \phi_{p1})^\prime$.
 \item $\sum_{j=1}^p \phi_{j1}^2 =1$ is the normalization condition: sum of squares of loadings is equal to one. Otherwise, setting $|\phi_{j1}|$ arbitrarily large leads to arbitrarily large variance.
 \item \eqref{PCA1} is solvable by linear algebra (singular-value decomposition)
 \end{itemize}
@@ -721,10 +772,10 @@ that has the largest variance. Hence, we solve:
 \begin{itemize}
 \item By solving \eqref{PCA1}, we obtain the linear combination of the sample variables of the form:
 $$z_{i1}= \phi_{11}x_{i1} + \phi_{21}x_{i2} + \dots + \phi_{p1}x_{ip} \,\,\,\,\,\,;\,\,\,\,\,\,            i=1,\dots,n.$$
-\item We refer to $Z_1$ as the first principal component, with realized values $z_{11}, z_{21}, \dots, z_{n1}$.
+\item $\bm{z}_1 = (z_{11}, z_{21}, \dots, z_{n1})^{\prime}$ is the first principal component. 
 \medskip
-\item Since each of the $X_j$ variables has mean zero, then so does $Z_1$\\ (for
-any values of $\phi_{j1}$). Hence, the sample variance of $Z_1$ can be calculated as $\frac{1}{n} \sum_{i=1}^n z_{i1}^2$.
+\item Since each of the $\bm{x}_j$ variables has mean zero, so does $\bm{z}_1$\\~\\
+Hence, the sample variance of $\bm{z}_1$ can be calculated as $\frac{1}{n} \sum_{i=1}^n z_{i1}^2$.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -733,37 +784,19 @@ any values of $\phi_{j1}$). Hence, the sample variance of $Z_1$ can be calculate
 \item The loading vector $\bm{\phi}_1$ with elements $\phi_{11}, \phi_{21},\dots, \phi_{p1}$ defines a direction in variable space (column space of $\bm{X}$), along which the data vary the most.
 \medskip
 \item \textbf{The second principal component} is the linear combination
-of $X_1, \dots , X_p$ that maximizes variance among all linear combinations that are \textbf{uncorrelated} with $Z_1$. Hence, we add orthogonality condition to \eqref{PCA1} and repeat the optimization.
+of $\bm{x}_1, \dots , \bm{x}_p$ that maximizes variance among all linear combinations that are \textbf{uncorrelated} with $\bm{z}_1$. Hence, we add orthogonality condition to \eqref{PCA1} and repeat the optimization.
 \medskip
-\item The second principal component $Z_2$ and its elements $z_{12}, z_{22}, \dots z_{n2}$ take the form:
+\item The second principal component $\bm{z}_2$ and its elements $z_{12}, z_{22}, \dots z_{n2}$ take the form:
 $$z_{i2}= \phi_{12}x_{i1} + \phi_{22}x_{i2} + \dots + \phi_{p2}x_{ip} \,\,\,\,\,\,;\,\,\,\,\,\,            i=1,\dots,n.$$
 where $\bm{\phi}_2 = (\phi_{12}, \phi_{22},\dots, \phi_{p2})^\prime$ is the second principal component loading vector.
 \end{itemize}
 \end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Principal component analysis (PCA)}
-\vspace{-1cm}
-\begin{figure}
-\includegraphics[scale=0.30]{IMG/PCAexample.jpg}
-\end{figure}
-\vspace{-0.5cm}
-\centering Sample dataset with 2 variables. Green line indicates the first principal component, blue dashed line indicates $Z_2$.
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Principal component analysis (PCA)}
-\vspace{-1.5cm}
-\begin{figure}
-\includegraphics[scale=0.45]{IMG/PCAexample2.jpg}
-\end{figure}
-\vspace{-0.5cm}
-\centering Sample dataset with 2 variables. Values of $z_{i1} \in Z_1$ and $z_{i2} \in Z_2$ are shown. Right panel/plot rotated for readability.
-\end{frame}
-%---------------------------------------------------------------------
+%----------------------------------------------------------------------
 \begin{frame}{Principal component analysis (PCA)}
 \begin{itemize}
-\item Constraining $Z_2$ to be uncorrelated with $Z_1$ is equivalent to constraining the direction $\bm{\phi}_2$ to be orthogonal (perpendicular) to the direction $\bm{\phi}_1$. 
+\item Constraining $\bm{z}_2$ to be uncorrelated with $\bm{z}_1$ is equivalent to constraining the direction $\bm{\phi}_2$ to be orthogonal (perpendicular) to the direction $\bm{\phi}_1$. 
 \medskip
-\item Subsequent principal components: \\ \medskip For a sequence of additional $Z_2, Z_3,\dots$ principal components, we solve \eqref{PCA1} while adding orthogonality condition with respect to all preceding principal components.
+\item Subsequent principal components: \\ \medskip For a sequence of additional $\bm{z}_2, \bm{z}_3,\dots$ principal components, we solve \eqref{PCA1} while adding orthogonality condition with respect to all preceding principal components.
 \medskip
 \item Important geometrical interpretations to principal components apply (see \textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR textbook}}}).
 \end{itemize}
@@ -774,13 +807,13 @@ where $\bm{\phi}_2 = (\phi_{12}, \phi_{22},\dots, \phi_{p2})^\prime$ is the seco
 \begin{itemize}
 \item To understand the ``strength'' of each principal component, we calculate the proportion of variance explained by each component.
 \medskip
-\item \textbf{Total variance present in a data set} (assuming centered variables with mean zero) is defined as:
-$$ \sum_{j=1}^p \textit{var}\,(X_j) 
+\item \textbf{Total variance present in a data set} (assuming $\bm{X}$ matrix ($n\!\times\!p)$ of centered variables $\bm{x}_j$ with mean zero) is defined as:
+$$ \sum_{j=1}^p \textnormal{var}\,(\bm{x}_j) 
    = \sum_{j=1}^p \frac{1}{n} \sum_{i=1}^n x_{ij}^2 $$
 \item \textbf{Variance explained} by the $m$-th principal component is:
-$$ \textit{var}\,(Z_m) 
+$$ \textnormal{var}\,(\bm{z}_m) 
    = \frac{1}{n} \sum_{i=1}^n z_{im}^2 $$
-\item $\sum_{j=1}^p \textit{var}\,(X_j) = \sum_{m=1}^M \textit{var}\,(Z_m), $  where $M = \min(n-1, p)$.
+\item $\sum_{j=1}^p \textnormal{var}\,(\bm{x}_j) = \sum_{m=1}^M \textnormal{var}\,(\bm{z}_m), $  where $M = \min(n-1, p)$. \\i.e. if all PC are used, they explain 100 \% of variance in $\bm{X}$.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -788,12 +821,12 @@ $$ \textit{var}\,(Z_m)
 \textbf{Proportion of variance explained (PVE)}\\
 \bigskip
 \begin{itemize}
-\item PVE of the $m$-th principal component lies between 0 and 1 and it is defined as:
+\item PVE of the $m$-th principal component $\bm{z}_m$ lies between 0 and 1 and it is defined as:
 $$\textnormal{PVE}_m 
  = \frac{\sum_{i=1}^n z_{im}^2 }
- {\sum_{j=1}^p \sum_{i=1}^n x_{ij}^2}  $$\\
+ {\sum_{j=1}^p \sum_{i=1}^n x_{ij}^2}  \,.$$\\
 \bigskip
-\item PVEs sum to 1. We can display \& interpret cumulative PVEs.
+\item Also, $$\sum_{m=1}^M \textnormal{PVE}_m = 1~,~~$$ \\~\\i.e. PVEs sum to 1 and we can display \& interpret cumulative PVEs.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -815,51 +848,47 @@ summary(pca1)\\
 \#\# Cumulative Proportion~ 0.91060756~ 0.95698698~ 1.00000000\\
 }
 \begin{itemize}
-\item The number of components is also the number of variables.
-\item Proportion of variance: Eg. if .85 then component explains 85\% of the variance.
-\item Cumulative Proportion: $Z_m$ and previous components (adding up to 1).
+\item The number of components is also the number of variables (if $n>p$).
+\item Proportion of variance: Eg. if $\textnormal{PVE}_1 = .52$, $\bm{z}_1$ explains 52\% of variance in $\bm{X}$.
+\item Cumulative Proportion: PVE by $\bm{z}_m$ and previous components.
 \item Standard deviation = eigenvalues
-\item How many components to use in PCR? Choose the components with eigenvalues equal or higher then 1. (or use cross-validation)
+\item How many components to use in PCR? Choose the components with eigenvalues equal or higher than 1. (or use cross-validation)
 \end{itemize}
 }
 \end{frame}
-
-
-
-
 %---------------------------------------------------------------------
 \begin{frame}{Kaiser-Meyer-Olkin (KMO) statistic}
-PCA can perform a compression of the available information (reduce dimension) only if we can ``reject''  independence (orthogonality) among variables.
+PCA can perform a compression of the available information (reduce dimension) only if we can ``reject''  independence (orthogonality) among variables $\bm{x}_j$ in $\bm{X}$.
 \bigskip
-Individual KMO (for $j$-th variable):
+Individual $\textit{KMO}$ (for $j$-th variable):
 $$\textit{KMO}_j = \frac{\sum_{i\neq j} r_{ij}^2}{\sum_{i\neq j} r_{ij}^2 + \sum_{i\neq j} a_{ij}^2}\,;\hspace{1,7cm} \textit{KMO}_j \in \langle 0,1 \rangle $$\\
-Overall KMO:
+Overall $\textit{KMO}$:
 $$\textit{KMO} = \frac{\sum_j \sum_{i\neq j} r_{ij}^2}
                    {\sum_j \sum_{i\neq j} r_{ij}^2 \,+\, \sum_j \sum_{i\neq j} a_{ij}^2}\,
                    ;\hspace{0.5cm} \textit{KMO} \in \langle 0,1 \rangle $$\\
 
 where:\\
 $\{r_{ij} \} = \bm{R}$, which is a correlation matrix,\\
-$\{a_{ij} \} = \bm{A}$, which is a partial correlation matrix\\
+$\{a_{ij} \} = \bm{A}$, which is a partial correlation matrix (partial correlations represent the direct interactions between two variables, with the indirect effects of all remaining variables removed)\\
 $a_{ij} = - \frac{v_{ij}}{\sqrt[]{v_{ii} \cdot v_{jj}\,}}$ where $\{ v_{ij} \} = \bm{V} = \bm{R}^{-1}$
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Kaiser-Meyer-Olkin (KMO) statistic}
-KMO description 
+$\textit{KMO}$ description 
 \begin{itemize}
-\item KMO compares  correlations between variables against their partial correlations. 
+\item $\textit{KMO}$ compares  correlations between variables against their partial correlations. 
 \item If partial correlations $a_{ij}$ are near zero, PCA can perform efficiently, because the
-variables are highly related and KMO $\approx 1$.
-\item If KMO is low (KMO $\approx 0$, often KMO $< 0.5$), PCA is not relevant.
+variables are highly related and $\textit{KMO} \approx 1$.
+\item If $\textit{KMO}$ is low (KMO $\approx 0$), PCA is not relevant.\\In empirical applications, PCA is gerally not usefull if $\textit{KMO} < 0.5$.
 \end{itemize}
 \bigskip
-KMO-based variable selection:
+$\textit{KMO}$-based variable selection:
 \smallskip
 \begin{itemize}
-\item Overall KMO should be .60 or higher (ideally over 0.90).
-\item If it is not, drop the variables with the lowest individual KMO statistic values, until overall KMO rises above .60.
+\item Overall $\textit{KMO}$ should be .60 or higher (ideally over 0.90).
+\item If it is not, drop the variables with the lowest individual $\textit{KMO}_j$ values, until overall $\textit{KMO}$ rises above .60.
 \item This approach requires that we start with multiple variables/regressors in our dataset; at least $p > 5$ .
-\item KMO \& Bartlett’s test in \texttt{R}: \textcolor{blue}{\underline{\href{https://rstudio-pubs-static.s3.amazonaws.com/135029_f7211c7b041d4d69a67a09fcc482d82c.html}{see RStudio web page}}})
+\item Alternative: Bartlett’s test in \texttt{R}: cortest.bartlett() in \{psych\}.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
@@ -878,9 +907,9 @@ If we have many correlated original variables as regressors in a LRM, we can rep
 %------------------------------------------------
 \begin{frame}{Principal component regression (PCR)}
 \begin{itemize}
-\item Using PCA, we linearly transform our dataset of predictors $X_1, X_2, \dots, X_p$ into $Z_1, Z_2, \dots, Z_M$ variables where $M < p$. \\The PCA transformation can be outlined as follows: 
+\item Using PCA, we linearly transform our dataset of predictors $\bm{x}_1, \bm{x}_2, \dots, \bm{x}_p$ into $\bm{z}_1, \bm{z}_2, \dots, \bm{z}_M$ variables where $M < p$. \\The PCA transformation can be outlined as follows: 
 \begin{equation} \label{PCR1}
-Z_m = \sum_{j=1}^p \phi_{mj} X_j,
+\bm{z}_m = \sum_{j=1}^p \phi_{mj} \bm{x}_j,
 \end{equation}
 for some constant parameters $\phi_{m1}, \dots, \phi_{mp}$.
 \item Now, we can use OLS to fit a LRM:
@@ -935,12 +964,12 @@ The optimal number of principal components can be assessed using cross validatio
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Principal component regression (PCR)}
-\vspace{-1cm}
+\vspace{-0.7cm}
 \begin{figure}
 \includegraphics[scale=0.30]{IMG/PCRcomponent.jpg}
 \end{figure}
 \vspace{-0.5cm}
-\centering Sample data, selection of the number of components.
+\centering Sample data, selection of the number of components. \\In this particular illustration, PCR would provide little improvement over OLS (this may happen often for $n\gg p$ datasets). 
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Principal component regression (PCR)}
@@ -948,14 +977,14 @@ The optimal number of principal components can be assessed using cross validatio
 \medskip
 \begin{itemize}
 \item PCA identifies linear combinations (directions) that best
-represent the predictors $X_1, X_2, \dots , X_p$.
+represent the predictors $\bm{x}_1, \bm{x}_2, \dots , \bm{x}_p$.
 \item These directions are identified in an \textbf{unsupervised} way, since the response $y$ is not used to help determine the principal component directions. i.e. the response does not supervise the identification of the principal components.
 \item PCR suffers from a potentially serious drawback: there is no guarantee that the directions that best explain the predictors will also be the best directions to use for predicting the response.
 \end{itemize}
 \medskip
 Potential solutions to the problem:
 \begin{itemize}
-\item Partial least squares (\textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR, ch. 10}}})
+\item Partial least squares (\textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR, ch. 6.3.2}}})
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -963,5 +992,66 @@ Potential solutions to the problem:
 \begin{frame}{Partial least squares (PLS)}
 \end{frame}
 %---------------------------------------------------------------------
+\begin{frame}{Partial least squares (PLS)}
+\begin{itemize}
+\item Much like with PCR, in PLS we also search for convenient (aggregating) linear combinations of regressors in matrix $\bm{X}$.\\
+\medskip
+\item PLS is not scale-invariant, so we assume each $\bm{x}_j$ regressor is standardized -- the same way as in PCR.\\
+\medskip
+\item PLS, unlike PCR, uses \textit{supervised} identification of the components: both $\bm{X}$ and $\bm{y}$ are used when searching for linear combinations of regressors.\\
+\medskip
+\item PLS-based linear combinations of $\bm{x}_j$ (``directions'') not only approximate the original (correlated) data in $\bm{X}$, but are also related to the response $\bm{y}$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Partial least squares (PLS)}
+Fist component for PLS:
 
+$$ \bm{z}_1^{\textnormal{PLS}} = \sum_{j=1}^p \psi_{j1}\bm{x}_j$$
+\medskip
+where coefficients $\psi_{j1}$ are calculated in two steps:
+\begin{enumerate}
+\item Use OLS to estimate slope-coefficients of the ``simple'' \\linear regressions $\bm{y} \leftarrow \bm{x}_j$.\\
+\medskip
+\item Standardize the coefficients so that $\sum_{j=1}^p \psi_{j1}^2=1$.
+\end{enumerate}
+\bigskip
+Note that with PLS, highest weights are on variables ($\bm{x}_j$) that are most related to the response. 
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Partial least squares (PLS) -- illustration}
+\vspace{-1.2cm}
+\begin{figure}
+\includegraphics[scale=0.50]{IMG/PCAExample5.pdf}
+\end{figure}
+\vspace{-0.6cm}
+\centering Sample dataset with 2 variables. The first PLS direction (component) -- solid line -- is shown. Compare to the PCA/PCR first direction (component) -- dotted line (shown previously).
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Partial least squares (PLS)}
+Second component for PLS:\\
+\medskip
+\begin{enumerate}
+    \item We regress each variable on $\bm{z}_1^{\textnormal{PLS}}$ and take residuals \\($\bm{x}_1 \leftarrow \bm{z}_1^{\textnormal{PLS}}$ and save OLS residuals $\ddot{\bm{x}}_1$; repeat for $\bm{x}_2$, etc.)\\~\\
+    Individual $\ddot{\bm{x}}_j$ residuals can be interpreted as the ``remaining'' information of $\bm{x}_j$ that is not explained by the first PLS direction (component).\\
+    \medskip
+    \item Compute $\bm{z}_2^{\textnormal{PLS}}$ using the orthogonalized data ($\ddot{\bm{X}}$), \\the same way as the first component.\\
+    (Run all $\bm{y} \leftarrow \ddot{\bm{x}}_j$ regressions and standardize coefficients).
+\end{enumerate}
+\bigskip
+By analogy, this procedure can be repeated for all subsequent components.
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Partial least squares (PLS)}
+
+The supervised dimension reduction in PLS can reduce bias \\(compared to PCR). \\~\\However, it can also increase variance of predictions. Hence, the benefits of using PLS over PCR can be outweighted by drawbacks ($k$FCV may be used to compare the two methods).\\~\\
+
+PLS -- detailed technical description and estimation algorithm:
+\begin{itemize}
+\item (\textcolor{blue}{\underline{\href{https://cran.r-project.org/web/packages/pls/vignettes/pls-manual.pdf}{  \{pls\} package manual}}})
+\item (\textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{The Elements of 
+Statistical Learning, ch. 3.5.2}}})
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
 \end{document}
