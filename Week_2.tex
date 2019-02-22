@@ -909,7 +909,7 @@ If we have many correlated original variables as regressors in a LRM, we can rep
 \begin{itemize}
 \item Using PCA, we linearly transform our dataset of predictors $\bm{x}_1, \bm{x}_2, \dots, \bm{x}_p$ into $\bm{z}_1, \bm{z}_2, \dots, \bm{z}_M$ variables where $M < p$. \\The PCA transformation can be outlined as follows: 
 \begin{equation} \label{PCR1}
-\bm{z}_m = \sum_{j=1}^p \phi_{mj} \bm{x}_j,
+\bm{z}_m = \bm{X\phi}_m \qquad \textnormal{where} \qquad z_{im} = \sum_{j=1}^p \phi_{jm\,} x_{ij},
 \end{equation}
 for some constant parameters $\phi_{m1}, \dots, \phi_{mp}$.
 \item Now, we can use OLS to fit a LRM:
@@ -917,7 +917,7 @@ for some constant parameters $\phi_{m1}, \dots, \phi_{mp}$.
 y_i = \theta_0 + \sum_{j=1}^M \theta_m z_{im} + \varepsilon_i,
 \end{equation}
 \item Note that in model \eqref{PCR2}, the regression coefficients are given
-as $\theta_0, \dots, \theta_M$. If the constants $\phi_{m1}, \dots , \phi_{mp}$ are chosen wisely (PCA), then such dimension reduction approaches can often
+as $\theta_0, \dots, \theta_M$. If the constants $\phi_{1m}, \phi_{2m}, \dots , \phi_{pm}$ are chosen wisely (PCA), then such dimension reduction approaches can often
 outperform OLS regression in terms of CV errors, etc.
 \end{itemize}
 \end{frame}
@@ -926,13 +926,13 @@ outperform OLS regression in terms of CV errors, etc.
 
 From equation/definition \eqref{PCR1}, we can write
 $$ \sum_{m=1}^M \theta_m z_{im} 
-= \sum_{m=1}^M \theta_m \sum_{j=1}^p \phi_{mj} x_{ij} 
-= \sum_{j=1}^p \sum_{m=1}^M \theta_m \phi_{mj} x_{ij} 
+= \sum_{m=1}^M \theta_m \sum_{j=1}^p \phi_{jm} x_{ij} 
+= \sum_{j=1}^p \sum_{m=1}^M \theta_m \phi_{jm} x_{ij} 
 = \sum_{j=1}^p \beta_j x_{ij} 
 $$ 
 where 
 \begin{equation} \label{PCR3}
-\beta_j = \sum_{m=1}^M \theta_m \phi_{mj}.
+\beta_j = \sum_{m=1}^M \theta_m \phi_{jm}.
 \end{equation}
 
 \begin{itemize}
@@ -994,22 +994,23 @@ Potential solutions to the problem:
 %---------------------------------------------------------------------
 \begin{frame}{Partial least squares (PLS)}
 \begin{itemize}
-\item Much like with PCR, in PLS we also search for convenient (aggregating) linear combinations of regressors in matrix $\bm{X}$.\\
+\item Much like with the PCR method, in PLS we also search for convenient (aggregating) linear combinations of regressors in matrix $\bm{X}$.\\
 \medskip
 \item PLS is not scale-invariant, so we assume each $\bm{x}_j$ regressor is standardized -- the same way as in PCR.\\
 \medskip
 \item PLS, unlike PCR, uses \textit{supervised} identification of the components: both $\bm{X}$ and $\bm{y}$ are used when searching for linear combinations of regressors.\\
 \medskip
-\item PLS-based linear combinations of $\bm{x}_j$ (``directions'') not only approximate the original (correlated) data in $\bm{X}$, but are also related to the response $\bm{y}$.
+\item PLS-based linear combinations of $\bm{x}_j$ (``directions'') not only approximate the original (correlated) data in $\bm{X},$ but are also related to the response $\bm{y}$.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Partial least squares (PLS)}
-Fist component for PLS:
+First component for PLS:
 
-$$ \bm{z}_1^{\textnormal{PLS}} = \sum_{j=1}^p \psi_{j1}\bm{x}_j$$
+$$ \bm{z}_1^{\textnormal{PLS}} = \bm{X\psi}_1 \qquad \textnormal{where} \qquad 
+z_{i1}^{\textnormal{PLS}} \sum_{j=1}^p \psi_{j1} x_{ij}$$
 \medskip
-where coefficients $\psi_{j1}$ are calculated in two steps:
+and coefficients $\psi_{j1}$ are calculated in two steps:
 \begin{enumerate}
 \item Use OLS to estimate slope-coefficients $\psi_{j1}$ of the ``simple'' \\linear regressions $\bm{y} \leftarrow \bm{x}_j$.\\
 \medskip
