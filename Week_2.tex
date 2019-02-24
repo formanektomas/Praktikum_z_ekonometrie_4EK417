@@ -492,7 +492,9 @@ the penalty part of the ridge regression objective function.
 standardizing the predictors, using the formula:
 
 $$ \widetilde{x}_{ij} = \frac{x_{ij}}{
-   \sqrt[]{\frac{1}{n} \sum_{i=1}^n (x_{ij} - \overline{x}_j)^2 \,   }}$$
+   \sqrt[]{\frac{1}{n} \sum_{i=1}^n (x_{ij} - \overline{x}_j)^2 \,}}
+   \quad \textnormal{hence} \quad
+   \textnormal{s.d.}(\widetilde{x}_{j}) = 1\, ; \, j=1,2,\dots$$
  
 \end{itemize}
 \end{frame}
