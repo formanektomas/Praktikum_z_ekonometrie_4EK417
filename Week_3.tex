@@ -197,67 +197,60 @@ With mean substitution & 69 & .54 &  310.747 & 59.12 \\
 \end{frame}
 
 %------------------------------------------------
-
-
-
 \begin{frame}
-\frametitle{Modern Approaches to missing data}
-
-\textbf{Multiple Imputation (MI) }
-  \begin{itemize}
-  \item[] R: $\left\lbrace \textnormal{mice}  \right\rbrace , \,\, \left\lbrace \textnormal{mi}  \right\rbrace, \,\, \left\lbrace \textnormal{Amelia}  \right\rbrace, \, $ \dots
+\frametitle{Multiple imputation (MI)}
+\textbf{Multiple Imputation (MI) }\\
+\texttt{R}: $\left\lbrace \textnormal{mice}  \right\rbrace , \,\, \left\lbrace \textnormal{mi}  \right\rbrace, \,\, \left\lbrace \textnormal{Amelia}  \right\rbrace, \, $ \dots\\
   \vspace{0.5cm}
-  \item[] MI motivation and algorithm
+MI motivation and algorithm\\
   \vspace{0.2cm}
   \begin{itemize}
-  \item Create several (say, 5) “imputed” values for each missing value $X_{ij}$. Each of the (5) versions of imputed data values are estimated/predicted using a separate ML approach from the data frame observed (different “model” is used for each imputation).
-  \vspace{0.2cm}
-  \item For SLRMs, this may be simplified into mean substitution augmented by adding random errors which reflect sampling variability of $X_j$.
-  \end{itemize}
+  \item Create several (say, 5) imputed values (versions) for each missing item -- regressor $x_{ij}$.
+  \medskip
+  \item Each of the (5) versions of imputed data is used for estimation \\(using OLS, ML or other adequate approach)
+  \medskip
+  \item Information obtained from all (e.g. 5) estimates is conveniently summarized.
  \end{itemize}
- 
-\end{frame}
-
-
+ \end{frame}
 %------------------------------------------------
-
-
 \begin{frame}
-\frametitle{Modern Approaches to missing data}
-\vspace{0.2cm}
-\textbf{Multiple Imputation (contnd.) }
-\vspace{0.2cm}
-  \begin{itemize}
-  \item[] How do we analyze estimates on data with MI?
-  \begin{enumerate}
-  \vspace{0.5cm}
-  \item We use each set of imputed values to form a separate completed dataset (e.g., we get 5 datasets).
-  \vspace{0.2cm}
-  \item For each completed dataset, a standard analysis (LRM) can be run.
-  \vspace{0.2cm}
-  \item Inferences can be combined across MI-based datasets.
-  \end{enumerate}
- \end{itemize}
- 
-\end{frame}
-
+\frametitle{Multiple imputation (MI)}
+Multiple imputation scheme (example with $m=3$ imputations):\\
+\vspace{-1cm}
+\begin{figure}
+\includegraphics[width=1\linewidth]{IMG/mice_scheme.pdf}
+\end{figure}
+ \end{frame}
 %------------------------------------------------
-
-
 \begin{frame}
-
-\frametitle{Modern Approaches to missing data}
+\frametitle{Multiple imputation (MI)}
+\textbf{Multiple imputation - 7 choices of model specification}\\
+\smallskip
+\begin{enumerate}
+    \item Decide on MAR assumption plausibility (MAR/MNAR).
+    \item Imputation model choice (univariate, multivariate, data type).
+    \item Choice of predictors for MI.
+    \item Should we impute variables that are functions of inclomete variables (interactions)?
+    \item Choice of order of imputation (can affect results).
+    \item MI is (generally) based on numerical algorithm: we need to choose starting setup and control (limit) the number of iterations.
+    \item We need to choose $m$ -- the number of imputed datasets.
+\end{enumerate}
+\smallskip
+In \texttt{R} ($\{ \textnormal{mice} \}$), most of the choices have generally valid default setting.\\
+\smallskip
+However -- all the choices are allways made and they affect the resulting imputations.
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Multiple imputation (MI)}
 \textbf{Multiple Imputation (contnd.) }
 \begin{figure}
 \includegraphics[width=0.7\linewidth]{IMG/mitable.jpg}
 \end{figure}
-
 \scriptsize{\url{https://www.uvm.edu/~dhowell/StatPages/Missing_Data/Missing-Part-Two.html}}
-
 \end{frame}
-
-
 %------------------------------------------------
+
 \section{Missing dependent variable data}
 \begin{frame}
 \frametitle{Missing dependent variable data}
@@ -277,36 +270,5 @@ With mean substitution & 69 & .54 &  310.747 & 59.12 \\
 \end{itemize}
 
 \end{frame}
-
-
 %------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%---------------------------------------------------------------------
-
 \end{document}
