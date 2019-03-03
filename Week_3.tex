@@ -166,9 +166,10 @@ With mean substitution & 69 & .54 &  310.747 & 59.12 \\
     \smallskip
     \item It is fast, simple, easy to implement, and no cases are excluded.
     \smallskip
-    \item But even under MCAR, this method still leads to underestimation of the population variance 
+    \item But even under MCAR, this method still leads to underestimation of the population variance. 
     \smallskip
-    \item Bias is proportional to $( \textnormal{nobs} - 1)/( \textnormal{nobs} + \textnormal{nmis} - 1)$. \\Smaller standard errors increase the possibility of Type I errors.
+    \item Bias (in variance estimation) is proportional to \\
+    $( \textnormal{nobs} - 1)/( \textnormal{nobs} + \textnormal{nmis} - 1)$. \\Smaller standard errors increase the possibility of Type I errors.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
@@ -235,7 +236,7 @@ Multiple imputation scheme (example with $m=3$ imputations):\\
     \item Choice of predictors for MI.
     \item Should we impute variables that are functions of incomplete variables (e.g. interaction terms)?
     \item Choice of order of imputation (can affect results).
-    \item MI is (generally) based on numerical a algorithm: we need to choose starting setup and control (limit) the number of iterations.
+    \item MI is (generally) based on a numerical algorithm: we need to choose starting setup and control (limit) the number of iterations.
     \item We need to choose $m$ -- the number of imputed datasets.
 \end{enumerate}
 \smallskip
@@ -272,7 +273,7 @@ Suppose there is a single variable $x$ that has some cases with missing data, an
     \smallskip
     \item[2] Make a random draw from the ``posterior predictive distribution'' of $\hat{\bm{\beta}}$, producing a new set of coefficients $\hat{\bm{\beta}}^{\ast}$.\\
     \smallskip
-    Typically, this would be a random draw from a multivariate normal distribution with mean $\hat{\bm{\beta}}$ and covariance $\textnormal{var}(\hat{\bm{\beta}})$. \\
+    Typically, this would be a random draw from a multivariate normal distribution with mean $\hat{\bm{\beta}}$ and cov. matrix $\textnormal{var}(\hat{\bm{\beta}})$. \\
     \smallskip 
     This step is necessary to produce sufficient variability in the imputed values, and is common to all ``proper'' methods of MI.
 \end{enumerate}
@@ -302,12 +303,12 @@ Suppose there is a single variable $x$ that has some cases with missing data, an
     \begin{itemize}
         \item If the original variable is skewed, the imputed values will also be skewed.
         \item If the original variable is bounded by 0 and 100, the imputed values will also be bounded by 0 and 100.
-        \item And if the real values are discrete (number of children), the imputed values will also be discrete. 
+        \item If the real values are discrete (number of children), the imputed values will also be discrete. 
     \end{itemize} 
     \smallskip
     \item Unfortunately, for \texttt{pmm}, there’s no mathematical theory to justify it (only Monte Carlo simulations support its use).
     \smallskip
-    \item However (based on MC simulations),  \texttt{pmm} does almost as well as parametric methods for a correctly specified model, and a little better than parametric methods in certain misspecified models.
+    \item Based on MC simulations,  \texttt{pmm} does almost as well as parametric methods for a correctly specified model, and a little better than parametric methods in certain misspecified models.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
