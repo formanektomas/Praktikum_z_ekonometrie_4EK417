@@ -10,13 +10,74 @@
 % CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+
 \documentclass{beamer}
 
 \mode<presentation> {
+
+% The Beamer class comes with a number of default slide themes
+% which change the colors and layouts of slides. Below this is a list
+% of all the themes, uncomment each in turn to see what they look like.
+
+%\usetheme{default}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{Dresden}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
 \usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+% As well as themes, the Beamer class has a number of color themes
+% for any slide theme. Uncomment each of these in turn to see how it
+% changes the colors of your current slide theme.
+
+%\usecolortheme{albatross}
+%\usecolortheme{beaver}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%\usecolortheme{orchid}
+%\usecolortheme{rose}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+%\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
 \usefonttheme{serif} 
-\setbeamertemplate{navigation symbols}{} 
+
+%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
+%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
+
+\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
 }
+
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage[T1]{fontenc}
@@ -35,7 +96,7 @@
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
 
-\title[Týden 5]{Praktikum z ekonometrie} % The short title appears at the bottom of every slide, the full title is only on the title page
+\title[Týden x]{Praktikum z ekonometrie - Týden x} % The short title appears at the bottom of every slide, the full title is only on the title page
 
 \author{VŠE Praha} % Your name
 \institute[4EK417] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
@@ -53,116 +114,31 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Outline} % Table of contents slide, comment this block out to remove it
+\frametitle{Obsah} % Table of contents slide, comment this block out to remove it
 \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
 \end{frame}
+
+%----------------------------------------------------------------------------------------
 %	PRESENTATION SLIDES
 %---------------------------------------------------------------------
-\section{Introduction}
-\begin{frame}{Introduction}
+\section{Úvod}
+\begin{frame}{Úvod}
+
+
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{Introduction - spatial analysis}
+\section{Prostorová autokorelace}
+\begin{frame}{Prostorová autokorelace}
+\begin{figure}
+	\includegraphics[width=.9\textwidth]{IMG/sp_auto1.PNG}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Prostorová autokorelace}
 \begin{figure}
 	\includegraphics[width=.9\textwidth]{IMG/sp_auto2.PNG}
 \end{figure}
 \end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Introduction - spatial analysis}
-Methods of quantitative spatial analysis:\\
-\bigskip
-\begin{itemize}
-    \item Visualization \\Maps, graphical display
-    \bigskip
-    \item Data exploration \& descriptive methods \\Tools to broadly look at spatial patterns
-    \bigskip
-    \item Econometric modeling \\Fitting models, testing hypotheses, formalizing spatial dependence
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Introduction - spatial analysis}
- What are spatial data?\\
-\bigskip
-\begin{itemize}
-    \item Data that are location speciffic and that vary in space.
-    \medskip
-    \item Referenced by a spatial location $\bm{s}$ (usually 2D),  \\$\bm{s} = (x; y)$; $x$ is longitude (easting) and $y$ is latitude (northing). \\ \medskip
-    May also be referenced by a zip code, county or state ID.
-    \medskip
-    \item Data that are close together in space (time) are often more alike than those that are far apart.
-    \medskip
-    \item Tobler's first law of geography: \\ ``Everything is related to everything else, but near things are more related than distant things.''
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{History of spatial analysis: 1854 -- London -- cholera}
-\vspace{-0.5cm}
-\begin{figure}
-	\includegraphics[width=.65\textwidth]{IMG/sp_cholera.eps}
-\end{figure}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{History of spatial analysis: 1854 -- London -- cholera}
- Dr. John Snow: Early spatial analysis\\
-\medskip
-\begin{itemize}
-    \item In August 1854, there was a major Cholera outbreak in the Soho neighbourhood of London, UK. There were 127 cholera related deaths around the area.
-    \smallskip
-    \item At the time, germ theory (microorganisms causing disease) was not generally accepted. Dr. J. Snow was a MD, pioneer of germ theory and a statistician.
-    \smallskip
-    \item Dr. John Snow spoke to local residents and mapped where cholera cases occurred. As a result of his map, he was able to pinpoint the public water pump on Broad Street as the source of contaminated water causing the cholera outbreak.
-    \smallskip
-    \item Dr. Snow used statistics to find a relationship between water sources and cholera cases and subsequently found out that the waterworks company supplying water to Broad Street pump was taking water from a sewage polluted area of the Thames river.
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{History of spatial analysis: 1935 -- field experiments}
-\vspace{-0.5cm}
-\begin{figure}
-	\includegraphics[width=.8\textwidth]{IMG/sp_Fisher.jpg}
-\end{figure}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{History of spatial analysis: 1935 -- field experiments}
- R.A. Fisher: Early spatial analysis\\
-\medskip
-\begin{itemize}
-    \item R.A. Fisher was probably the first to recognize implications of spatial dependency for statistical analysis.
-    \smallskip
-    \item In his work on design of experiments in agricultural science, he wrote (Fisher, 1935, p. 66):\\
-    ``After choosing the area we usually have no guidance beyond the widely verified fact that patches in close proximity are commonly more alike, as judged by the yield of crops, than those which are further apart.''
-    \smallskip
-    \item Observed spatial variability, i.e. field-to-field variability, was largely due to physical properties of the soil and environmental properties of the field. He avoided the confounding of treatment effects with plot effect with the introduction of randomization.
-    \smallskip
-    \item Fisher's solution was to eliminate spatial dependency bias by localizing the crops under scrutiny into randomly assigned blocks.
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 %---------------------------------------------------------------------
 \begin{frame}{Prostorová autokorelace}
 \begin{itemize}
