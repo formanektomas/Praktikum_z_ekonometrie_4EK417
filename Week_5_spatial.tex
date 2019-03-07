@@ -76,7 +76,7 @@ Methods of quantitative spatial analysis:\\
     \bigskip
     \item Data exploration \& descriptive methods \\Tools to broadly look at spatial patterns
     \bigskip
-    \item Econometric modeling \\Fitting models, testing hypotheses, formalizing spatial dependence
+    \item Econometric modeling \\Fitting models, testing hypotheses, formalizing spatial dependence, discerning spatial effects from other factor (e.g. macroeconomic)
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -138,8 +138,238 @@ Methods of quantitative spatial analysis:\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-
-
+\section{Spatial stochastic processes}
+\begin{frame}{Spatial stochastic processes}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Measuring spatial variables}
+Spatial data: measurements and measurement scales
+\begin{itemize}
+    \item \textbf{Generally, data vary continuously over space, but are measured only at discrete locations.} 
+    \begin{itemize}
+        \item To characterize spatial variables, spatial aggregation is necessary.
+        \item Aggregation of spatial variables may be just another source of bias and potential data mis-manipulation\\ 
+        Summary values are influenced by shape and scale of spatial units.\\
+        Shape (administrative boundaries) may change over time.
+    \end{itemize}
+    \item Scale, consistency and relevance should be carefully considered
+when collecting and analyzing spatial data
+\end{itemize}
+\medskip
+Spatio-temporal data:
+\begin{itemize}
+    \item Data that are location specific and repeated in time.
+    \item Each variable-observation has a location, time and value.
+    \item Similar methods for analysis, with an added time dimension \\(choice of sampling frequency, spatial panel data analysis)
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Measuring spatial distances}
+Distances ($d$) can be defined in a variety of ways, yet the following technical conditions should always apply (invariant to spatial translation, i.e. ``shift''):\\
+\medskip
+\begin{enumerate} 
+\item[1] $d(\bm{s}_i, \bm{s}_j) = d(\bm{s}_j, \bm{s}_i)$ \\ \smallskip (symmetry) 
+\medskip
+\item[2] $d(\bm{s}_i, \bm{s}_i) = 0$  \\ \smallskip (dist. between a point and itself is zero) 
+\medskip
+\item[3] $d(\bm{s}_i, \bm{s}_j) \leq d(\bm{s}_i) + d(\bm{s}_j)$  \\ \smallskip (triangle inequality; 
+$d(\bm{s}_i)$ is the distance from origin) 
+\end{enumerate}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Measuring spatial distances}
+Distances ($d$) can be defined in a variety of ways, yet the following technical conditions should always apply (invariant to spatial translation, i.e. ``shift''):\\
+\medskip
+\begin{enumerate} 
+\item[1] $d(\bm{s}_i, \bm{s}_j) = d(\bm{s}_j, \bm{s}_i)$ \\ \smallskip (symmetry) 
+\medskip
+\item[2] $d(\bm{s}_i, \bm{s}_i) = 0$  \\ \smallskip (dist. between a point and itself is zero) 
+\medskip
+\item[3] $d(\bm{s}_i, \bm{s}_j) \leq d(\bm{s}_i) + d(\bm{s}_j)$  \\ \smallskip (triangle inequality; 
+$d(\bm{s}_i)$ is the distance from origin) 
+\end{enumerate}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Measuring spatial distances}
+\small{\textbf{Euclidean distances}, measured between two point in the ``ordinary'' Euclidean space. In 2D, the Euclidean distance ($L_2$ norm) is defined as 
+$$
+d(\bm{s}_i, \bm{s}_j) = \sqrt[]{(s_{ix}-s_{jx})^2+(s_{iy}-s_{jy})^2}\,,
+$$
+where the $x$ and $y$ subscripts handle planar coordinates. For smaller distances, the computational simplicity is attractive.\\
+\medskip
+\textbf{Great circle distances} - for larger distances, planar projection accumulates non-negligible errors. The shortest path between two points on a sphere (given their longitudes and latitudes): 
+$$
+d(\bm{s}_i, \bm{s}_j) = 2r \, \arcsin \,
+ \sqrt{ \sin^2 \left( \frac{\phi_j-\phi_i}{2} \right)
+       + \cos(\phi_i) \cos(\phi_j)
+       \sin^2 \left( \frac{l_j-l_i}{2} \right) }\,,
+$$
+where $r$ is the radius of the sphere, $\phi_1$ and $\phi_2$ are the latitudes of $\bm{s}_i$ and $\bm{s}_j$ in radians, $l_i$ and $l_j$ are the longitudes (in radians). Its only an approximation when applied to the Earth, which is not a perfect sphere (correct within a 0.5\%; alternative: Vicenty's formulae).\\
+\medskip
+\textbf{Manhatan distances} - $L_1$ norm, a function on a fixed grid.
+}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+For a generic location $\bm{s}$ given by a vector of $d$ coordinates in a $d$-dimensional Euclidean space, spatial stochastic process \\(``random field'') is often denoted as
+$$ Z(\bm{s}): \bm{s} \in D \subseteq \mathbb{R}^d \, .$$
+\vspace{-0.5cm}
+\begin{itemize}
+    \item Typically, $d=2$ for most economic and econometric applications, $d=3$ is often used in fields such as geology or astronomy. 
+    \smallskip
+    \item $D$ is a fixed finite set of $N$ spatial locations $\bm{s}_1, \bm{s}_2, \dots, \bm{s}_N$. 
+    \smallskip
+    \item Individual $\bm{s}_i$ units are points in space (say, with GPS-based latitude and longitude coordinates). Sometimes, such points can be associated with non-zero surface area elements.
+    \item Much like in time-series analysis, the individual realizations of a spatial stochastic process -- random field -- are often denoted \\$z(\bm{s}_i)$ or, simply, $z_i$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+Stationarity is a common assumption: a spatial process under scrutiny repeats itself over the domain $D$. If we translate the entire set of coordinates by $\bm{h}$ -- a specific distance in a specified direction, the stochastic process and its features remain unchanged.\\
+\medskip
+\textbf{Strong stationarity} of a random filed: We start with a finite-dimensional distribution: 
+$$F_{\bm{s}_1, \dots,\bm{s}_m }(z_1,\dots, z_m) = P[Z(\bm{s}_1) \leq z_1, Z(\bm{s}_2) \leq z_2, \dots, Z(\bm{s}_m) \leq z_m] \, .$$  
+Strong stationarity $\leftrightarrow$~$F$ is invariant under spatial translation $\bm{h}$. Unlike $d_{ij}$ (Euclidean distance between two spatial units $\bm{s}_i$ and $\bm{s}_j$), \\$\bm{h}$ is an orientated distance ``shift'' (spatial translation) vector. \\For strong stationarity:
+\begin{equation*}
+\begin{aligned}
+& P \left[Z(\bm{s}_1) \leq z_1, Z(\bm{s}_2) \leq z_2, \dots, Z(\bm{s}_m) \leq z_m \right] \\
+& = P \left[Z(\bm{s}_1+\bm{h}) \leq z_1, Z(\bm{s}_2+\bm{h}) \leq z_2, \dots, Z(\bm{s}_m+\bm{h}) \leq z_m \right] \, .
+\end{aligned} 
+\end{equation*}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+\vspace{-0.2cm}
+\textbf{Weak  stationarity} (also called second order stationarity) assumes that the first two moments exist, are invariant (and finite) and covariance only depends on spatial translation (orientated distance) $\bm{h}$:
+\begin{equation*}
+\begin{aligned}  
+E[Z(\bm{s})] &= \mu \,, \\
+\textnormal{var}[Z(\bm{s})] & = \sigma^2 \,, \\
+\textnormal{cov} [Z(\bm{s}+\bm{h}),Z(\bm{s})] = C(\bm{s}+\bm{h}, \bm{s}) & = C(\bm{h}) \,.
+\end{aligned} 
+\end{equation*}
+As autocovariance is a function of $\bm{h}$ only (under weak st.), \\for any spatial points $\bm{s}_i$ and $\bm{s}_j$ such that $\bm{s}_i -\bm{s}_j = \bm{h}$, we can write: 
+\begin{equation*}
+\textnormal{cov} \left[ Z(\bm{s}_i), Z(\bm{s}_j) \right] = C(\bm{s}_i - \bm{s}_j) = C(\bm{h}) \,.  
+\end{equation*}
+Covariogram $C(\bm{h})$ is the covariance between two spatial units, separated by $\bm{h}$. For $\bm{h} = \bm{0}$, it simply describes variance: 
+$$\textnormal{cov}\,[Z(\bm{s}+\bm{0}),Z(\bm{s})] =  C(\bm{0}) = \textnormal{var}\,[Z(\bm{s})]\,.$$
+Under weak dependency, covariance disappears with growing distance: 
+$$C(\bm{h}) \rightarrow 0~\textnormal{as}~||\bm{h}|| \rightarrow \bm{\infty}$$.
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+\textbf{Intrinsic stationarity} is less restrictive than weak (second order) stationarity and it is defined in terms of first differences. \\
+\smallskip
+A spatial process is intrinsically stationary if the difference between two observed spatial points is weakly stationary: 
+\begin{equation*} 
+\begin{aligned}  
+E[Z(\bm{s}+\bm{h})-Z(\bm{s})] &= 0 \,, \\
+\textnormal{var}[Z(\bm{s}+\bm{h})-Z(\bm{s})] & = 2\gamma(\bm{h}) \,,
+\end{aligned} 
+\end{equation*}
+where $2\gamma(\bm{h}) \geq 0$ is the variogram. Generally, $2\gamma(\bm{h})$ increases with growing oriented distance $\bm{h}$. \\
+\smallskip
+The two types of relaxed stationarity are related: weak stationarity implies intrinsic stationarity but not vice versa. For weakly stationary spatial processes (where $E(Z(\bm{s}+\bm{h}))=E(Z(\bm{s}))=\mu$) the variogram simplifies to: 
+\begin{equation*}
+2\gamma(\bm{h}) = E \left[ \left( Z(\bm{s}+\bm{h}) - Z(\bm{s})  \right)^2 \right],
+\end{equation*}
+i.e. to the expected squared difference between two observed realizations of a spatial stochastic process. 
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+\textbf{Semivariogram} is denoted as $\gamma(\bm{h})$ and it equals to half the variogram. \\ \smallskip Since  $2\gamma(\bm{h})$ is calculated as expectation of a square, $\gamma(\bm{h}) \geq 0$ for both weakly and intrinsically stationary random fields. \\ \smallskip Also, at $\bm{h}=\bm{0}$, $\gamma(\bm{0}) = 0$ because 
+$$ E \left[ \left( Z(\bm{s}_i) - Z(\bm{s}_i)  \right)^2 \right]=0 \textnormal{~for~} \forall \, i\,.$$
+Variogram (semivariogram) is a generalization of the covariogram $C(\bm{h})$ and under weak stationarity, the two functions are related by: 
+\begin{equation*}
+    \gamma(\bm{h}) = C(\bm{0}) - C(\bm{h})\,.
+\end{equation*}
+If a stationary stochastic process has no spatial dependency at all \\(i.e. $C(\bm{h})=0$ for $\bm{h}\not =\bm{0}$), the semivariogram is constant: $\gamma(\bm{h}) = \textnormal{var}[Z(\bm{s})]$ everywhere, except for $\bm{h}=\bm{0}$, where $\gamma(\bm{0})=0$. 
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+\textbf{Isotropic spatial process} may be defined through a semivariogram:\\  $$\gamma(\bm{h})=\gamma(||\bm{h}||)=\gamma(d).$$ 
+Isotropy means that the semivariogram depends only on the distance $d$ between two points and not on direction.\\ \medskip The lack of isotropy -- anisotropy -- means the semivariogram depends on direction as well as distance. \\ \medskip To assess and test anisotropy, we can estimate and plot directional semivariograms (shown next).
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+\textbf{Empirical semivariogram} \\
+To perform empirical analysis of distance-based data correlations, we construct the so called empirical semivariogram. First, we divide the distances observed over the domain $D$ into $K$ conveniently chosen intervals: 
+$$I_1 = (0, d_1 ], \, I_2 = (d_1, d_2 ], \, \dots \, , \, I_K = (d_{K-1}, d_K ] \, .$$
+Here, $d_1$ is the maximum distance within the $I_1$ interval and $d_K$ is the maximum distance observed over the field of data. \\ \smallskip The intervals can be proportional in terms of distance or in terms of sets of observation pairs allocated to each interval (to adjust for unevenly spaced observations). \\ \smallskip Note that distances are determined by $d$ (distance magnitudes) only -- here, we do not use the orientated distances $\bm{h}$.
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+\textbf{Empirical semivariogram} is calculated using the following formula:
+\begin{equation*}
+\hat{\gamma}(d_k) = 
+\frac{1}{2N(d_k)} \sum_{N(d_k)}[Z(\bm{s}_i)-Z(\bm{s}_j)]^2 \,,
+\end{equation*}
+where $N(d_k)$ is the number of distinct observation pairs in the interval $I_k$ and $\hat{\gamma}(d_k)$ is the semivariogram estimate for its corresponding group (interval) of distances. \\
+\bigskip
+Usually, we fit a convenient parametric function (exponential, spherical, Gaussian, etc.) to the estimated $\hat{\gamma}(d_k)$ values (shown next). \\ 
+\bigskip
+The main goal of empirical semivariogram construction is to estimate and visualize the spatial autocorrelation structure of the observed stochastic process.
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Empirical semivariogram}
+\vspace{-0.5cm}
+\begin{figure}
+	\includegraphics[width=.8\textwidth]{IMG/sp_svgm.jpg}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Empirical semivariogram}
+Three main features of an estimated empirical semivariogram: 
+\begin{itemize}
+\item \textit{Nugget} (nugget effect) describes the micro-scale variations or measurement errors in data. Theoretically, at zero distance, $\gamma(0)=0$. However, two factors play a role here: First, $\gamma(d_1)$ is estimated over the $N(d_1)$ set of pairs, i.e. for the first interval where $ d_{ij} \in (0, d_1 ]$. Second, fitting the empirical semivariogram curve to observed values often causes the non-zero nugget.
+\smallskip
+\item \textit{Sill} amounts to $\lim_{d \to \infty} \gamma(d)$. The sill corresponds to variance of the stochastic field at distances where spatial dependency (which reduces $\gamma(d)$) no longer applies. $\lim_{d \to \infty} \gamma(d) = C(\bm{0}) = \textit{var}[Z(\bm{s})]$.
+\smallskip
+\item \textit{Range} is the spatial distance (if any) beyond which the data are not autocorrelated. In a way, range describes the strength of spatial structure -- based on where the semivariogram ``reaches'' its asymptote (sill).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Empirical semivariogram (fitting)}
+\vspace{-0.25cm}
+\begin{figure}
+	\includegraphics[width=.4\textwidth]{IMG/sp_svgm2.jpg}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Empirical semivariogram (directional semivariogram)}
+\begin{figure}
+	\includegraphics[width=.8\textwidth]{IMG/sp_svgm3.jpg}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatio-temporal stochastic processes}
+The above discussion can be generalized to accommodate processes that are observed repeatedly over time. \\ \medskip 
+Such observations usually exhibit both spatial and temporal dependency and variability.\\ \medskip  
+Given the frequency and density limitations of empirical measurements in continuous space and time, we model our observations as realizations of a spatio-temporal random function (random field)
+\begin{equation*} 
+Z(\bm{s},t), \hspace{1cm} \textnormal{where~} (\bm{s},t) \in \, \mathbb{R}^d \! \times \mathbb{R} \,,
+\end{equation*}
+the spatio-temporal domain is indexed in space by $\bm{s} \in \mathbb{R}^d$ and in time by $t \in \mathbb{R}$. \\ \medskip 
+The separation between spatial and time dimensions is substantial, which is reflected in the notation.
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatio-temporal stochastic processes}
+Weak and intrinsic stationarity concepts can be easily expanded from spatial to spatio-temporal data. \\ \medskip
+For an intrinsically stationary process $Z(\bm{s},t)$, spatio-temporal semivariograms (STSV) is:
+\begin{equation*} 
+\gamma(\bm{h};t) = \frac{1}{2} \textnormal{var} \left[ Z(\bm{s}_0+\bm{h} \, ; \> t_0 + t) - Z(\bm{s}_0;t_0) \right],
+\hspace{1cm} (\bm{h},t) \in \, \mathbb{R}^d \! \times \mathbb{R}.
+\end{equation*}
+STSV does not depend on the selection of origin $(\bm{s}_0, t_0) \in \mathbb{R}^d \! \times \mathbb{R}$ (under intrinsic stationarity). \\ \medskip Also, for intrinsically stationary random fields $Z(\bm{s},t)$, the STSV $\gamma(\bm{h};t)$ is non-negative and $\gamma(\bm{0};0) = 0$.
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Empirical STSV (EU's Unemp., NUTS0, 2002---2016)}
+\begin{figure}
+	\includegraphics[width=.7\textwidth]{IMG/sp_STV.eps}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
 
 
 
