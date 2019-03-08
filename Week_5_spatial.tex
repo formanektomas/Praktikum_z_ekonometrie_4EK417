@@ -598,84 +598,96 @@ $$
 \end{figure}
 \end{frame}
 %---------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%---------------------------------------------------------------------
-\begin{frame}{Prostorová autokorelace}
-\textbf{Prostorová závislost/autokorelace – příklady}
+\begin{frame}{Sample selection in spatial data analysis}
 \begin{itemize}
-	\item Ceny nemovitostí závisejí na užitných vlastnostech (byt: m$^2$, počet místností, výtah, $\dots$) ale i na lokalitě. Ceny v dané lokalitě vykazují určitou míru podobnosti$\dots$ Obvykle zde platí kladná prostorová autokorelace. 
-	\item Tržby benzínových pump na dálnicích závisejí na vzdálenosti od aglomerace (resp. na hustotě provozu, která se vzdáleností od aglomerace slábne). Speciální případ jednorozměrné prostorové závislosti (obvykle uvažujeme 2D vzdálenosti a závislosti).
-	\item Zvýšená policejní přítomnost/aktivita v určité oblasti (okrese) sníží míru kriminality, ale může způsobit přesun nelegálních aktivit do okolních oblastí (negativní autokorelace).
-	\item Makroekonomické šoky (pozitivní i negativní) se mohou "přelévat" mezi ekonomikami. 
+    \item Spatially autocorrelated processes are defined in terms of individual units and their interactions with neighbors. 
+    \smallskip
+    \item Clearly, we can only assess the impact of neighboring units if such units are part of our sample. Hence, in spatial econometrics, we usually do not draw limited samples from a particular area.
+    \smallskip
+    \item Instead, we work with data from adjacent units located in unbroken (``complete'') study areas.  
+    \smallskip
+    \item Otherwise, $\bm{C}$ and $\bm{W}$ matrices would be misleading and we could not consistently estimate spatial interactions and effects.
+    \smallskip    
+    \item Generally speaking, spatial analysis should include the whole geographically defined area/region instead of using random sampling (from a ``population'' of regions within the relevant area). 
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{Prostorová autokorelace}
+\subsection{Spatial dependency tests}
+\begin{frame}{Spatial dependency tests}
 \begin{itemize}
-	\item \textit{"Prostorová závislost popisuje vztah pozorovaného atributu (hodnota sledované proměnné) v určité oblasti vůči pozorovaným atributům v okolních oblastech."} (Fotheringham et al, 2002).
-	
-	\item \textit{"Prostorová autokorelace ($\dots$) je korelace mezi pozorovanými hodnotami jedné proměnné, již lze přisoudit výhradně geografické blízkosti jednotlivých pozorování ($\dots$)."} (Griffith, 2003).
+    \item Positive spatial autocorrelation occurs if high or low values \\of a variable cluster in space. 
+    \medskip
+    \item For negative spatial autocorrelation, spatial units tend to be surrounded by neighbors with very dissimilar observations. 
+    \medskip
+    \item Spatially random data lack any spatial pattern.
+    \medskip
+    \item Sometimes, spatial dependency patterns are easy to discern visually using choropleths. 
+    \medskip
+    \item However, a formal approach towards evaluation of spatial dependency is often required.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{Prostorová autokorelace}
-\textbf{Prostorová závislost – diskuse}
-\begin{itemize}
-	\item Velká část prostorových efektů (prostorové závislosti) úzce souvisí s vynechanými faktory (důležité vysvětlující proměnné modelu).
-	
-	\item Prostorová autokorelace - proxy proměnná pro řadu nepozorovatelných nebo obtížně kvantifikovatelných faktorů. Například, jde-li o trh práce (nezaměstnanost) v EU: 
-	\begin{itemize}
-		\item Dojíždění za prací mezi okresy/kraji/státy, resp. konzistentní měření tohoto jevu.
-		\item Jazykové, kvalifikační, administrativní bariéry na pracovním trhu.
-		\item Vzdušné vzdálenosti vs. toplogie vs. kvalita a hustota dopravní sítě. 
-	\end{itemize}
-	\item Prostorové modely mohou poskytnout dobře interpretovatelný a prakticky využitelný způsob analýzy makroekonomické (regionální) dynamiky.
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\section{Moran's I, Geary's C}
 \begin{frame}{Moran's $I$}
-Nejčastěji uváděný a používaný test prostorové nezávislosti
-$$I(x)_t = \big( \frac{n}{s}\big) \bm{x}^T_t \bm{W} \bm{x}_t (\bm{x}_t^T\bm{x}_t)^{-1}$$
-kde $\bm{x}_t$ je vektor $n$ prostorových pozorování (jednotek) proměnné $x$ v čase $t$. 
-$$S = \sum_{i=1}^n\sum_{j=1}^n w_{ij}$$
-$S$ je standardizační faktor – součet všech členů matice $\bm{W}$. \\
-$H_0 :$ absence prostorové závislosti, prostorová náhodnost (spatial randomness) \\
-Očekávaná hodnota statistiky  $I(x)_t$ při platnosti $H_0 : \frac{-1}{(n-1)} $.\\
-Pomocí $Var(I(x)_t)$ vypočteme $z$-poměr a testujeme statistickou významnost: zda jsou si sousedící jednotky více podobné, než by odpovídalo platné $H_0$. \\
-Znaménko Moran's $I$ statistiky rozlišuje mezi pozitivní a negativní prostorovou autokorelací.
+Measure of global spatial autocorrelation, overall clustering of data:
+\begin{equation*}
+I = \frac{N}{W}\,\bm{z}'\bm{Wz}(\bm{z}'\bm{z})^{-1},
+\end{equation*}     
+where 
+\begin{itemize}
+    \item[] $N$ is the number of spatial observations (units) of the variable under scrutiny (say, $\bm{y}$),
+    \smallskip
+    \item[] $\bm{z}$ is the centered form of $\bm{y}$: $z_i = y_i - \bar{y}$.
+    \smallskip
+    \item[] The standardization factor $W = \sum_{i}\sum_{j}w_{ij}$ corresponds to the sum of all elements of the spatial weights matrix $\bm{W}$. \\For row-standardized $\bm{W}$ matrices, $\tfrac{N}{W}=1$. Moran's $I$ can be used with $\bm{C}$ matrices (binary, generalized) as well.
+\end{itemize}
 \end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Moran's $I$}
+\vspace{-0.2cm}
+\begin{equation*}
+I = \frac{N}{W}\,\bm{z}'\bm{Wz}(\bm{z}'\bm{z})^{-1},
+\end{equation*}     
+In most empirical circumstances, $I \in [ -1,1 ]$. Under the null hypothesis of spatial randomness, Moran’s $I$ is asymptotically normally distributed with the following first two moments:
+\begin{equation*}
+E(I) = -\frac{1}{N-1} \hspace{0.5cm} 
+\textnormal{and} \hspace{0.5cm} 
+\textnormal{var}(I) = \frac{N^2W_1 - NW_2 +3W^2}{(N^2-1)W^2} \,,
+\end{equation*}  
+where $W_1 = \sum_i \sum_j (w_{ij}+w_{ji})^2$ and $W_2 = \sum_i (\sum_j w_{ij} + \sum_j w_{ji})^2$.\\
+\medskip
+Normality assumption $\rightarrow$ calculate a $z$-score 
+$$z=\frac{I-E(I)}{\sqrt{\textnormal{var}(I)}} $$\\
+and test for statistical significance of Moran's $I$: whether neighboring units are more similar $(I > E(I))$ or more dissimilar $(I < E(I))$ than they would be under the null hypothesis of spatial randomness.
+\end{frame}
+%---------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %---------------------------------------------------------------------
 \begin{frame}{Geary's $C$}
 Geary's C je definován jako:
