@@ -23,7 +23,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{color}
-\usepackage[czech]{babel}
+%\usepackage[czech]{babel}
 \usepackage{lmodern}  
 \usepackage{rotating}
 \usepackage{scrextend}
@@ -417,13 +417,185 @@ Weight decreases as distance increases from the interpolated points. High $p$ as
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Krigging}
+\textbf{Kriging}\\ \medskip
+\begin{itemize}
+    \item $x(\bm{s}_0)= \sum_{i=1}^N \lambda_i \, x(\bm{s}_i)$ ~~s.t.~~ $\sum_{i=1}^N \lambda_i = 1$. 
+    \bigskip
+    \item In IDW, $\lambda_i$ depend only on distance to the prediction location.\\
+    \bigskip
+    \item  With krigging, $\lambda_i$ depend on a fitted model to the measured points, the distance to the prediction location, and the spatial relationships among the measured values around the prediction location.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Krigging}
 \textbf{Ordinary kriging} assumes constant unknown mean only over the search neighborhood of $\bm{s}_{0}$. \\ \medskip
+
 \begin{itemize}
-    \item $x(\bm{s}_0)= \sum_{i=1}^N \lambda_i \, x(\bm{s}_i)$ ~~s.t.~~ $\sum_{i=1}^N \lambda_i = 1$. \\ \smallskip 
-    In IDW, $\lambda_i$ depends only on distance to the prediction location.\\
-    \smallskip
-    \item 
+    \item Matrix form: $x(\bm{s}_0)= \bm{\lambda}^{\prime} \, \bm{x}$ ~~s.t.~~ $\bm{\lambda}^{\prime} \bm{1} = 1$. \\
+    where $\bm{\lambda}^{\prime} = (\lambda_1,\dots,\lambda_N)$ and $\bm{1}$ is a vector of ones.
+    \medskip
+    \item Krigging -- solve:~~~~ $\min E(x(\bm{s}_0 - \bm{\lambda}^{\prime} \, \bm{x})^2$ s.t. $\bm{\lambda}^{\prime} \bm{1} = 1$.\\
+    \medskip
+    \item  Minimum variance of $x(\bm{s}_0)$: $~\sigma^2= \sum_{i=1}^N \lambda_i \gamma (\bm{s}_i,\,\bm{s}_0)~+~m \,$
+    \medskip
+    \item is obtained when $\sum_{i=1}^N \lambda_i \gamma (\bm{s}_i,\,\bm{s}_j)~+~m = \gamma (\bm{s}_j,\,\bm{s}_0)$ for all $j$. \\
+    \medskip
+    Here, $\gamma$ is the semivarogram, $m$ is an additional LM parameter (mean estimate) that ensures unbiasedness of the estimate. \\For additional discussion and alternative estimation methods \\(simple, universal krigging, etc.), see\\
+    \url{https://en.wikipedia.org/wiki/Kriging}
 \end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Krigging -- illustration}
+\begin{figure}
+	\includegraphics[width=.8\textwidth]{IMG/sp_Krigg.pdf}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\subsection{Definition of neighbors}
+\begin{frame}{Definition of neighbors}
+\begin{itemize}
+    \item Fotheringham et al (2002): ``Spatial dependency is the extent to which the value of an attribute in one location depends on the values of the attribute in nearby locations.''
+    \medskip
+    \item Different definitions of spatial dependency are possible.
+    \medskip
+    \item To discuss spatial dependency, spatial autocorrelation, corresponding tests and spatial econometric models, we need to formalize the concept of \textbf{nearby locations -- neighbors}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Definition of neighbors}
+\begin{itemize}
+	\item \textbf{Distance-based approach} defines two units as neighbors if their distance does not exceed some ad-hoc predefined threshold: $\tau$. \\
+	\medskip
+	\begin{itemize}
+		\item Can generate ``islands'' (units with zero neighbors), if $\tau$ is low compared to minimum distances among unit pairs.
+		\smallskip
+		\item Less suited for analysis of areas with uneven geographic density (of measurements). 
+	\end{itemize}
+	\medskip
+	\item \textbf{Centroids} are used for measuring distances between units with non-zero areas (e.g. regions)\\
+	\medskip
+	\begin{itemize}
+		\item Centroids can be purely geographical, ``main'' city location, population-weighted, transportation-weighted (highway/railway), etc.
+	\end{itemize}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Definition of neighbors}
+\begin{figure}
+	\includegraphics[width=.7\textwidth]{IMG/sp_neigb.PNG}
+	\caption[]{Plot for distance-based neighbors (NUTS2), maximum neighbur distance threshold at 250 km}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Definition of neighbors}
+\begin{itemize}
+\item \textbf{Contiguity-based approach} spatial units (regions) are neighbors if they share a common border (at least one point).
+\bigskip 
+\item \textbf{Generalized contiguity approach} is based on the premise that a ``second order'' neighbor is the neighbor of a first order neighbor (the actual contiguous neighbor). \\ \smallskip With this type of approach, we can define a maximum neighborhood lag (order) to control for the highest accepted number
+of neighbors traversed (not permitting cycles).	
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Definition of neighbors}
+\textbf{$\bm{k}$ Nearest neighbors ($\bm{k}$NN)} \\
+\medskip
+For each spatial unit, we search for a preset number of $k$ nearest units that we define as its neighbors. 
+\medskip
+\begin{itemize}
+	\item Solves for differences in areal densities ($k$ neighbors are ensured for each unit).
+	\smallskip
+	\item Usually leads to asymmetric spatial connectivity matrices with potentially flawed neighborhood interpretation. 
+	\smallskip
+	\item Illustration for $k = 3$   (neighbors only shown for 2 units):
+	\begin{figure}
+		\includegraphics[width=.2\textwidth]{IMG/sp_neigb2.PNG}
+	\end{figure}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\subsection{Spatial connectivity and weights matrices}
+\begin{frame}{Spatial connectivity matrix ($\bm{C}$)}
+$$
+~~\bm{C} = \begin{bmatrix}
+0 & 1 & 1 & 1 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 1 \\
+1 & 0 & 1 & 0
+\end{bmatrix}\quad \text{~~a 4-unit example}$$
+$$c_{ij}=
+	\begin{cases}
+	1 & \text{if $i$ and $j$ are neighbors,}\\
+	0 & \text{if $i$ and $j$ are not neighbors.}
+	\end{cases}$$
+\begin{itemize}
+	\item Zeros on the diagonal -- units are not neighbors to themselves.
+	\smallskip
+	\item Spatial connectivity matrix interpretation: 
+	\smallskip
+	\begin{itemize}
+		\item row/column 1: unit 1 is neigbor to units 2,3,4
+		\item row/column 2: unit 2 is neigbor to units 1,3 (not 4)
+	\end{itemize}
+	\smallskip
+    \item Matrix $\bm{C}$ is symmetric (for $k$NN, transformations are available).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial weights matrix ($\bm{W}$)}
+\vspace{-0.5cm}
+$$
+\bm{C} = \begin{bmatrix}
+0 & 1 & 1 & 1 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 1 \\
+1 & 0 & 1 & 0
+\end{bmatrix}\rightarrow 
+\bm{W}=
+\begin{bmatrix}
+0 & \tfrac{1}{3} & \tfrac{1}{3} & \tfrac{1}{3} \\[2pt]
+\tfrac{1}{2} & 0 & \tfrac{1}{2} & 0 \\[2pt]
+\tfrac{1}{3} & \tfrac{1}{3} & 0 & \tfrac{1}{3} \\[2pt]
+\tfrac{1}{2} & 0 & \tfrac{1}{2} & 0
+\end{bmatrix}
+$$
+\begin{itemize}
+	\item Usually, $\bm{W}$ is row-standadrized (to unity): 
+	$w_{ij} = \frac{c_{ij}}{\sum^N_{j=1} c_{ij}}$.
+	\smallskip
+	\item Binary (connectivity) indicators $c_{ij}$ may be generalized prior to standardization. Hence, instead of binary $c_{ij}$, we may use inverse distances (linear, squared, \dots) -- given assumed decay in spatial dependency over distance. \\ \medskip Validity of any such prior information (decay pattern) will influence subsequent analysis (spatial dependency tests, spatial regression models).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial weights matrix ($\bm{W}$)}
+\vspace{-0.2cm}
+$$
+\bm{W}=
+\begin{bmatrix}
+0 & \tfrac{1}{3} & \tfrac{1}{3} & \tfrac{1}{3} \\[2pt]
+\tfrac{1}{2} & 0 & \tfrac{1}{2} & 0 \\[2pt]
+\tfrac{1}{3} & \tfrac{1}{3} & 0 & \tfrac{1}{3} \\[2pt]
+\tfrac{1}{2} & 0 & \tfrac{1}{2} & 0
+\end{bmatrix}
+$$
+\begin{itemize}
+	\item Each row of $\bm{W}$ ``provides'' weights for an expected value of an observed spatial variable $y_i$ -- weighted averages (fitted values) can be calculated as $\hat{\bm{y}} = \bm{Wy}$. For example:
+	\begin{align*}
+	\hat{y}_1 & =  \tfrac{1}{3} y_2 + \tfrac{1}{3} y_3 + \tfrac{1}{3} y_4 \\
+	&\dots \\
+	\hat{y}_4 & = \tfrac{1}{2} y_1  + \tfrac{1}{3} y_3 
+	\end{align*}
+	\item Observed values of variables can be used to predict corresponding values for neighboring spatial units.
+	\smallskip
+	\item In this context, $\hat{y}_i$ is often called \textit{spatial lag} of $y_i$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Definition of neighbors}
+\vspace{-0.3cm}
+\begin{figure}
+	\includegraphics[width=.7\textwidth]{IMG/sp_MoranPlot.eps}
+	\caption[]{Moran plot for unemployment rate, 2014, NUTS2 (AT, CZ, DE, HU, PL, SK): observed values vs. spatial lags.}
+\end{figure}
 \end{frame}
 %---------------------------------------------------------------------
 
@@ -449,13 +621,15 @@ Weight decreases as distance increases from the interpolated points. High $p$ as
 
 
 
-%---------------------------------------------------------------------
-\begin{frame}{Prostorová autokorelace}
-\begin{itemize}
-\item Prostorové modely umožňují rozlišit vliv geografických faktorů (prostorová autokorelace, spill-over efekty) od působení dalších relevantních proměnných, které mohou být např. ovlivněny nástroji makroekonomické politiky.
-\item Pozorování (prostorové jednotky) jsou charakterizovány geografickou polohou (geo-coded), sledujeme vzdálenosti mezi jednotkami.
-\end{itemize}
-\end{frame}
+
+
+
+
+
+
+
+
+
 %---------------------------------------------------------------------
 \begin{frame}{Prostorová autokorelace}
 \textbf{Prostorová závislost/autokorelace – příklady}
@@ -487,121 +661,6 @@ Weight decreases as distance increases from the interpolated points. High $p$ as
 		\item Vzdušné vzdálenosti vs. toplogie vs. kvalita a hustota dopravní sítě. 
 	\end{itemize}
 	\item Prostorové modely mohou poskytnout dobře interpretovatelný a prakticky využitelný způsob analýzy makroekonomické (regionální) dynamiky.
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\section{Definice sousedících oblastí (Neighbours)}
-\begin{frame}{Definice sousedících oblastí (Neighbours)}
-\begin{itemize}
-\item \textbf{Společná hranice (Contiguity approach)} dvě jednotky jsou definovány jako sousedící, pokud sdílejí společnou hranici (alespoň jeden bod). 	
-\item \textbf{Společná hranice - zobecněná definice (Contiguity - generalized approach)}  Zobecnění je založeno na předpokladu, že oblasti, které přímo sdílejí hranici, jsou sousední oblasti prvního řádu. Za sousední oblast lze potom považovat i tzv. "sousední oblast druhého řádu" - tedy přímo nesousedící oblast, která sdílí hranici se sousedem prvního řádu. Nejvyšší přípustnou hodnotu řádu sousedící oblasti (míru vzdálenosti, míru prostorového zpoždění) lze volit arbitrárně.	
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Definice sousedících oblastí (Neighbours)}
-\begin{itemize}
-	\item \textbf{Sousedství podle vzdálenosti (Distance-based approach)} Dvě jednotky považujeme za sousedící, pokud jejich vzdálenost nepřesahuje předem definovanou mez (threshold). 
-	\begin{itemize}
-		\item Může generovat "ostrovy" (jednotky bez sousedů), pokud maximální vzdálenost mezi sousedními jednotkami je nastavena níže než je minimální vzdálenost mezi jednotkami ve výběru. 
-		\item Méně vhodný přístup pro analýzu oblastí s nestejnoměrnou geografickou hustotou (různorodé velikosti a vzdálenosti). 
-	\end{itemize}
-	\item \textbf{Vzdálenosti mezi jednotkami měříme pomocí centroidů} - vhodně zvolených a reprezentativních bodů (míst):  
-	\begin{itemize}
-		\item Geografický střed oblasti, poloha  "hlavního města", střed oblasti vážený na základě hustoty obyvatel, střed založený na dopravní síti, atd.
-	\end{itemize}
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Definice sousedících oblastí (Neighbours)}
-\begin{figure}
-	\includegraphics[width=.7\textwidth]{IMG/sp_neigb.PNG}
-	\caption{Plot for distance-based neighbours (NUTS2), maximum neighbour distance threshold at 250 km}
-\end{figure}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Definice sousedících oblastí (Neighbours)}
-\textbf{K-k-nejbližších sousedů(KNN)} \\
-Za sousedící oblasti označíme předem stanovený počet k okolních oblastí, které jsou geograficky nejblíže. 
-\begin{itemize}
-	\item Řeší problémy s nestejnoměrnou geografickou hustotou (k sousedů zaručeno pro každou jednotku).
-	\item Metoda obvykle vede k \textbf{asymetrickým prostorovým maticím} – obtížná interpretace sousednosti. $\dots$  existují jednoduché transformační algoritmy. 
-	
-	\item Příklad pro $k = 3$   (sousední oblasti vyobrazeny jen pro dvě jednotky):
-	\begin{figure}
-		\includegraphics[width=.2\textwidth]{IMG/sp_neigb2.PNG}
-	\end{figure}
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\section{Prostorové matice}
-\begin{frame}{Prostorová matice – spatial matrix ($\bm{S}$)}
-$$
-\bm{S} = \begin{bmatrix}
-0 & 1 & 1 & 1 \\
-1 & 0 & 1 & 0 \\
-1 & 1 & 0 & 1 \\
-1 & 0 & 1 & 0
-\end{bmatrix}\quad \text{příklad prostorové matice, počet jednotek: 4}$$
-$$s_{ij}=
-	\begin{cases}
-	1, & \text{pokud jsou jednotky $i$ a $j$ sousedé.}\\
-	1, & \text{nejde o sousedící jednotky}
-	\end{cases}$$
-\begin{itemize}
-	\item Nuly na diagonále – jednotka není sama sobě sousedem.
-	\item Interpetace prostorové matice: 
-	\begin{itemize}
-		\item 1. řádek (jednotka 1 sousedí s jednotkami 2,3,4
-		\item 2. řádek jedntoka 2 sousedí s jednotkami 1,3 - ale nesousedí s jednotkou 4
-		\item $\dots$ matice $\bm{S}$ je symetrická
-	\end{itemize}
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Matice vah – weight matrix ($\bm{W}$)}
-\vspace{-0.5cm}
-$$
-\bm{S} = \begin{bmatrix}
-0 & 1 & 1 & 1 \\
-1 & 0 & 1 & 0 \\
-1 & 1 & 0 & 1 \\
-1 & 0 & 1 & 0
-\end{bmatrix}\rightarrow 
-\bm{W}=
-\begin{bmatrix}
-0 & \tfrac{1}{3} & \tfrac{1}{3} & \tfrac{1}{3} \\[2pt]
-\tfrac{1}{2} & 0 & \tfrac{1}{2} & 0 \\[2pt]
-\tfrac{1}{3} & \tfrac{1}{3} & 0 & \tfrac{1}{3} \\[2pt]
-\tfrac{1}{2} & 0 & \tfrac{1}{2} & 0
-\end{bmatrix}
-$$
-\begin{itemize}
-	\item Obvykle provedeme jednoduchou standardizaci $\bm{W}$ po řádcích: 
-	$$ w_{ij} = \frac{s_{ij}}{\sum^n_{j=1} s_{ij}}$$
-	$n$ - počet prostorových jednotek
-	\item Nevhodné pro oblasti s heterogenní hustotou (velký vliv u oblastí s málo sousedy). 
-	\item Binární indikátory $s_{ij}$ lze před standardizací zobecnit - například, místo binárních indikátorů využijeme předpoklad, že síla prostorové závislosti klesá se vzdáleností mezi jednotkami (lineárně, kvadraticky, atd.). Validita použitého prioru následně ovlivní přesnost/platnost informací, získaných prostorovou regresí.
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Matice vah – weight matrix ($\bm{W}$)}
-$$
-\bm{W}=
-\begin{bmatrix}
-0 & \tfrac{1}{3} & \tfrac{1}{3} & \tfrac{1}{3} \\[2pt]
-\tfrac{1}{2} & 0 & \tfrac{1}{2} & 0 \\[2pt]
-\tfrac{1}{3} & \tfrac{1}{3} & 0 & \tfrac{1}{3} \\[2pt]
-\tfrac{1}{2} & 0 & \tfrac{1}{2} & 0
-\end{bmatrix}
-$$
-\begin{itemize}
-	\item Každý řádek matice $\bm{W}$ "tvoří" očekávanou hodnotu sledované proměnné - např. $y_i$ - na základě váženého průměru hodnot sousedních jednotek. Například:
-	\begin{align*}
-	\hat{y}_1 & =  \tfrac{1}{3} y_2 + \tfrac{1}{3} y_3 + \tfrac{1}{3} y_4 \\
-	\dots \\
-	\hat{y}_4 & = \tfrac{1}{2} y_1  + \tfrac{1}{3} y_3 
-	\end{align*}
-	\item Pozorované hodnoty proměnných u prostorových jednotek lze využít pro predikci příslušných hodnot u sousedících jednotek.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
