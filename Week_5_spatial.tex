@@ -30,7 +30,6 @@
 \usepackage{pifont}
 \usepackage{hyperref}
 \usepackage{bm}
-
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -374,7 +373,7 @@ STSV does not depend on the selection of origin $(\bm{s}_0, t_0) \in \mathbb{R}^
 \begin{frame}{Data exploration \& descriptive methods}
 \end{frame}
 %---------------------------------------------------------------------
-\subsection{Interpolation and Krigging}
+%\subsection{Interpolation and Krigging}
 \begin{frame}{Interpolation}
 \textbf{Inverse distance weighting (IDW):} a deterministic method of interpolation with a known scattered set of points. \\ \smallskip Assigned values to unknown points are calculated with a weighted average of the values available at the known points.
 \\ \smallskip 
@@ -451,7 +450,7 @@ Weight decreases as distance increases from the interpolated points. High $p$ as
 \end{figure}
 \end{frame}
 %---------------------------------------------------------------------
-\subsection{Definition of neighbors}
+%\subsection{Definition of neighbors}
 \begin{frame}{Definition of neighbors}
 \begin{itemize}
     \item Fotheringham et al (2002): ``Spatial dependency is the extent to which the value of an attribute in one location depends on the values of the attribute in nearby locations.''
@@ -513,7 +512,7 @@ For each spatial unit, we search for a preset number of $k$ nearest units that w
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\subsection{Spatial connectivity and weights matrices}
+%\subsection{Spatial connectivity and weights matrices}
 \begin{frame}{Spatial connectivity matrix ($\bm{C}$)}
 $$
 ~~\bm{C} = \begin{bmatrix}
@@ -612,7 +611,7 @@ $$
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\subsection{Spatial dependency tests}
+%\subsection{Spatial dependency tests}
 \begin{frame}{Spatial dependency tests}
 \begin{itemize}
     \item Positive spatial autocorrelation occurs if high or low values \\of a variable cluster in space. 
@@ -636,7 +635,8 @@ where
 \begin{itemize}
     \item[] $N$ is the number of spatial observations (units) of the variable under scrutiny (say, $\bm{y}$),
     \smallskip
-    \item[] $\bm{z}$ is the centered form of $\bm{y}$: $z_i = y_i - \bar{y}$.
+    \item[] $\bm{z}$ is the centered form of $\bm{y}$: $z_i = y_i - \bar{y}$.\\
+    (Note a recast: $y_i = \beta_0 + z_i$. If SLRM is expanded by regressors, Moran's $I$ can be applied to regression residuals).
     \smallskip
     \item[] The standardization factor $W = \sum_{i}\sum_{j}w_{ij}$ corresponds to the sum of all elements of the spatial weights matrix $\bm{W}$. \\For row-standardized $\bm{W}$ matrices, $\tfrac{N}{W}=1$. Moran's $I$ can be used with $\bm{C}$ matrices (binary, generalized) as well.
 \end{itemize}
@@ -660,44 +660,128 @@ $$z=\frac{I-E(I)}{\sqrt{\textnormal{var}(I)}} $$\\
 and test for statistical significance of Moran's $I$: whether neighboring units are more similar $(I > E(I))$ or more dissimilar $(I < E(I))$ than they would be under the null hypothesis of spatial randomness.
 \end{frame}
 %---------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%---------------------------------------------------------------------
-\begin{frame}{Geary's $C$}
-Geary's C je definován jako:
-$$C = \frac{(N-1)\sum_i \sum_j w_{ij} (X_i - X_j)^2}{2W\sum_i (X_i -\bar{X})^2}$$
-kde $N$ je počet prostorových jednotek; $X$ zkoumaná proměnná, $\bar{X}$ je průměrná hodnota, $w_{ij}$ jsou prvky matice vah a $W$ je součet všech prvků $w_{ij}$ . 
+\begin{frame}{Local Moran's $I$}
 \begin{itemize}
-	\item Geary's $C$ nabývá hodnotu mezi 0 a 2. 1 představuje prostorovou nezávislost. Hodnoty nižší než 1 znamenají pozitivní prostorovou autokorelaci, narůstající směrem k nule. Hodnoty vyšší než 1, indikují negativní prostorovou autokorelaci.
-	\item Geary's $C$ je inverzně spjat se statistikou Moran's $I$. Zatímco Moran's $I$ popisuje celkovou prostorovou autokorelaci, Geary's $C$ je více citlivý na lokální vlivy.
+    \item Moran's $I$ yields only one statistic that summarizes the nature of spatial dependency in the observed variable -- it assumes geographical homogeneity (stationarity) in the data. 
+    \smallskip
+    \item If such assumption does not hold (spatial dependency varies over space), then Moran's $I$ test loses power and the ``global'' statistic is non-descriptive. 
+    \smallskip
+    \item To address this problem, we can use Local Moran's $I$ statistic \\(for row-standardized $\bm{W}$):
+    \begin{equation*}
+    I_i = \frac{z_iN}{\bm{z}'\bm{z}}\bm{w}_{i}\bm{z} \, .
+    \end{equation*}    
+    \item The expected value of  Local Moran's $I$ under the null hypothesis of no spatial autocorrelation is: $E(I_i)=-w_i/(N-1)$. Here, $w_i$ is the sum of elements in the $i$-th row of $\bm{W}$.
 \end{itemize}
 \end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Local Moran's $I$}
+    \begin{equation*}
+    I_i = \frac{z_iN}{\bm{z}'\bm{z}}\bm{w}_{i}\bm{z} \, .
+    \end{equation*}    
+\begin{itemize}
+    \item Values of $I_i > E(I_i)$ indicate positive spatial autocorrelation, i.e. that the $i$-th region is surrounded by regions that, on average, are similar to the $i$-th region with respect to the observed variable $y$. 
+    \item $I_i < E(I_i)$ would suggest negative spatial autocorrelation.
+    \item Significance of spatial dependency is then evaluated using $var(I_i)$ and the corresponding $z$-score.
+    \bigskip
+    \item We may see the global nature of Moran's $I$ from
+    \begin{equation*} 
+    I = \frac{1}{N}\sum_{i=1}^N I_{i} \,.
+    \end{equation*}   
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Geary's $C$}
+ Variance test similar (in principle) to the Durbin-Watson test statistic for residuals' autocorrelation in time-series regressions.
+ \begin{equation*}
+C = \frac{N-1}{2W}\,
+    \frac{\sum_{i}\sum_{j}w_{ij}(y_i-y_j)^2}
+         {\sum_{i}(y_i-\bar{y})^2} \,,
+\end{equation*}   
+where all elements follow from previous slides. Empirical Geary's $C$ values range from 0 to 2. However, occurrences of $C>2$ are possible.\\
+\smallskip
+\begin{itemize}
+    \item Under the null of no spatial autocorrelation, first two moments are:
+\begin{equation*}
+E(C) = 1\, ,\hspace{0.5cm}
+\textnormal{var}(C) = \frac{(N-1)(2W_1 + W_2) - 4W^2 }{2(N+1)W^2} \,,
+\end{equation*}  
+\item Positive spatial dependency: $C < 1$.\\ Negative spatial autocorrelation is reflected in $C > 1$.
+\smallskip
+\item $z$-transformation is asymptotically normally distributed. Therefore, $z(C)$ can be used for testing spatial randomness.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+%\subsection{Clusters -- hotspots and coldspots}
+\begin{frame}{Clusters -- hotspots and coldspots}
+Getis' $G^{\ast}$: spatial clusters and hotspot analysis\\
+\smallskip
+\begin{itemize}
+    \item Clustering analysis by Getis can only be performed for positively autocorrelated spatial data.
+    \smallskip
+    \item $G_i^{\ast}(\tau) = \frac{\sum_{j=1}^N c_{ij}^{\ast} y_j}{\sum_{j=1}^N y_j} \,,$\\
+    \smallskip
+    where amended distance-based (arbitrary $\tau$ used) connectivity matrix $\bm{C}^{\ast} = \bm{C}+\bm{I}_N$; i.e. $y_i$ observations enter $G_i^{\ast}(\tau)$ calculation. Observations of $y$ are assumed to have a natural origin and positive support.
+    \smallskip
+    \item $G_i^{\ast}(\tau)$ is a local stastic, a proportion of the aggregated $y_j$ values that lie within $\tau$ of $i$ to the total sum of $y_j$ observations.
+    \smallskip
+    \item Alternatively, Getis' statistic is calculated using $\bm{C}$ (not $\bm{C}^{\ast}$) and denoted $G_i(\tau)$ 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Clusters -- hotspots and coldspots}
+\begin{itemize}
+    \item If we observe high values of $y_j$ within distance $\tau$ of unit $i$, then $G_i^{\ast}(\tau)$ would be relatively high compared to its expected value under the null hypothesis of full spatial randomness: $$E \left[G_i^{\ast}(\tau) \right] = \frac{c_i^{\ast}}{N}\,,$$ where $c_i^{\ast}$ is the sum of elements of $i$-th row of $\bm{C}^{\ast}$.
+    \medskip 
+    \item Also, under the $H_0$ of spatial randomness, we can write
+    $$
+    \textnormal{var} \left[G_i^*(\tau) \right] = 
+    \frac{c_i^*(N-c_i^*)}{N^2 (N-1)}
+    \left( \frac{Y_{i2}^*}{(Y_{i1}^*)^2} \right) , 
+    $$ 
+    where $Y_{i1}^*=\tfrac{\sum_j y_j}{N}$ and $Y_{i2}^*=\tfrac{\sum_j y_j^2}{N}-(Y_{i1}^*)^2$.
+    \medskip 
+    \item High positive $z$-score indicates ``hotspot'' (cluster of high values) and vice versa. Critical values provided by Getis and Ord. \\Say, for $N = 100$ and $\alpha = 5\%$, the $z$-scores would have to exceed $\pm 3.289$ for a statistically significant hot/cold spot.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Clusters -- hotspots and coldspots}
+\begin{figure}
+	\includegraphics[width=.7\textwidth]{IMG/sp_coldspot.PNG}
+	\caption{Spatial clusters (hot and cold spots) of the municipalities in Serbia by the level of average monthly net earning from 2001 to 2010}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %---------------------------------------------------------------------
 \section{Základní modely prostorové regrese}
 \begin{frame}{Základní modely prostorové regrese}
@@ -913,34 +997,7 @@ $$
 
 \end{frame}
 %---------------------------------------------------------------------
-\section{Identifikace hotspotů a coldspotů}
-\begin{frame}{Identifikace "hotspotů" a "coldspotů"}
-\begin{itemize}
-	\item \textbf{Getis-Ord $G^\ast_i$}
-	$$ G^\ast_i = \frac{\sum_{j=1}^n w_{i,j} x_j - \bar{X} \sum_{j=1}^n w_{i,j}}{S \quad\sqrt[]{\frac{[n\sum_{j=1}^n w^2_{i,j}-(\sum_{j=1}^n w_{i,j})^2]}{n-1}}}$$
-	$$ \bar{X} = \frac{\sum_{j=1}^n x_j}{n}, \quad S = \sqrt[]{\frac{\sum_{j=1}^n x^2_j}{n}-(\bar{X})^2} $$
-	\item $x_j$ je hodnota sledované proměnné v $j$-té jednotce, $w_{i,j}$ jsou prvky matice $\bm{W}$,  $n$ je počet prostorových jednotek.
-	\item $G^\ast_i$ statistika se používá pouze pro kladnou prostorovou autokorelaci a umožňuje identifikovat prostorové shluky jednotek, které mají podobné hodnoty, jež jsou vysoké nebo nízké vůči průměrné pozorované hodnotě – hotspoty a coldspoty.\\(Getis – Ord 1992).
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Identifikace "hotspotů" a "coldspotů"}
-\begin{figure}
-	\includegraphics[width=.7\textwidth]{IMG/sp_coldspot.PNG}
-	\caption{Spatial clusters (hot and cold spots) of the municipalities in Serbia by the level of average monthly net earning from 2001 to 2010 (at fix distance of 210 km)}
-\end{figure}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Identifikace "hotspotů" a "coldspotů"}
-	$$ G^\ast_i = \frac{\sum_{j=1}^n w_{i,j} x_j - \bar{X} \sum_{j=1}^n w_{i,j}}{S \quad \sqrt[]{\frac{[n\sum_{j=1}^n w^2_{i,j}-(\sum_{j=1}^n w_{i,j})^2]}{n-1}}}$$
-\begin{itemize}
-	\item $ G^\ast_i$ je lokální statistika – spočtená pro každou prostorovou jednotku, jedná se o tzv. $z$-poměr ($z$-score).
-	\item $ G^\ast_i$ popisuje statistickou významnost prostorového shlukování. Vysoká pozitivní hodnota $G^\ast_i$ indikuje koncentraci vysokých hodnot u sousedících prostorových jednotek (hotspot). Naopak, negativní hodnoty indikují výskyt tzv. coldspotu.
-	\item Hodnoty blízké nule naznačují, že jednotka není součástí žádného prostorového shluku.
-	
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
+
 \section{Prostorová regrese v R}
 \begin{frame}{Prostorová regrese v R}
 \begin{itemize}
