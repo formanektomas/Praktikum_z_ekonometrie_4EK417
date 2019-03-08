@@ -370,6 +370,62 @@ STSV does not depend on the selection of origin $(\bm{s}_0, t_0) \in \mathbb{R}^
 \end{figure}
 \end{frame}
 %---------------------------------------------------------------------
+\section{Data exploration \& descriptive methods}
+\begin{frame}{Data exploration \& descriptive methods}
+\end{frame}
+%---------------------------------------------------------------------
+\subsection{Interpolation and Krigging}
+\begin{frame}{Interpolation}
+\textbf{Inverse distance weighting (IDW):} a deterministic method of interpolation with a known scattered set of points. \\ \smallskip Assigned values to unknown points are calculated with a weighted average of the values available at the known points.
+\\ \smallskip 
+To find an interpolated value $x_0$ at a given point $\bm{s}_0$ based on samples $x_i=x(\bm{s}_i)$ with $i=1,2,\dots,N$ we use a IDW interpolating function:
+$$
+x(\bm{s}_0) = 
+\begin{cases}
+    \frac{\sum_{i=1}^N w_i(\bm{s_0})x_i}{\sum_{i=1}^N w_i(\bm{s_0})}, & 
+    \textnormal{if~} d(\bm{s}_0,\bm{s}_i) \neq 0 \textnormal{~for all~}i\\
+    x_i & \textnormal{if~} d(\bm{s}_0,\bm{s}_i)=0 \textnormal{~for some~}i \, 
+\end{cases} 
+$$
+where $w_i(\bm{s}_0)=\frac{1}{d(\bm{s}_0,\bm{s}_i)^p}\,$, $\bm{s}_0$ is an interpolating (known) point, $d$ is a distance, and $p$ is a positive \textit{real} number (power parameter). \\ \smallskip
+Weight decreases as distance increases from the interpolated points. High $p$ assigns greater influence to closest values -- result may turn into a mosaic of tiles (a Voronoi diagram). 
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{IDW interpolation -- illustration}
+\begin{figure}
+	\includegraphics[width=.7\textwidth]{IMG/sp_idw.png}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Krigging}
+\begin{itemize}
+    \item developed by Daniel G. Krige (1919-2013) \\(originally called ``weighted moving averages'' method) 
+    \smallskip
+    \item Also known as BLUP (best linear unbiased prediction) and closely related to OLS estimation.
+    \smallskip
+    \item Returns observed values at sampling locations.
+    \smallskip
+    \item Interpolates values using the intensity and shape of the empirical (semi)variogram. Results depend on the choice of fitting model \\(Gaussian, spherical, exponential, etc.).
+    \smallskip
+    \item Uses neighborhood and/or distance search radius.
+    \smallskip
+    \item Provides standard errors of interpolated values.
+    \smallskip
+    \item Multiple approaches and generalizations exist (Block Krigging). \\
+    \url{http://desktop.arcgis.com/en/arcmap/10.3/tools/3d-analyst-toolbox/how-kriging-works.htm}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Krigging}
+\textbf{Ordinary kriging} assumes constant unknown mean only over the search neighborhood of $\bm{s}_{0}$. \\ \medskip
+\begin{itemize}
+    \item $x(\bm{s}_0)= \sum_{i=1}^N \lambda_i \, x(\bm{s}_i)$ ~~s.t.~~ $\sum_{i=1}^N \lambda_i = 1$. \\ \smallskip 
+    In IDW, $\lambda_i$ depends only on distance to the prediction location.\\
+    \smallskip
+    \item 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
 
 
 
