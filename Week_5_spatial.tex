@@ -819,7 +819,7 @@ Using apropriate null restrictions, GNS may be transformed to different types of
 \begin{frame}{Spatial regression models}
 \begin{figure}
 	\includegraphics[width=1\textwidth]{IMG/sp_reg.PNG}
-	\caption{The relationship between different spatial dependence models for cross-sectional data (source: Elhorst, 2014). Note: this illustration uses a slightly modified notation of spatial parameters.}
+	\caption{The relationship between different spatial dependence models for cross-sectional data (source: Elhorst, 2014). Note: this illustration is based on a slightly modified notation of spatial parameters.}
 \end{figure}
 \end{frame}
 %---------------------------------------------------------------------
@@ -1100,136 +1100,236 @@ For convenience and clarity, the RHS may also be re-written as:
 		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
 	\end{pmatrix}\,. 
 \end{equation*}
-\item Recall that $w_{ij}$ denotes element of the $\bm{W}$ matrix and $w_{ij} > 0$ if two spatial units $i$ and $j$ are neighbors (zero otherwise). $\beta_k$ and $\theta_k$ are parameters of model GNS/SDM, corresponding to the $k$-th regressor. The RHS is a $N\!\times\!N$ matrix.
+\item Recall that $w_{ij}$ denotes element of the $\bm{W}$ matrix and $w_{ij} > 0$ if two spatial units $i$ and $j$ are neighbors (and zero otherwise). \\$\beta_k$ and $\theta_k$ are parameters of the GNS/SDM, corresponding to the $k$-th regressor. The RHS is a $N\!\times\!N$ matrix.
 \end{itemize}	
 \end{frame}
 %---------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%---------------------------------------------------------------------
-\begin{frame}{Prostorové modely:  stacionarita/stabilita}
-\textbf{Stabilita odhadů}
+\begin{frame}{Marginal effects in spatial models}
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+    =(\bm{I}_N - \lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
 \begin{itemize}
-	\item Matice $\bm{S}$, resp. matice $\bm{W}$ není odhadována, musíme ji stanovit předem. Odhadnuté koeficienty $\bm{\beta}$, resp. $\bm{\theta}$ závisejí na zvolené matici $\bm{W}$.
-	\item "Řešení": regresní modely odhadujeme opakovaně, pokaždé s trochu jinak definovanou maticí $\bm{W}$ a porovnáváme vlastnosti jednotlivých odhadů.
-    \item Tento postup zaručuje pouze lokální optimum (určíme nejlepší z porovnávaných modelů podle zvoleného kritéria), nikoliv globální optimum.
-	\end{itemize}
+	\item Each diagonal element of the partial derivatives matrix  represents a direct effect and every off-diagonal element represents an indirect effect.
+	\smallskip
+	\item Direct effects and indirect effects differ across spatial units. Each element of the RHS matrix might be different. 
+	\smallskip
+	\begin{itemize}
+	    \item Individual direct effects differ because the diagonal elements of $(\bm{I}_N - \lambda \bm{W})^{-1}$ are different for each unit (given $\lambda \neq 0$).
+	    	\smallskip
+	    \item Indirect effects are different because off-diagonal element of both $\bm{W}$ and $(\bm{I}_N - \lambda \bm{W})^{-1}$ are different if $\lambda \neq 0$ and/or $\theta_k \neq 0$.
+	\end{itemize} 
+\end{itemize}	
 \end{frame}
 %---------------------------------------------------------------------
-
-%---------------------------------------------------------------------
-\begin{frame}
+\begin{frame}{Marginal effects in spatial models}
+\vspace{-0.3cm}
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+    =(\bm{I}_N - \lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
 \begin{itemize}
-\item \textbf{Interpretace odhadnutého prostorového regresního modelu – vždy na základě přímých a nepřímých efektů}. 
-\item Koeficient $\beta_k$ nepopisuje chování závislé proměnné $y_i$ při změně $x_{ik}$ "správně".
-\item Statistickou významnost přímých efektů můžeme testovat viz \href{http://www.springer.com/cda/content/document/cda_downloaddocument/9783642403392-c2.pdf}{Elhorst (2014)}.	
-\end{itemize}
+	\item In absence of spatial autocorrelation of $\bm{y}$ and $\bm{x}_k$, i.e. if both $\lambda = 0$ and $\theta_k = 0$, then all off-diagonal elements equal zero. In this case, indirect effects are not present. Also, direct effects are constant (equal to $\beta_k$) across all spatial units as $(\bm{I}_N - \lambda \bm{W})^{-1}$ simplifies to $\bm{I}_N$ if $\lambda=0$. 
+	\medskip
+    \item The indirect effects that occur if $\theta_k \neq 0$ and $\lambda = 0$ are referred to as \textbf{local effects}. The name arises from the fact that such effect only arise from the neighborhood of a given unit. For example, the effect of $x_{jk}$ ($k$-th regressor for the $j$-th unit) on $y_i$ is nonzero only if units $i$ and $j$ are neighbors (i.e. $w_{ij} > 0$). For non-neighboring units, $x_{jk}$ has no effect on $y_i$.
+\end{itemize}	
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{Přímé a nepřímé efekty (Spill-overs)}
+\begin{frame}{Marginal effects in spatial models}
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+    =(\bm{I}_N - \lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
 \begin{itemize}
-	\item Ukázkový výstup odhadu přímých a nepřímých efektů (LeSage/Pace, 2009):
-	$$\bm{y} = (\bm{I} - \rho \bm{W})^{-1} \bm{X}\bm{\beta} + (\bm{I} - \rho \bm{W})^{-1} \bm{\epsilon}$$
-	$\dots$ jednoduchá regrese $y$ na $x$, použita prostorová regrese: \\
-	Spatial lag model.
+	\item The indirect effects that occur if $\lambda \neq 0$ and $\theta_k = 0$ are referred to as \textbf{global effects}. The name comes from the fact that effects on $y_i$ originate from units that lie within the neighborhood of $i$ as well as from units outside this neighborhood. Mathematically, this is due to the fact that matrix $(\bm{I}_N-\lambda \bm{W})^{-1}$ does not contain zero elements (given $\lambda \neq 0$) -- even though $\bm{W}$ does contain (usually many) zero elements.
+	\medskip
+    \item For $\lambda \neq 0$ and $\theta_k \neq 0$, both local and global indirect effect are present and they cannot be separated from each other.
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+    =(\bm{I}_N - \lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
+\begin{itemize}
+    \item The presence or absence of spatial autocorrelation $\rho$ in the error term of GNS/SDM has no impact on the marginal effects: as we take the first derivative of $E(\bm{y})$ with respect to $\bm{x}_k$, the $\bm{r}= (\alpha \bm{\iota} + \rho \bm{W\!u} + \bm{\varepsilon})$ element disappears because it is a ``constant''.
+    \medskip
+    \item Considering the complexity of marginal effects for one regressor, the problem of presenting estimation output from a model with multiple regressors may be severe: even if reliable estimates $\hat{\lambda}, \hat{\bm{\beta}}$ and $\hat{\bm{\theta}}$ are available, we have to deal with a $N\!\times\!N$ matrix of marginal (direct and indirect) effects for each regressor.
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+    =(\bm{I}_N - \lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
+Estimated marginal effects are usually presented in an aggregated form. For each regressor, we usually report two (sometimes three) statistics:
+ \begin{itemize}
+    \item Summary indicator for direct effects is calculated as the average of all diagonal elements. 
+    \medskip
+    \item Indirect effects are reported as the average of all off-diagonal elements. 
+    \medskip
+    \item The above statistics are usually reported along with their corresponding standard errors and statistical significance indicators ($p$-values) -- see \textcolor{blue}{\underline{\href{http://www.springer.com/cda/content/document/cda_downloaddocument/9783642403392-c2.pdf}{Elhorst (2014)}}} for technical discussion.
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\vspace{-0.3cm}
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+    =(\bm{I}_N - \lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
+\begin{itemize}
+    \item Total effect is just a sum of the direct and indirect impacts. Total standard errors, $z$ scores and significance levels are also calculated by aggregating the underlying direct impacts and spillovers. 
+    \smallskip
+    \item Motivation: in many empirical applications, the direct and indirect effects may come with opposite signs. Therefore, at some higher level of spatial aggregation, direct impacts and spillovers could cancel out. For example, positive direct effects may come at the ``price'' of equally prominent negative spillovers. 
+    \smallskip
+    \item Total impacts are often reported along with their direct/indirect constituents -- even if there are no contradicting signs of direct/indirect impacts. 
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{itemize}
+	\item Sample output from a SLM (model with a single regressor).
 	
 	\end{itemize}
 \begin{table}[]
 \centering
-\caption{Spatial partitioning of direct, indirect and total   impacts}
+\caption{Estimated direct, indirect and total   impacts}
 \begin{tabular}{llll}
 &         &          &             \\
-                                                                                                       & Mean    & Std. dev & t-statistic \\
+& Mean    & Std. dev & t-statistic \\
+\hline
 Direct effect                                                                                          & 0.586   & 0.0148   & 39.6106     \\
-Indirect effect                                                                                        & 1.08414 & 0.0587   & 18.4745     \\
-Total effect                                                                                           & 1.67    & 0.0735   & 22.7302    
+Indirect effect                                                                                        & 1.084 & 0.0587   & 18.4745     \\
+Total effect                                                                                           & 1.670    & 0.0735   & 22.7302    
 \end{tabular}
 \end{table}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{Přímé a nepřímé efekty (Spill-overs)}
-
-$$ \bigg[\frac{\partial E(\bm{y})}{\partial \bm{x}_{1,k}} \dots \frac{\partial E(\bm{y})}{\partial \bm{x}_{N,k}}\bigg] =
-(\bm{I} - \rho \bm{W})^{-1} 
-\begin{bmatrix}
-\beta_k & w_{12}\theta_k & \dots & w_{1N}\theta_k \\
-w_{21}\theta_K & \beta_k & \dots & w_{2N}\theta_k \\
-\vdots & \ddots & \ddots & \vdots \\
-w_{N1}\theta_k & w_{N2}\theta_k & \dots & \beta_k 
-\end{bmatrix}
-$$
+\begin{frame}{Drawbacks of SLMs/SDMs/SEMs}
 \begin{itemize}
-	\item \textbf{Nevýhody, omezení modelů založených na prostorové závislosti:}
-	\item Poměr přímého a nepřímého efektu nezávisí na $\beta_k$ - je dán pouze na základě matice $\bm{W}$ a hodnoty $\rho$. 
-	\item Tento poměr je stejný pro všechny vysvětlující proměnné (resp. příslušné přímé a nepřímé efekty).
+\item Ratio between direct and indirect effect for a regressor $\bm{x}_k$ is independent of $\beta_k$. This is because the $\beta_k$ coefficients cancel out in the numerator and denominator of such ratio (direct/indirect effects). 
+\smallskip
+\item This ratio depends only on the parameter $\lambda$ and on the $\bm{W}$ matrix specification. 
+\smallskip 
+\item Hence, it is the same for all regressors in a given spatial model.
+\smallskip
+\item Unfortunately, this ``behavior'' (say, identical relative strengths of direct and indirect effects for all regressors) seems rather implausible in many types of empirical applications.
 \end{itemize}
-
 \end{frame}
 %---------------------------------------------------------------------
-
-\section{Prostorová regrese v R}
-\begin{frame}{Prostorová regrese v R}
+\begin{frame}{Drawbacks of SLMs/SDMs/SEMs}
 \begin{itemize}
-	\item Knihovna \{spdep\} 
-	\begin{itemize}
-		\item Různé typy prostorových modelů
-		\item Testy prostorové nezávislosti, identifikace prostorových shluků,$\dots$
-	\end{itemize}
-	\item	Knihovna \{splm\}
-	\begin{itemize}
-		\item Prostorová regrese na panelových datech
-	\end{itemize}
-	\item Knihovna \{ggplot2\} + další nutné knihovny
-	\begin{itemize}
-		\item Kartogramy (infomapy) / choropleth maps
-	\end{itemize}
+    \item $\bm{W}$ matrices cannot be estimated along with model parameters. 
+    \medskip
+    \item Rather, $\bm{W}$ needs to be specified prior to model estimation. 
+    \medskip
+    \item There is little theoretical background for choosing the ``right'' \\$\bm{W}$ matrix specification. 
+    \medskip
+    \item As $\bm{W}$ matrix in a SLM/SDM/SEM changes, the estimated parameters tend to change as well. Large changes to $\bm{W}$ may \\cause large changes in estimated parameters.
+    \medskip
+    \item The variety of available neighborhood definitions and standardization methods implies that researchers usually evaluate several alternative spatial structure settings in order to verify model stability and robustness of the results. 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Robustness against changes in spatial structure}
+\begin{enumerate}
+\item Start with a relatively sparse $\bm{W}$ distance matrix, that is generated by using a restrictive (i.e. low) $\tau$. Note that the threshold must be high enough to ensure at least one neighbor for each spatial unit
+\medskip
+\item Increase $\tau$ by some low amount (eg 10-km in NUTS2 units). Estimate the model and record all relevant information. 
+\medskip
+\item Repeat step 2 until a maximum neighborhood threshold distance is reached. Usually, this would happen in one of the following manners: (a) ``range'' (as in the semivariogram) is reached, (b) Maximum neighbor distance threshold becomes so large that the assumption of spatial weak dependency no longer applies, (c) We have prior information limiting the plausible range of spatial interactions.
+\medskip
+\item Plot the estimated spatial parameters, direct and indirect effects of interest and statistical significance data  against the distance thresholds used.
+\end{enumerate}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial robustness -- SLM illustration}
+\vspace{-0.3cm}
+\begin{figure}
+	\includegraphics[width=.65\textwidth]{IMG/sp_Stability.pdf}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\section{Spatial filtering and semi-parametric models}
+\begin{frame}{Spatial filtering and semi-parametric models}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%---------------------------------------------------------------------
+\begin{frame}{Spatial regression in R}
+\begin{itemize}
+	\item \{spdep\} 
+	\item \{splm\}
+	\item \{sf\}, \{sp\}, \{ggplot2\}
+	\item \textcolor{blue}{\underline{\href{https://cran.r-project.org/web/views/Spatial.html}{https://cran.r-project.org/web/views/Spatial.html}}}
 \end{itemize}
  \begin{figure}
- 	\includegraphics[width=.5\textwidth]{IMG/sp_unemp.PNG}
+ 	\includegraphics[width=.7\textwidth]{IMG/sp_unemp.PNG}
  \end{figure}
-
 \end{frame}
-
 %---------------------------------------------------------------------
-
-
-
-
 \end{document}
