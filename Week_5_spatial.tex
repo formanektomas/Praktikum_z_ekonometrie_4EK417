@@ -742,12 +742,494 @@ Getis' $G^{\ast}$: spatial clusters and hotspot analysis\\
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Spatial regression models}
+\begin{itemize}
+\item Spatial regression models allow us to discern the influence of geographical factors (spatial autocorrelation, spill-over effects) from other relevant factors/variables (that may be subject to macroeconomic policy tools).
+\medskip
+\item Observed data are characterized (indexed) by geographic location, distances between geo-coded units play a crucial role.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial regression models}
+\textbf{Spatial regression models -- examples}
+\medskip
+\begin{itemize}
+	\item House prices depend on utility-related variables (are in m$^2$, number of rooms/bedrooms, elevator, etc.). At the same time, prices in a given area/neighborhood tend to be correlated -- usually, positive spatial autocorrelation is present. 
+	\smallskip
+	\item Highway gas-stations' revenues depend on distance from a capital/major city (traffic intensities may be measured -- or proxied by distances). \\May be considered as a special case of one-dimensional spatial dependency (measured along the highway route). 
+	\smallskip
+	\item Increased policing activity in a given area (county) may decrease local crime levels while causing increased illegal activities in nearby counties -- a negative spatial autocorrelation example.
+	\smallskip
+	\item Macroeconomic shocks (both positive and negative) may spill more prominently among spatially close economies: we need to account for such effects in econometric models.
+	\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial regression models}
+\textbf{Spatial regression models -- discussion}
+\medskip
+\begin{itemize}
+	\item Great proportion of spatial effects (spatial dependencies) is closely related to missing variables (significant yet often non-measurable) of a regression model.
+	\smallskip
+	\item Spatial autocorrelation -- proxy variable for a series of unobservable factors. For example, using EU's labor market and/unemployment regression models:
+	\smallskip
+	\begin{itemize}
+		\item Work commuting among regions/districts/states and the problematic consistent measurements of this phenomenon.
+		\smallskip
+		\item Language, qualification and administrative barriers on labor market.
+		\smallskip
+		\item Aerial distances vs. topology and transportation infrastructure.
+	\end{itemize}
+	\smallskip
+	\item Spatial models may provide a simple and interpretable tool for analysis of macroeconomic (regional) dynamics.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial regression models -- main motivations}
+\vspace{-0.2cm}
+\begin{itemize}
+\item \textit{Omitted variables} motivation: discussed in previous slide.
+\smallskip
+\item \textit{Time-dependency}: agents make decisions influenced by the behavior of other agents in previous periods (state authorities may set taxes that reflect policy actions taken by their neighbors in previous periods).
+\smallskip
+\item \textit{Spatial heterogeneity} motivation is largely based on panel data methods and regression models. Spatially close units exhibit more similar individual effects as compared to non-neighboring units. 
+\smallskip
+\item \textit{Externalities-based} motivation comes from a well-established economic concept: individuals and regions may be subject to positive/negative consequences of activities exercised by unrelated third parties (heavy traffic, air pollution, etc.).
+\smallskip
+\item \textit{Model uncertainty} motivation: spatial autocorrelation may be used in circumstances where we face uncertainty in terms of specifying a proper data generating process (DGP). 
+\end{itemize} 
+Note that motivations are not mutually exclusive.
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial regression models}
+Generalized nesting spatial (GNS) model 
+\begin{equation*}
+\begin{aligned}
+  \bm{y} &= \lambda \bm{W\!y} + \alpha \bm{\iota} + \bm{X \beta} + \bm{W\!X\theta} + \bm{u} \,, \\
+  \bm{u} &= \rho \bm{W\!u} + \bm{\varepsilon} \,,
+\end{aligned}
+\end{equation*}
+where $\bm{W\!y}$ is the spatial lag, $\bm{W\!X}$ is the spatial lag for regressor matrix $\bm{X}$ and $\bm{W\!u}$ describes spatial interactions (spatial lag) among disturbance elements. Elements $\lambda$, $\rho$ and $\bm{\theta}$ are the spatial parameters, estimated along with $\alpha$ and $\bm{\beta}$.\\ \bigskip
+Under the null hypothesis of no spatial dependency \\($\lambda = \rho =0$  and $\bm{\theta}=\bm{0}$), GNS simplifies to 
+\begin{equation*}
+  \bm{y} = 
+  \alpha \bm{\iota} + \bm{X \beta} + \bm{\varepsilon} \,,
+\end{equation*}
+Using apropriate null restrictions, GNS may be transformed to different types of spatial models.
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial regression models}
 \begin{figure}
 	\includegraphics[width=1\textwidth]{IMG/sp_reg.PNG}
-	\caption{The relationship between different spatial dependence models for cross-sectional data (source Halleck Vega and Elhorst 2012)}
+	\caption{The relationship between different spatial dependence models for cross-sectional data (source: Elhorst, 2014). Note: this illustration uses a slightly modified notation of spatial parameters.}
 \end{figure}
 \end{frame}
 %---------------------------------------------------------------------
+\begin{frame}{Spatial lag model}
+By assuming spatial interactions in dependent variable only, ($\bm{\theta}=\bm{0}$ and $\rho=0$), we simplify GNS into a spatial lag model (SLM):
+\begin{equation*} 
+\bm{y} = \lambda \bm{W\!y} + \alpha \bm{\iota} + \bm{X \beta} + \bm{\varepsilon}\,.
+\end{equation*}
+The SLM specification is used commonly throughout empirical literature, e.g. in models describing taxes imposed by governments. Reduced form of SLM can be expressed as:
+\begin{equation*} 
+(\bm{I}_{N} - \lambda \bm{W}) \bm{y} = \alpha \bm{\iota} + \bm{X \beta} + \bm{\varepsilon}\,,
+\end{equation*}
+where $\bm{I}_{N}$ is an $(N\! \times \!N)$ identity matrix and the RHS regression coefficients explain the variability of individual $y_{i}$ observations that is not explained spatially. Also, if the inverse to $(\bm{I}_{N} - \lambda \bm{W})$ exists, we can express DGP for $\bm{y}$ as
+\begin{equation*}
+\bm{y} = (\bm{I}_{N} - \lambda \bm{W})^{-1} (\alpha \bm{\iota} + \bm{X \beta} + \bm{\varepsilon})\,.
+\end{equation*}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial lag model}
+\begin{equation*} 
+\bm{y} = \lambda \bm{W\!y} + \alpha \bm{\iota} + \bm{X \beta} + \bm{\varepsilon}\,.
+\end{equation*}
+\begin{itemize}
+    \item For each $y_i$, the element $\textit{SpatialLag}(y_{i}) = \bm{w}_i^{\prime} \bm{y}$ enters the equation, where $\bm{w}_i^{\prime}$ is the $i$-th row of $\bm{W}$.
+    \smallskip
+    \item For model stability, we assume $\lambda \in (-1,1)$. \\(rule of thumb, see Elhorst, 2014, Spatial Econometrics; From Cross-Sectional Data to Spatial Panels and the discussion provided next).
+    \smallskip
+    \item Coefficients $\bm{\beta},~\alpha$ and $\lambda$ are estimated by MLE (if distributional assumptions -- e.g. normality of the error term -- can be made).  Otherwise, GMM may be applied.
+    \smallskip
+    \item Coefficients $\bm{\beta}^{\prime} = (\beta_1, \dots, \beta_k)$ explain (ceteris paribus) variability in $\bm{y}$ that is not explained spatially.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial Durbin model}
+If we drop the simplifying assumption $\bm{\theta}=\bm{0}$ from SLM, we get the spatial Durbin model (SDM):
+\begin{equation*} 
+  \bm{y} = \lambda \bm{W\!y} + \alpha \bm{\iota} + \bm{X \beta} + \bm{W\!X\theta} + \bm{\varepsilon}\,.
+\end{equation*}
+For example, if $y_i$ describes household income in a region $i$, then such income is influenced by incomes (say, wages) in neighboring regions and by both ``domestic'' and neighboring rates of unemployment, labor force productivities, etc.  
+\\ \medskip
+By analogy to the SLM case -- and  given $(\bm{I}_{N} - \lambda \bm{W})^{-1}$ exists -- we may write the DGP as follows:
+\begin{equation*}
+\bm{y} = (\bm{I}_{N} - \lambda \bm{W})^{-1} (\alpha \bm{\iota} + \bm{X \beta} + \bm{W\!X\theta}+ \bm{\varepsilon})\,.
+\end{equation*}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial error model}
+Spatial error model (SEM) is another frequently used specification of the spatial model. SEM is obtained from the GNS model by assuming $\lambda=0$ and $\bm{\theta}=\bm{0}$. Hence, spatial interactions take place only among the error terms: 
+\begin{equation*}
+\begin{aligned}
+\bm{y} = \alpha \bm{\iota} + \bm{X \beta} + \bm{u}\,, \\
+ \bm{u} = \rho \bm{W\!u} + \bm{\varepsilon}\,.
+\end{aligned}
+\end{equation*}
+Theoretical (macroeconomic) reasoning of the spatial dependency is not required for SEMs -- this approach can be used to model a situation where endogenous variables are influenced by exogenous factors that are omitted from the main equation and spatially autocorrelated. Alternatively, unobserved shocks may follow spatial pattern(s).
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial model stability conditions}
+\begin{enumerate}
+\item Spatial matrix $\bm{C}$ is a non-negative matrix of known constants with zeros on the diagonal (if this holds for $\bm{C}$, it holds for the row-standardized $\bm{W}$ as well).
+\smallskip
+\item Spatial weak dependency  holds. Two alternative conditions: (a) The row and column sums of $\bm{C}$ should be uniformly bounded in absolute value as $N$ (the number of observed units) goes to infinity. (b) The row and column sums of $\bm{C}$ should not diverge to infinity at a speed equal to or faster than the growth of sample size $N$. Condition (b) is more general (relaxed) and (a) is its special case.
+\smallskip
+\item Matrices $(\bm{I}_{N} - \lambda \bm{W})$ and $(\bm{I}_{N} - \rho \bm{W})$ are non-singular. If the underlying $\bm{C}$ matrix is symmetric and non-negative, this condition is satisfied whenever $\lambda$ and $\rho$ lie within the $(1/\kappa_{min}, 1)$ interval, where $\kappa_{min}$ denotes the smallest (most negative) real eigenvalue of $\bm{W}$ and 1 is the largest eigenvalue for a row-standardized $\bm{W}\!.$ \vspace{0.2cm} \\
+\end{enumerate}    
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{ML estimation of SLMs and SDMs}
+\begin{itemize}
+    \item The RHS regressor element $\bm{W\!y}$ SLM or SDM is correlated with the error term. Hence, OLS estimation of models with spatially lagged endogenous variables is biased and inconsistent.
+    \smallskip 
+    \item ML estimators for such models are consistent (other methods are possible: GMM, 2SLS).
+    \smallskip
+    \item We use a slightly modified SDM notation to describe ML estimator for both SLMs and SDMs, as their likelihood functions coincide (SLM is a special case of SDM, with $\bm{\theta}=\bm{0}$ imposed). 
+    \smallskip
+    \item First, we expand the DGP of SDM by $\textit{iid}$ normality assumption for residuals: 
+    \begin{equation*} 
+    \begin{aligned}
+    \bm{y} &= (\bm{I}_{N} - \lambda \bm{W})^{-1} (\alpha \bm{\iota} + \bm{X \beta} + \bm{W\!X\theta}+ \bm{\varepsilon})\,, \\ 
+    \bm{\varepsilon} &\sim N(\bm{0}, \sigma_{\varepsilon}^2 \, \bm{I}_{N}) \,,
+    \end{aligned}
+    \end{equation*}
+    where $\sigma_{\varepsilon}^2$ is the variance of $\bm{\varepsilon}$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{ML estimation of SLMs and SDMs}
+\begin{itemize}
+    \item In $\bm{y} = (\bm{I}_{N} - \lambda \bm{W})^{-1} (\alpha \bm{\iota} + \bm{X \beta} + \bm{W\!X\theta}+ \bm{\varepsilon})\,,$ we use substitution $\bm{Z}=[\bm{\iota} \,, \bm{X} \,, \bm{W\!X}]$ and $\bm{\delta}= \left[ \alpha \,, \bm{\beta} \,, \bm{\theta} \right]^{'}$. 
+    \smallskip
+    \item We can re-arrange DGP of the SDM/SLM equation as: 
+    \begin{equation*}
+    \begin{aligned}
+    \bm{y} &= (\bm{I}_{N} - \lambda \bm{W})^{-1} \bm{Z \delta} \, + \,
+    (\bm{I}_{N} - \lambda \bm{W})^{-1} \bm{\varepsilon}\,, \\ 
+    \bm{\varepsilon} &\sim N(\bm{0}, \sigma_{\varepsilon}^2 \, \bm{I}_{N})\,.
+    \end{aligned}
+    \end{equation*}
+    \item The above substitution allows us to use a single likelihood function for both SLM and SDM: for SDMs, we use $\bm{Z}=[\bm{\iota} \,, \bm{X} \,, \bm{W\!X}]$. \\ \smallskip For SLMs, $\bm{Z}=[\bm{\iota} \,, \bm{X}]$ and analogous amendments are made to the vector of parameters $\bm{\delta}$.
+    \smallskip
+    \item Note how our substitution transforms the original SDM model
+    \begin{equation*} 
+    \bm{y} = \lambda \bm{W\!y} + \alpha \bm{\iota} + \bm{X \beta} + \bm{W\!X\theta} + \bm{\varepsilon}\,.
+    \end{equation*}
+    into
+    \begin{equation*}
+    \bm{y} = \lambda \bm{W\!y} + \bm{Z \delta} + \bm{\varepsilon}\, \qquad \rightarrow \qquad
+    \bm{\varepsilon} = \bm{y} - \bm{W\!y} - \bm{Z \delta}.
+    \end{equation*}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{ML estimation of SLMs and SDMs}
+\begin{itemize}
+    \item The log-likelihood function for the SLM (and SDM) model may be outlined as
+    \begin{equation*}
+    \begin{aligned}
+    LL(\lambda,\bm{\delta}, \sigma_{\varepsilon}^2) &= - \frac{N}{2} \log (\pi \sigma_{\varepsilon}^2) +
+    \log | \bm{I}_{N} - \lambda \bm{W} | - 
+    \frac{\bm{e}^{'} \bm{e} }{2\sigma_{\varepsilon}^2}\,, \\
+    \bm{e} &= \bm{y} - \lambda \bm{Wy} - \bm{Z \delta}\,,
+    \end{aligned}
+    \end{equation*}
+    where $N$ is the number of spatial units, $| \bm{I}_{N} - \lambda \bm{W} |$ is the determinant of this $N \! \times \! N$ matrix and $\bm{e}$ is a vector of residuals.
+    \smallskip
+    \item Direct estimation (maximization) of the $LL$ function is subject to multiple computational issues. Alternative approach -- by means \\of iterating over concentrated log-likelihood functions -- is used.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{ML estimation of SEMs}
+\begin{itemize}
+    \item We add $\textit{iid}$ normality assumption to $\bm{\varepsilon}$ residuals of the SEM:
+    \begin{equation*}
+    \begin{aligned}
+    \bm{y} &= \bm{X \beta} +  (\bm{I}_{N} - \rho \bm{W})^{-1} \bm{\varepsilon}\,, \\ 
+    \bm{\varepsilon} &\sim N(\bm{0}, \sigma_{\varepsilon}^2\,\bm{I}_{N})\,,
+    \end{aligned}
+    \end{equation*}
+    where the intercept term has been incorporated into the $\bm{X \beta}$ expression for simplicity. 
+    \smallskip
+    \item Now, the log-likelihood function for SEMs has the form
+    \begin{equation*}
+    \begin{aligned}
+    LL(\bm{\beta}, \rho, \sigma_{\varepsilon}^2) &= - \frac{N}{2} \log (\pi \sigma_{\varepsilon}^2) +
+    \log | \bm{I}_{N} - \rho \bm{W} | - 
+    \frac{\bm{e}^{'} \bm{e} }{2\sigma_{\varepsilon}^2}\,, \\
+    \bm{e} &= (\bm{I}_{N} - \rho \bm{W}) (\bm{y} - \bm{X \beta})\,.
+    \end{aligned}
+    \end{equation*}
+    \item Again, for computational reasons, concentrated log-likelihood functions are calculated iteratively to maximize $LL$ function and obtain parameter estimates and corresponding standard errors. 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{ML estimation \& testing of spatial models}
+\begin{itemize}
+    \item $LL$ functions  for SDMs (SLMs) and SEMs may be amended to accommodate binomial, count, multinomial and other dependent variables (LeSage, Pace: Introduction  to  spatial  econometrics).
+    \smallskip
+    \item Likelihood ratio ($LR$) test can be used to evaluate spatial model specification through a set of conveniently chosen restrictions leading to two alternative nested models:
+\begin{equation*}
+\textit{LR} = 2(\mathcal{L}_{ur}-\mathcal{L}_{r}) \,\,\, \underset{H_0}{\sim} \,\,\, \chi_q^2 \, ,
+\end{equation*}
+where $\mathcal{L}_{ur}$ is the maximized $LL$ function  of the estimated spatial model, The null hypothesis is used to impute zero restriction on all parameters describing spatial autocorrelation ($\lambda$, $\bm{\theta}$ or $\rho$ -- given specification of the unrestricted model) and $\mathcal{L}_{r}$ is the maximized $LL$ of the non-spatial model.
+\smallskip
+\item $LR$ tests may be applied more generally (different restrictions may be evaluated).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{SLM vs SEM specification tests}
+\begin{itemize}
+    \item LM-based test for SEM specification evaluates the null hypothesis of no spatial autocorrelation of residuals against the alternative of SEM specification: 
+\begin{equation*}
+\textit{LM-SEM}=\frac{1}{T}
+\left(\frac{\bm{\hat{u}}^{'}\bm{W\hat{u}}}{\hat{\sigma}^2}\right)^{2} 
+\,\,\, \underset{H_0}{\sim} \,\,\, \chi_1^2 \,\,,
+\end{equation*}
+where $\hat{\sigma}^2$ is the estimated variance of residuals $\bm{\hat{u}}$ and $T=\textnormal{tr}(\bm{W}^{'}\bm{W} \! + \! \bm{W}^2)$ is trace of the matrix. Note that the $\textit{LM-SEM}$ statistic is just a scaled version of Moran's $I$.
+\smallskip
+\item The $\textit{LM-SEM}$ test is not robust against SLM specification (spatial dependency in $y$).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{SLM vs SEM specification tests}
+\begin{itemize}
+    \item The $\textit{LM-SLM}$ statistic is used in OLS-estimated linear models to test $H_0$ of spatial independence in $\bm{y}$ against the alternative of its spatial autocorrelation (SLM): 
+\begin{equation*} 
+\textit{LM-SLM}=\frac{1}{N \, J_{\lambda,\bm{\beta}}}
+\left(\frac{\bm{\hat{u}}^{'}\bm{Wy}}{\hat{\sigma}^2}\right)^{2} 
+\,\,\, \underset{H_0}{\sim} \,\,\, \chi_1^2 \,\,,
+\end{equation*}
+where the term $J_{\lambda,\bm{\beta}} = \left[ (\bm{WX\hat{\beta}})^{'}\bm{M}(\bm{WX\hat{\beta}}) + T \hat{\sigma}^2 \right] \! / N \hat{\sigma}^2$ is calculated using the vector of OLS-estimated parameters $\bm{\hat{\beta}}$ and the ``residual maker'' (orthogonal projection matrix) $\bm{M} = \bm{I}_N - \bm{X}(\bm{X}^{'}\bm{X})^{-1}\bm{X}^{'}$.
+\smallskip
+\item The $\textit{LM-SLM}$ test is not robust against autocorrelated error term (SEM-type).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{SLM vs SEM specification tests}
+\begin{itemize}
+    \small{
+    \item The test for a spatial error process that is robust to local presence of a spatial lag is given as:
+    \begin{equation*} 
+    \textit{RLM-SEM}=\frac{1}{T-T^2(NJ_{\lambda,\bm{\beta}})^{-1}}
+    \left(\frac{\bm{\hat{u}}^{'}\bm{W\hat{u}}}{\hat{\sigma}^2}
+    -T(NJ_{\lambda,\bm{\beta}})^{-1}
+    \frac{\bm{\hat{u}}^{'}\bm{Wy}}{\hat{\sigma}^2}
+    \right)^{2} 
+    \! \underset{H_0}{\sim} \chi_1^2,
+    \end{equation*}
+    } % end small
+\textnormal{where the subtraction of a correction factor that accounts for the local misspecification (potentially omitted spatial lag process) is visible. 
+    \smallskip
+    \item By $\textit{RLM-SEM}$, we test the $H_0$ of no spatial dependency in residuals (OLS-estimated) against the alternative of SEM specification, while controlling for possible local spatial lag (SLM process). 
+    } % normal
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{SLM vs SEM specification tests}
+\begin{itemize}
+    \item Test for a spatial lag process robust to local presence of spatial error autocorrelation is defined as:
+    \begin{equation*}
+    \textit{RLM-SLM}=\frac{1}{N \, J_{\lambda,\bm{\beta}} - T}
+    \left(\frac{\bm{\hat{u}}^{'}\bm{Wy}}{\hat{\sigma}^2}
+    - \frac{\bm{\hat{u}}^{'}\bm{W\hat{u}}}{\hat{\sigma}^2} \right)^{2} 
+    \,\,\, \underset{H_0}{\sim} \,\,\, \chi_1^2 \,\,.
+    \end{equation*}
+    \item Heteroskedasticity-robust versions of statistics $\textit{LM-SEM}$ and $\textit{LM-SLM}$ are available. 
+    \smallskip
+    \item Heteroskedasticity-robust versions of the $\textit{LM-SEM}$ and $\textit{LM-SLM}$ tests are not easily accessible as accounting for heteroskedasticity leads to highly non-linear expressions.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{itemize}
+	\item In spatial models (SLM, SDM), there are two basic types of marginal effects: direct and indirect effects. \\ \bigskip 
+	Sometimes a third effect -- total effect -- is reported: a sum of the previous two effects. 
+	\bigskip
+	\item In presence of spatial autocorrelation among observed variables (and for SDM), if a given explanatory variable in some $i$-th unit changes, than not only the dependent variable in the $i$-th unit is expected to change (direct effect) but also the dependent variables in other units (neighbors of unit $i$) would change. \\ \bigskip Such effect across spatial units is the indirect effect, sometimes called ``spillover''.
+	\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{itemize}
+	\item Marginal effects can be conveniently illustrated using a slightly modified GNS model:
+\begin{equation*}
+\bm{y} = (\bm{I}_N - \lambda \bm{W})^{-1}
+         (\bm{X \beta}+\bm{WX\theta}) + \bm{r} \,,
+\end{equation*}
+where $\bm{r}$ contains both the intercept and (potentially spatially dependent) error term. Marginal effects for some arbitrary regressor $\bm{x}_k$ are given by a Jacobian matrix of first derivatives of the expected values of $\bm{y}$ with respect to the explanatory variable: 
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)} = 
+\begin{pmatrix}
+		\dfrac{ \partial E(\bm{y})}{ \partial x_{1k}} & \cdots & \dfrac{\partial E(\bm{y})}{ \partial x_{Nk}}
+	\end{pmatrix} = 	
+	\begin{pmatrix}
+		\dfrac{\partial E(y_{1})}{\partial x_{1k}} & \cdots & \dfrac{\partial E(y_{1})}{\partial x_{Nk}} \\
+		\vdots & \ddots & \vdots \\
+		\dfrac{\partial E(y_{N})}{\partial x_{1k}} &\cdots & \dfrac{\partial E(y_{N})}{\partial x_{Nk}} \\
+	\end{pmatrix}.
+\end{equation*}
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{itemize}
+	\item After some re-arranging, we can write:
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+    =(\bm{I}_N-\lambda \bm{W})^{-1} (\bm{I}_N \beta_k + \bm{W} \theta_k)\,.
+\end{equation*}
+\item 
+For convenience and clarity, the RHS may also be re-written as:
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+    =(\bm{I}_N-\lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
+\item Recall that $w_{ij}$ denotes element of the $\bm{W}$ matrix and $w_{ij} > 0$ if two spatial units $i$ and $j$ are neighbors (zero otherwise). $\beta_k$ and $\theta_k$ are parameters of model GNS/SDM, corresponding to the $k$-th regressor. The RHS is a $N\!\times\!N$ matrix.
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%---------------------------------------------------------------------
+\begin{frame}{Prostorové modely:  stacionarita/stabilita}
+\textbf{Stabilita odhadů}
+\begin{itemize}
+	\item Matice $\bm{S}$, resp. matice $\bm{W}$ není odhadována, musíme ji stanovit předem. Odhadnuté koeficienty $\bm{\beta}$, resp. $\bm{\theta}$ závisejí na zvolené matici $\bm{W}$.
+	\item "Řešení": regresní modely odhadujeme opakovaně, pokaždé s trochu jinak definovanou maticí $\bm{W}$ a porovnáváme vlastnosti jednotlivých odhadů.
+    \item Tento postup zaručuje pouze lokální optimum (určíme nejlepší z porovnávaných modelů podle zvoleného kritéria), nikoliv globální optimum.
+	\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+
+%---------------------------------------------------------------------
+\begin{frame}
+\begin{itemize}
+\item \textbf{Interpretace odhadnutého prostorového regresního modelu – vždy na základě přímých a nepřímých efektů}. 
+\item Koeficient $\beta_k$ nepopisuje chování závislé proměnné $y_i$ při změně $x_{ik}$ "správně".
+\item Statistickou významnost přímých efektů můžeme testovat viz \href{http://www.springer.com/cda/content/document/cda_downloaddocument/9783642403392-c2.pdf}{Elhorst (2014)}.	
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Přímé a nepřímé efekty (Spill-overs)}
+\begin{itemize}
+	\item Ukázkový výstup odhadu přímých a nepřímých efektů (LeSage/Pace, 2009):
+	$$\bm{y} = (\bm{I} - \rho \bm{W})^{-1} \bm{X}\bm{\beta} + (\bm{I} - \rho \bm{W})^{-1} \bm{\epsilon}$$
+	$\dots$ jednoduchá regrese $y$ na $x$, použita prostorová regrese: \\
+	Spatial lag model.
+	
+	\end{itemize}
+\begin{table}[]
+\centering
+\caption{Spatial partitioning of direct, indirect and total   impacts}
+\begin{tabular}{llll}
+&         &          &             \\
+                                                                                                       & Mean    & Std. dev & t-statistic \\
+Direct effect                                                                                          & 0.586   & 0.0148   & 39.6106     \\
+Indirect effect                                                                                        & 1.08414 & 0.0587   & 18.4745     \\
+Total effect                                                                                           & 1.67    & 0.0735   & 22.7302    
+\end{tabular}
+\end{table}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Přímé a nepřímé efekty (Spill-overs)}
+
+$$ \bigg[\frac{\partial E(\bm{y})}{\partial \bm{x}_{1,k}} \dots \frac{\partial E(\bm{y})}{\partial \bm{x}_{N,k}}\bigg] =
+(\bm{I} - \rho \bm{W})^{-1} 
+\begin{bmatrix}
+\beta_k & w_{12}\theta_k & \dots & w_{1N}\theta_k \\
+w_{21}\theta_K & \beta_k & \dots & w_{2N}\theta_k \\
+\vdots & \ddots & \ddots & \vdots \\
+w_{N1}\theta_k & w_{N2}\theta_k & \dots & \beta_k 
+\end{bmatrix}
+$$
+\begin{itemize}
+	\item \textbf{Nevýhody, omezení modelů založených na prostorové závislosti:}
+	\item Poměr přímého a nepřímého efektu nezávisí na $\beta_k$ - je dán pouze na základě matice $\bm{W}$ a hodnoty $\rho$. 
+	\item Tento poměr je stejný pro všechny vysvětlující proměnné (resp. příslušné přímé a nepřímé efekty).
+\end{itemize}
+
+\end{frame}
+%---------------------------------------------------------------------
+
+\section{Prostorová regrese v R}
+\begin{frame}{Prostorová regrese v R}
+\begin{itemize}
+	\item Knihovna \{spdep\} 
+	\begin{itemize}
+		\item Různé typy prostorových modelů
+		\item Testy prostorové nezávislosti, identifikace prostorových shluků,$\dots$
+	\end{itemize}
+	\item	Knihovna \{splm\}
+	\begin{itemize}
+		\item Prostorová regrese na panelových datech
+	\end{itemize}
+	\item Knihovna \{ggplot2\} + další nutné knihovny
+	\begin{itemize}
+		\item Kartogramy (infomapy) / choropleth maps
+	\end{itemize}
+\end{itemize}
+ \begin{figure}
+ 	\includegraphics[width=.5\textwidth]{IMG/sp_unemp.PNG}
+ \end{figure}
+
+\end{frame}
+
+%---------------------------------------------------------------------
+
+
 
 
 \end{document}
