@@ -737,13 +737,13 @@ Getis' $G^{\ast}$: spatial clusters and hotspot analysis\\
 \end{figure}
 \end{frame}
 %---------------------------------------------------------------------
-\section{Spatial regression models}
+\section{Spatial regression models (parametric)}
 \begin{frame}{Spatial regression models}
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Spatial regression models}
 \begin{itemize}
-\item Spatial regression models allow us to discern the influence of geographical factors (spatial autocorrelation, spill-over effects) from other relevant factors/variables (that may be subject to macroeconomic policy tools).
+\item Spatial regression models allow us to discern the influence of geographic factors (spatial autocorrelation, spill-over effects) from other relevant factors/variables -- say, economic -- that may be subject to macroeconomic policy tools.
 \medskip
 \item Observed data are characterized (indexed) by geographic location, distances between geo-coded units play a crucial role.
 \end{itemize}
@@ -753,9 +753,9 @@ Getis' $G^{\ast}$: spatial clusters and hotspot analysis\\
 \textbf{Spatial regression models -- examples}
 \medskip
 \begin{itemize}
-	\item House prices depend on utility-related variables (are in m$^2$, number of rooms/bedrooms, elevator, etc.). At the same time, prices in a given area/neighborhood tend to be correlated -- usually, positive spatial autocorrelation is present. 
+	\item House prices depend on utility-related variables (area in m$^2$, number of rooms/bedrooms, elevator, etc.). At the same time, prices in a given area/neighborhood tend to be correlated -- usually, positive spatial autocorrelation is present. 
 	\smallskip
-	\item Highway gas-stations' revenues depend on distance from a capital/major city (traffic intensities may be measured -- or proxied by distances). \\May be considered as a special case of one-dimensional spatial dependency (measured along the highway route). 
+	\item Highway gas-stations' revenues depend on distance from \\a capital/major city (traffic intensities may be measured -- or proxied by distances). \\Can be considered as a special case of one-dimensional spatial dependency (distance measured along the highway route). 
 	\smallskip
 	\item Increased policing activity in a given area (county) may decrease local crime levels while causing increased illegal activities in nearby counties -- a negative spatial autocorrelation example.
 	\smallskip
@@ -767,7 +767,7 @@ Getis' $G^{\ast}$: spatial clusters and hotspot analysis\\
 \textbf{Spatial regression models -- discussion}
 \medskip
 \begin{itemize}
-	\item Great proportion of spatial effects (spatial dependencies) is closely related to missing variables (significant yet often non-measurable) of a regression model.
+	\item Great proportion of spatial effects (spatial dependencies) is closely related to missing variables (significant yet often non-measurable) for a regression model.
 	\smallskip
 	\item Spatial autocorrelation -- proxy variable for a series of unobservable factors. For example, using EU's labor market and/unemployment regression models:
 	\smallskip
@@ -786,7 +786,7 @@ Getis' $G^{\ast}$: spatial clusters and hotspot analysis\\
 \begin{frame}{Spatial regression models -- main motivations}
 \vspace{-0.2cm}
 \begin{itemize}
-\item \textit{Omitted variables} motivation: discussed in previous slide.
+\item \textit{Omitted variables} motivation: discussed on previous slide.
 \smallskip
 \item \textit{Time-dependency}: agents make decisions influenced by the behavior of other agents in previous periods (state authorities may set taxes that reflect policy actions taken by their neighbors in previous periods).
 \smallskip
@@ -824,7 +824,7 @@ Using apropriate null restrictions, GNS may be transformed to different types of
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Spatial lag model}
-By assuming spatial interactions in dependent variable only, ($\bm{\theta}=\bm{0}$ and $\rho=0$), we simplify GNS into a spatial lag model (SLM):
+By assuming spatial interactions in the dependent variable only, \\($\bm{\theta}=\bm{0}$ and $\rho=0$), we simplify GNS into a spatial lag model (SLM):
 \begin{equation*} 
 \bm{y} = \lambda \bm{W\!y} + \alpha \bm{\iota} + \bm{X \beta} + \bm{\varepsilon}\,.
 \end{equation*}
@@ -981,7 +981,7 @@ Theoretical (macroeconomic) reasoning of the spatial dependency is not required 
 \begin{equation*}
 \textit{LR} = 2(\mathcal{L}_{ur}-\mathcal{L}_{r}) \,\,\, \underset{H_0}{\sim} \,\,\, \chi_q^2 \, ,
 \end{equation*}
-where $\mathcal{L}_{ur}$ is the maximized $LL$ function  of the estimated spatial model, The null hypothesis is used to impute zero restriction on all parameters describing spatial autocorrelation ($\lambda$, $\bm{\theta}$ or $\rho$ -- given specification of the unrestricted model) and $\mathcal{L}_{r}$ is the maximized $LL$ of the non-spatial model.
+where $\mathcal{L}_{ur}$ is the maximized $LL$ function  of the estimated spatial model. The null hypothesis is used to enforce zero restriction on all parameters describing spatial autocorrelation ($\lambda$, $\bm{\theta}$ or $\rho$ -- given specification of the unrestricted model) and $\mathcal{L}_{r}$ is the maximized $LL$ of the non-spatial model.
 \smallskip
 \item $LR$ tests may be applied more generally (different restrictions may be evaluated).
 \end{itemize}
@@ -1018,7 +1018,7 @@ where the term $J_{\lambda,\bm{\beta}} = \left[ (\bm{WX\hat{\beta}})^{'}\bm{M}(\
 \begin{frame}{SLM vs SEM specification tests}
 \begin{itemize}
     \small{
-    \item The test for a spatial error process that is robust to local presence of a spatial lag is given as:
+    \item The test for a spatial error process that is robust to local presence of \\a spatial lag is given as:
     \begin{equation*} 
     \textit{RLM-SEM}=\frac{1}{T-T^2(NJ_{\lambda,\bm{\beta}})^{-1}}
     \left(\frac{\bm{\hat{u}}^{'}\bm{W\hat{u}}}{\hat{\sigma}^2}
@@ -1027,7 +1027,7 @@ where the term $J_{\lambda,\bm{\beta}} = \left[ (\bm{WX\hat{\beta}})^{'}\bm{M}(\
     \right)^{2} 
     \! \underset{H_0}{\sim} \chi_1^2,
     \end{equation*}
-    } % end small
+    }% end small
 \textnormal{where the subtraction of a correction factor that accounts for the local misspecification (potentially omitted spatial lag process) is visible. 
     \smallskip
     \item By $\textit{RLM-SEM}$, we test the $H_0$ of no spatial dependency in residuals (OLS-estimated) against the alternative of SEM specification, while controlling for possible local spatial lag (SLM process). 
@@ -1046,7 +1046,7 @@ where the term $J_{\lambda,\bm{\beta}} = \left[ (\bm{WX\hat{\beta}})^{'}\bm{M}(\
     \end{equation*}
     \item Heteroskedasticity-robust versions of statistics $\textit{LM-SEM}$ and $\textit{LM-SLM}$ are available. 
     \smallskip
-    \item Heteroskedasticity-robust versions of the $\textit{LM-SEM}$ and $\textit{LM-SLM}$ tests are not easily accessible as accounting for heteroskedasticity leads to highly non-linear expressions.
+    \item Heteroskedasticity-robust versions of the $\textit{RLM-SEM}$ and $\textit{RLM-SLM}$ tests are not easily accessible as accounting for heteroskedasticity leads to highly non-linear expressions.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -1068,7 +1068,7 @@ where the term $J_{\lambda,\bm{\beta}} = \left[ (\bm{WX\hat{\beta}})^{'}\bm{M}(\
 \end{equation*}
 where $\bm{r}$ contains both the intercept and (potentially spatially dependent) error term. Marginal effects for some arbitrary regressor $\bm{x}_k$ are given by a Jacobian matrix of first derivatives of the expected values of $\bm{y}$ with respect to the explanatory variable: 
 \begin{equation*}
-\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)} = 
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k} = 
 \begin{pmatrix}
 		\dfrac{ \partial E(\bm{y})}{ \partial x_{1k}} & \cdots & \dfrac{\partial E(\bm{y})}{ \partial x_{Nk}}
 	\end{pmatrix} = 	
@@ -1085,13 +1085,13 @@ where $\bm{r}$ contains both the intercept and (potentially spatially dependent)
 \begin{itemize}
 	\item After some re-arranging, we can write:
 \begin{equation*}
-\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
     =(\bm{I}_N-\lambda \bm{W})^{-1} (\bm{I}_N \beta_k + \bm{W} \theta_k)\,.
 \end{equation*}
 \item 
 For convenience and clarity, the RHS may also be re-written as:
 \begin{equation*}
-\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
     =(\bm{I}_N-\lambda \bm{W})^{-1}
 	\begin{pmatrix}
 		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
@@ -1106,7 +1106,7 @@ For convenience and clarity, the RHS may also be re-written as:
 %---------------------------------------------------------------------
 \begin{frame}{Marginal effects in spatial models}
 \begin{equation*}
-\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
     =(\bm{I}_N - \lambda \bm{W})^{-1}
 	\begin{pmatrix}
 		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
@@ -1131,7 +1131,7 @@ For convenience and clarity, the RHS may also be re-written as:
 \begin{frame}{Marginal effects in spatial models}
 \vspace{-0.3cm}
 \begin{equation*}
-\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
     =(\bm{I}_N - \lambda \bm{W})^{-1}
 	\begin{pmatrix}
 		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
@@ -1149,7 +1149,7 @@ For convenience and clarity, the RHS may also be re-written as:
 %---------------------------------------------------------------------
 \begin{frame}{Marginal effects in spatial models}
 \begin{equation*}
-\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
     =(\bm{I}_N - \lambda \bm{W})^{-1}
 	\begin{pmatrix}
 		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
@@ -1167,7 +1167,7 @@ For convenience and clarity, the RHS may also be re-written as:
 %---------------------------------------------------------------------
 \begin{frame}{Marginal effects in spatial models}
 \begin{equation*}
-\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
     =(\bm{I}_N - \lambda \bm{W})^{-1}
 	\begin{pmatrix}
 		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
@@ -1185,7 +1185,7 @@ For convenience and clarity, the RHS may also be re-written as:
 %---------------------------------------------------------------------
 \begin{frame}{Marginal effects in spatial models}
 \begin{equation*}
-\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
     =(\bm{I}_N - \lambda \bm{W})^{-1}
 	\begin{pmatrix}
 		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
@@ -1196,7 +1196,7 @@ For convenience and clarity, the RHS may also be re-written as:
 \end{equation*}
 Estimated marginal effects are usually presented in an aggregated form. For each regressor, we usually report two (sometimes three) statistics:
  \begin{itemize}
-    \item Summary indicator for direct effects is calculated as the average of all diagonal elements. 
+    \item Summary indicator for direct effects is calculated as the average of all diagonal elements (Jacobian for a given regressor $\bm{x}_k$). 
     \medskip
     \item Indirect effects are reported as the average of all off-diagonal elements. 
     \medskip
@@ -1207,7 +1207,7 @@ Estimated marginal effects are usually presented in an aggregated form. For each
 \begin{frame}{Marginal effects in spatial models}
 \vspace{-0.3cm}
 \begin{equation*}
-\frac{\partial E(\bm{y})}{\partial E(\bm{x}_k)}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
     =(\bm{I}_N - \lambda \bm{W})^{-1}
 	\begin{pmatrix}
 		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
@@ -1246,13 +1246,13 @@ Total effect                                                                    
 %---------------------------------------------------------------------
 \begin{frame}{Drawbacks of SLMs/SDMs/SEMs}
 \begin{itemize}
-\item Ratio between direct and indirect effect for a regressor $\bm{x}_k$ is independent of $\beta_k$. This is because the $\beta_k$ coefficients cancel out in the numerator and denominator of such ratio (direct/indirect effects). 
+\item In SDM/SLM, the ratio between direct and indirect effect for a regressor $\bm{x}_k$ is independent of $\beta_k$. This is because the $\beta_k$ coefficients cancel out in the numerator and denominator of such ratio (direct/indirect effects). 
 \smallskip
 \item This ratio depends only on the parameter $\lambda$ and on the $\bm{W}$ matrix specification. 
 \smallskip 
-\item Hence, it is the same for all regressors in a given spatial model.
+\item Hence, direct/indirect effect ratio is the same for all regressors in a given spatial model.
 \smallskip
-\item Unfortunately, this ``behavior'' (say, identical relative strengths of direct and indirect effects for all regressors) seems rather implausible in many types of empirical applications.
+\item Unfortunately, this ``behavior'' (identical relative strengths of direct and indirect effects for all regressors) seems rather implausible in many types of empirical applications.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -1276,10 +1276,11 @@ Total effect                                                                    
 \medskip
 \item Increase $\tau$ by some low amount (eg 10-km in NUTS2 units). Estimate the model and record all relevant information. 
 \medskip
-\item Repeat step 2 until a maximum neighborhood threshold distance is reached. Usually, this would happen in one of the following manners: (a) ``range'' (as in the semivariogram) is reached, (b) Maximum neighbor distance threshold becomes so large that the assumption of spatial weak dependency no longer applies, (c) We have prior information limiting the plausible range of spatial interactions.
+\item Repeat step 2 until a some preset maximum $\tau$ is reached. Usually, this would happen in one of the following manners: (a) ``range'' (as in the semivariogram) is reached, (b) $\tau$ becomes so large that the assumption of spatial weak dependency no longer applies, (c) We have prior information limiting the plausible range of spatial interactions.
 \medskip
 \item Plot the estimated spatial parameters, direct and indirect effects of interest and statistical significance data  against the distance thresholds used.
 \end{enumerate}
+Analogous approach can be used for $k$NN, contiguity neighbors, etc.
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Spatial robustness -- SLM illustration}
@@ -1292,6 +1293,59 @@ Total effect                                                                    
 \section{Spatial filtering and semi-parametric models}
 \begin{frame}{Spatial filtering and semi-parametric models}
 \end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial filtering and semi-parametric models}
+\begin{itemize}
+    \item Parametric methods are potentially not robust in a situation where the model suffers from a simultaneous presence of different sources of misspecification. \\Unaccounted nonlinear relationship among spatially correlated variables, spatially varying relationships (non-stationarity), uncontrolled common factors (spatial and time-related) and other instances of spatial heterogeneity can disrupt spatial dependencies or even manifest themselves as such. 
+    \medskip
+    \item Spatial filtering may be used to remove global and/or local spatial dependencies among geo-coded variables. 
+    \medskip
+    \item Spatial filtering does not rely on distributional assumptions and is fairly robust to model misspecification. 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial filtering and semi-parametric models}
+\begin{itemize}
+    \item Getis' nonparametric filtering can be used to eliminate spatial autocorrelation from observed data by ``spatial demeaning''. \\Based on $G_i(\tau)$ by Getis -- only applicable for positive spatial autocorrelation and positive support of the observed spatial variables.
+    \bigskip
+    \item Moran eigenvector map (MEM) filtering can be used to preserve some level of spatial properties within the model -- it is a semi-parametric method.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Getis univariate filtering}
+\begin{itemize}
+    \item Approach based on $G_i(\tau)$ statistic by Getis: 
+    $$
+    G_i(\tau) = \frac{\sum_{j=1}^N c_{ij} \, y_j}{\sum_{j=1}^N y_j},
+    \qquad ; \qquad
+    E \left[G_i(\tau) \right] = \frac{c_i}{N}\,,
+    $$
+    where $c_i$ is the sum of elements of $i$-th row of $\bm{C}$ \\(note that $\bm{C}$ is used for filtering, not the $\bm{C}^{\ast} = \bm{C}+\bm{I}_N$).
+    \bigskip
+    \item Multiplicative transformation (filtering) of a spatial variable $y_i$: 
+    \begin{equation*}
+    \ddot{y}_i = \frac{E \left[G_i(\tau) \right]}{G_i(\tau)} \cdot y_i \>,
+    \end{equation*}
+    where $\ddot{y}_i$ is the spatially filtered value of $y_i$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Getis univariate filtering}
+$$\ddot{y}_i = \frac{E \left[G_i(\tau) \right]}{G_i(\tau)} \cdot y_i \>,$$
+\begin{itemize}
+    \item Corrects for positive spatial autocorrelation in observed data by counterbalancing the clustering.
+    \smallskip
+    \item Filtering factor shrinks $y_i$ if the majority of observations $y_j$ within the $\tau$ distance of unit $i$ are above average. 
+    \smallskip
+    \item Similarly, $y_i$ is inflated if neighboring observations feature below-average values.
+    \smallskip
+    \item Simple and intuitive, yet positive support assumption can be a limitation. Also, the process of setting $\tau$ is arbitrary (robustness evaluation possible). 
+    \item Univariate -- to estimate models using filtered data, such as $\bm{\ddot{y}} = 
+  \alpha \bm{\iota} + \bm{\ddot{X} \beta} + \bm{\varepsilon} \, ,$ variables have to be filtered individually.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+
 
 
 
@@ -1320,7 +1374,7 @@ Total effect                                                                    
 
 
 %---------------------------------------------------------------------
-\begin{frame}{Spatial regression in R}
+\begin{frame}{Spatial analysis and regression models in R}
 \begin{itemize}
 	\item \{spdep\} 
 	\item \{splm\}
