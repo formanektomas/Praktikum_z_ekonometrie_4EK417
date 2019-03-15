@@ -1341,13 +1341,155 @@ $$\ddot{y}_i = \frac{E \left[G_i(\tau) \right]}{G_i(\tau)} \cdot y_i \>,$$
     \smallskip
     \item Simple and intuitive, yet positive support assumption can be a limitation. Also, the process of setting $\tau$ is arbitrary (robustness evaluation possible). 
     \item Univariate -- to estimate models using filtered data, such as $\bm{\ddot{y}} = 
-  \alpha \bm{\iota} + \bm{\ddot{X} \beta} + \bm{\varepsilon} \, ,$ variables have to be filtered individually.
+  \alpha \bm{\iota} + \bm{\ddot{X} \beta} + \bm{\varepsilon} \, ,$ all variables have to be filtered individually.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-
-
-
+\begin{frame}{Moran's eigenvector map (MEM) filtering}
+Econometric models are partitioned into two elements that are both employed within the spatial regression:
+\medskip
+\begin{itemize}
+    \item  Exogenous regressors (say, macroeconomic indicators) 
+    \smallskip
+    \item Complementary spatial-filter variate (e.g. a MEM) describing spatial dependency that would otherwise affect model's residuals.
+    \smallskip
+    \item For MEM-based spatial filtering, all units need to be connected -- i.e. there has to be a ``path'' between any two regions, based on connections (edges) between neighboring units. Hence, for spatial filtering applications, $\tau$ value must not be lower than the longest edge of a minimum spanning tree of a graph based on $\bm{D}$ (where $d_{ij}$ are distances between units). Maximum limit on $\tau$ also applies (recall weak dependency assumptions).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+\begin{itemize}
+    \item[1] Use $\bm{C}$ to construct a double-centered connectivity matrix $\bm{\Omega}$:
+\begin{equation*}
+\bm{\Omega} = (\bm{I}_N - \frac{1}{N}\,\bm{\iota}_N \bm{\iota}_N^{\prime})\, \bm{C} \, (\bm{I}_N - \frac{1}{N}\,\bm{\iota}_N \bm{\iota}_N^{\prime}) \,,
+\end{equation*}
+where $\bm{I}_N$ is the identity matrix and $\bm{\iota}_N$ is a column vector of ones. Double-centering standardizes $\bm{C}$ so that all rows and columns in $\bm{\Omega}$ add up to zero. $\bm{C}$ may be full rank (not guaranteed), $\bm{\Omega}$ is always rank deficient.
+\medskip
+\item[2] Calculate all distinct eigenvectors $\bm{v}_i$ and eigenvalues $\kappa_i$ for the double-centered matrix $\bm{\Omega}$ -- by solving the characteristic equation system  $(\bm{\Omega} - \kappa\, \bm{I}_{N}) \, \bm{v} = \bm{0} $. As $\bm{\Omega}$ is a real symmetric matrix, all distinct eigenvectors are orthogonal and linearly independent (given rank-deficiency of $\bm{\Omega}$, some eigenvalues and eigenvectors are duplicated). \\ \medskip 
+MEM -- convenient subset of eigenvectors $\bm{v}$ -- can be used as a synthetic explanatory variable in semiparametric regression.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+\begin{itemize}
+    \item[4] Semiparametric model is established using a misspecification paradigm and based on a regression model with spatially autocorrelated disturbances:
+    \begin{equation*} 
+    \begin{aligned}
+    \bm{y} & = \bm{X\beta} + \bm{u} \,, \\
+    \bm{u} & = \bm{E\gamma} + \bm{\varepsilon} \, ,
+    \end{aligned}
+    \end{equation*}
+    where $\bm{u}$ are the spatially autocorrelated disturbances that may be decomposed into $\bm{\varepsilon}$ (white noise) and $\bm{E}$: a set of missing (unobservable) exogenous variables that follow common spatial dependency pattern ($\bm{C}$) and $\bm{\gamma}$ is a vector of parameters.
+    \\ \medskip The $\bm{E\gamma}$ term is based on approximation and it is not directly comparable with the SEM parametric specification
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+\begin{itemize}
+    \item[5] Using a stepwise algorithm described next, the misspecification term $\bm{E}$ is approximated by MEM -- a convenient subset of Morans eigenvectors
+\begin{equation*} 
+\left\lbrace
+\bm{v}_1, \dots , \bm{v}_{r} 
+\right\rbrace 
+\equiv 
+\textnormal{evec}
+\left(\bm{\Omega}\right) \, ,
+\end{equation*}
+where $r=\textnormal{rank}(\Omega)$ is the number of distinct eigenvectors of $\bm{\Omega}$. 
+\\ \medskip 
+We can approximate $\bm{E}$ by a parsimonious subset of eigenvectors $\bm{v}$ such that $\bm{M} = \left\lbrace \bm{v}_1, \dots , \bm{v}_{\ell} \right\rbrace$ where $\ell \leq r$. 
+\\ \medskip 
+Since spatial misspecification term $\bm{E}$ is correlated with $\bm{X}$ (at least potentially), the explicit inclusion of proxy element (MEM) $\bm{M}$ corrects for the bias in estimated coefficients $\hat{\bm{\beta}}$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+\begin{itemize}
+    \item[6] After substitution of $\bm{E}$ by $\bm{M}$, we get
+\begin{equation*}
+\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon} \, ,
+\end{equation*}
+where $\bm{y}$ is decomposed into a systematic component (featuring $\bm{X}$), stochastic spatial component and white-noise residuals. 
+\\ \medskip 
+For conveniently specified $\bm{M}$, the stochastic spatial term $\bm{M \hat{\gamma}}$ removes a significant portion of the mean squared error (MSE) term, attributable to spatial autocorrelation 
+\\ \medskip 
+Hence, $\bm{M \hat{\gamma}}$ is often referred to as spatial filter. 
+\\ \medskip 
+Filtering is fairly robust to model specification errors when compared with fully parametric models.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+Stepwise algorithm for choosing $\bm{M}$:
+\medskip
+\begin{itemize}
+    \item We choose $\bm{M}$ so that the residuals $\bm{\hat{\varepsilon}}$ become spatially random (independent with respect to the underlying spatial domain). 
+    \smallskip
+    \item We aim to find a parsimonious, i.e. smallest possible subset of eigenvectors $\bm{v}$, leading to spatial independence of $\bm{\hat{\varepsilon}}$.
+    \smallskip
+    \item Stepwise regression approach is often used.
+    \smallskip
+    \item Stepwise algorithm often based on a modified Moran's $I$ coefficient: Moran's $\textit{MC}$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+Stepwise algorithm for choosing $\bm{M}\,$:
+\medskip
+\begin{itemize}
+    \item $\textit{MC}_{\bm{v}_i} = \frac{N}{\bm{\iota}_N^{\prime} \, \bm{Z} \, \bm{\iota}_N } \, \bm{v}_i^{\prime} \bm{C} \bm{v}_i \, ,$\\ \smallskip
+    where $\bm{Z}$ is a distance-based similarity matrix with $[z_{ij}] = 1 - (\tfrac{h_{ij}}{\textnormal{max}(h_{ij})})^2$. Individual $z_{ij}$ vary between zero for $h_{ij} = \textnormal{max}(h_{ij})$ and 1 for $h_{ij} = 0$.
+    \smallskip
+    \item First eigenvector is selected by maximizing $\textit{MC}_{\bm{v}_i}$. 
+    \smallskip 
+    \item Using such $\bm{v}_i$ as a starting eigenvector subset for $\bm{M}$, equation $\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon}$ is estimated and residuals are evaluated for spatial autocorrelation (e.g. using Moran's $I$). 
+    \smallskip
+    \item If residuals are spatially dependent, new eigenvector is added to $\bm{M}$ using the same $\textit{MC}$ criterion, model is re-estimated and spatial autocorrelation in residuals is tested again. \smallskip 
+    \item Eigenvectors are iteratively added to $\bm{M}$, until spatial autocorrelation in residuals $\bm{\hat{\varepsilon}}$ falls below a predetermined threshold (e.g. 5 \% significance level).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+$\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon}$
+\medskip
+\begin{itemize}
+    \item Eigenvectors in $\bm{M}$ are orthogonal and follow a strictly decreasing sequence.
+    \smallskip
+    \item Each eigenvector explains a specific proportion of variance in residuals of the model -- the largest proportion of variance is explained by the first eigenvector selected into $\bm{M}$, the second largest amount of variance is explained by the second eigenvector, etc. 
+    \smallskip
+    \item This leads to identical $\bm{M}$ matrices, obtained through forward and backward stepwise selection methods. 
+    \smallskip
+    \item Convenient linear combination of the above eigenvectors (i.e. $\bm{M\hat{\gamma}}$) is our spatial filter. 
+    \smallskip
+    \item Often, we only take into account positive spatial autocorrelation: only $\bm{v}_i$ associated with positive $\kappa_i$ are considered.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+$\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon}$\\
+\medskip
+Individual $\bm{v}$ elements of $\bm{M}$ bear the following interpretation:\\
+\bigskip
+\begin{itemize}
+    \item  MEMs -- spaces spanned by single or multiple $\bm{v}$ eigenvectors -- with associated ``large'' positive eigenvalues $\kappa_i$ represent global-scale spatial trends (say, landscape-wide dynamics in observed spatial data). 
+    \medskip
+    \item Eigenvectors with medium eigenvalues represent medium scale dynamics. 
+    \medskip
+    \item Eigenvectors with small positive eigenvalues would represent small scale dependencies (``local'' patchiness).   
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{MEM - illustrative example}
+\vspace{-0.3cm}
+\begin{figure}
+	\includegraphics[width=.8\textwidth]{IMG/sp_Eigen.eps}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\section{Spatial panel models (parametric)}
+\begin{frame}{Spatial panel models (parametric)}
+\end{frame}
+%---------------------------------------------------------------------
 
 
 
