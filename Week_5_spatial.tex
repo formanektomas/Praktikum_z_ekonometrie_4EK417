@@ -1566,65 +1566,99 @@ where $\ddot{y}_{it}=y_{it}-\bar{y}_i$, etc.
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Fixed effects spatial lag model}
-$
+$$
 \bm{y}  = 
   \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + 
   \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + 
   \bm{X \beta} + \bm{\upsilon}
-$
+$$
 \begin{itemize}
-    \item https://www.jstatsoft.org/article/view/v047i01
+    \item FE spatial lag model is estimated by MLE method. For detailed description, see \textcolor{blue}{\underline{\href{https://www.jstatsoft.org/article/view/v047i01}{Milo, Piras (2012)}}}
+    \medskip
+    \item Direct/indirect/total effects and their statistical significance is calculated (bootstrapped standard errors) -- see Milo, Piras (2012).
+    \medskip
+    \item From estimated FE model, we can calculate individual effects:
+\begin{equation*}
+\hat{\mu}_i =
+\frac{1}{T} \sum_{t=1}^T \left[ y_{it} - \hat{\lambda} \left( \sum_{j=1}^N \! w_{ij} y_{jt} \right)
+- \bm{x}_{it} \bm{\hat{\beta}} \right] \,.
+\end{equation*}
+However, for short panels $(N \gg T)$, enough observations for reliable $\mu_i$ estimation often do not accumulate.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+\begin{frame}{Fixed effects spatial error model}
+\begin{itemize}
+    \item Spatial lag is absent in the FE spatial error model:
+    \begin{equation*}
+    \begin{aligned}
+      \bm{y}  &= 
+      \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + \bm{X\beta} + \bm{\varepsilon}\,, \\
+      \bm{\varepsilon} &= \rho
+      \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{\varepsilon} + \bm{\upsilon}\,.
+    \end{aligned}
+    \end{equation*}
+    \item Model is estimated by MLE (time-demeaning is used).
+    \smallskip
+    \item Coefficients $\bm{\beta}$ are the marginal effects here
+    \smallskip
+    \item Individual effects can be retrieved from the estimated model as 
+\begin{equation*} 
+\hat{\mu}_i =
+\frac{1}{T} \sum_{t=1}^T \left( y_{it} - \bm{x}_{it} \bm{\hat{\beta}} \right),
+\end{equation*}
+and reliability issues for short panels $(N \gg T)$ apply.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Random effects spatial lag model}
+\begin{itemize}
+    \item Individual effects can be viewed as random and independent of regressors -- random effect (RE) model and RE estimator provide efficient estimates. RE properties of $\bm{\mu}$: \\$\mu_i \sim \textit{IID} \left( 0,\sigma_{\mu}^2 \right)$; normality is often assumed.
+    \medskip
+    \item Under RE assumptions, GNS panel model can be re-written as:
+    \begin{equation*} 
+     \begin{aligned}
+      \bm{y}  &= 
+      \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + \bm{X\beta} + \bm{u}\,, \\
+      \bm{u} &= 
+      \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + 
+      \left( \Ms{I}{T} \otimes \Ms{B}{N}^{-1} \right) \bm{\upsilon}
+     \end{aligned}
+    \end{equation*}
+    where $\Ms{B}{N}= \left( \Ms{I}{N} - \rho \bm{W} \right)$ and error variance may be outlined as
+    \begin{equation*}
+  \textnormal{var} \left( \bm{u} \right) = \bm{\Omega}_{\bm{u}} =
+  \sigma_{\bm{\mu}}^2 \left( \Ms{\iota}{T} \Ms{\iota}{T}^\prime \otimes \Ms{I}{N} \right) 
+  + \sigma_{\bm{\upsilon}}^2 \left[ \Ms{I}{T} \otimes \left( \Ms{B}{N}^\prime \Ms{B}{N} \right)^{-1} \right].
+\end{equation*}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Random effects spatial lag model}
+    \begin{equation*} 
+     \begin{aligned}
+      \bm{y}  &= 
+      \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + \bm{X\beta} + \bm{u}\,, \\
+      \bm{u} &= 
+      \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + 
+      \left( \Ms{I}{T} \otimes \Ms{B}{N}^{-1} \right) \bm{\upsilon}
+     \end{aligned}
+    \end{equation*}
+\begin{itemize}
+    \item Model is estimated by MLE (iterative estimation involving concentrated $LL$ functions), see Milo, Piras (2012).
+    \medskip
+    \item Direct/indirect/total effects can be calculated.
+    \medskip
+    \item RE vs. FE: Generalized Hausman test can be applied: 
+    \begin{equation*} 
+    H = NT \left( \bm{\hat{\theta}}_{RE} - \bm{\hat{\theta}}_{FE} \right)^{\prime}
+    \! \left( \bm{\hat{\Sigma}}_{RE} - \bm{\hat{\Sigma}}_{FE} \right)^{-1}
+    \! \left( \bm{\hat{\theta}}_{RE} - \bm{\hat{\theta}}_{FE} \right)
+    \,\,\, \underset{H_0}{\sim} \,\,\, \chi_k^2 \,\,,
+\end{equation*}
+where $\bm{\hat{\theta}}_{RE}$ and $\bm{\hat{\theta}}_{FE}$ are the RE and FE-based estimates, $\bm{\hat{\Sigma}}_{RE}$ and $\bm{\hat{\Sigma}}_{FE}$ are corresponding variance-covariance matrices. Under $H_0$ (RE assumptions hold), the test statistic is asymptotically $\chi^2$-distributed with $k$ d.f. ($k$ is the number of regressors).
+\end{itemize}
+\end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Spatial analysis and regression models in R}
 \begin{itemize}
