@@ -1506,6 +1506,95 @@ For repeated geo-coded observations, spatial panel models depict interactions am
 \small{where $\bm{y}$ is a $NT \!\times \!1$ column vector of dependent variable observations ($i = 1, 2, \dots, N$, $t=1,2, \dots, T$ and $i$ is the ``fast'' index). $\bm{W}$ is a spatial weights matrix and $\bm{X}$ is a $(NT \!\times \!k)$ matrix of exogenous regressors. Elements $\Ms{I}{T}$ and $\Ms{I}{N}$ are identity matrices and $\Ms{\iota}{T}$ is a  $(T \! \times \!1)$ vector of ones. Operator $\otimes$ is the Kronecker product. Elements of vector $\bm{\beta}$ as well as $\lambda$ and $\rho$ are parameters of the model. The disturbance vector $\bm{u}$ ($NT \!\times \!1$) is a sum of two terms: the unobserved individual effects $\bm{\mu}$ and spatially autocorrelated innovations $\bm{\varepsilon}$. The $(N \!\times \!1)$ vector $\bm{\mu}$ holds time-invariant and spatially uncorrelated individual effects. Innovations $\bm{\varepsilon}$ are spatially autocorrelated with a spatial error autoregressive parameter $\rho$ where $|\rho| < 1$. $\bm{\upsilon}$ is a vector of spatially independent innovations: $\upsilon_{it} \sim \textit{IID} \left( 0,\sigma_{\upsilon}^2 \right)$.}
 \end{frame}
 %---------------------------------------------------------------------
+\begin{frame}{Spatial panel models}
+\begin{equation*}
+\begin{aligned}
+  \bm{y}  &= 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + \bm{X\beta} + \bm{u}\,, \\
+  \bm{u} &= 
+  \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + \bm{\varepsilon}\,, \\
+  \bm{\varepsilon} &= \rho
+  \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{\varepsilon} + \bm{\upsilon}\,,
+\end{aligned}
+\end{equation*}
+\begin{itemize}
+    \item Spatial dependency  tests (Moran's $I$) for panel data are available.
+    \smallskip
+    \item By analogy to the GNS model (for CS data), the above specification is simplified (restricted) before estimation.
+    \smallskip
+    \item Generally, $\bm{\beta}$ parameters do not constitute marginal effects -- direct/indirect effects have to be calculated (in principle, using the same approach as for CS data).
+    \smallskip
+    \item With the ``random effects'' (RE) models, we assume that unobserved individual effects $\bm{\mu}$ are not correlated to other regressors of the model. 
+    \smallskip
+    \item For ``fixed effects'' (FE) models, some level of correlation between individual effects and other regressors is acceptable.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial panel models}
+We shall briefly discuss three types of spatial panel models:
+\bigskip
+\begin{itemize}
+    \item Fixed effects spatial lag model
+    \medskip
+    \item Fixed effects spatial error model
+    \medskip
+    \item Random effects spatial lag model
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Fixed effects spatial lag model}
+\begin{itemize}
+    \item FE spatial lag model that does not feature spatial autocorrelation in the error term can be written as 
+\begin{equation*}
+  \bm{y}  = 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + 
+  \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + 
+  \bm{X \beta} + \bm{\upsilon} \,,
+\end{equation*}
+where $\bm{\upsilon}$ is a vector of spatially independent and normally distributed innovations.
+\medskip
+\item First step in FE spatial lag model estimation: eliminating the individual effects: 
+\begin{equation*}
+  \ddot{\bm{y}}  = 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \ddot{\bm{y}} + 
+  \ddot{\bm{X}} \bm{\beta} + \ddot{\bm{\upsilon}} \,,
+\end{equation*}
+where $\ddot{y}_{it}=y_{it}-\bar{y}_i$, etc.
+\medskip
+\item As individual effects are time-invariant, $\ddot{\mu}_{i}=\mu_{i}-\bar{\mu}_i=0$ \\and $\bm{\mu}$ disappears from equation.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Fixed effects spatial lag model}
+$
+\bm{y}  = 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + 
+  \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + 
+  \bm{X \beta} + \bm{\upsilon}
+$
+\begin{itemize}
+    \item https://www.jstatsoft.org/article/view/v047i01
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
