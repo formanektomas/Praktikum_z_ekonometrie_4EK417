@@ -30,6 +30,7 @@
 \usepackage{pifont}
 \usepackage{hyperref}
 \usepackage{bm}
+\newcommand{\Ms}[2]{\bm{#1}_{#2}}
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -1490,6 +1491,26 @@ Individual $\bm{v}$ elements of $\bm{M}$ bear the following interpretation:\\
 \begin{frame}{Spatial panel models (parametric)}
 \end{frame}
 %---------------------------------------------------------------------
+\begin{frame}{Spatial panel models}
+For repeated geo-coded observations, spatial panel models depict interactions among variables across spatial units and over time:
+\begin{equation*}
+\begin{aligned}
+  \bm{y}  &= 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + \bm{X\beta} + \bm{u}\,, \\
+  \bm{u} &= 
+  \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + \bm{\varepsilon}\,, \\
+  \bm{\varepsilon} &= \rho
+  \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{\varepsilon} + \bm{\upsilon}\,,
+\end{aligned}
+\end{equation*}
+\small{where $\bm{y}$ is a $NT \!\times \!1$ column vector of dependent variable observations ($i = 1, 2, \dots, N$, $t=1,2, \dots, T$ and $i$ is the ``fast'' index). $\bm{W}$ is a spatial weights matrix and $\bm{X}$ is a $(NT \!\times \!k)$ matrix of exogenous regressors. Elements $\Ms{I}{T}$ and $\Ms{I}{N}$ are identity matrices and $\Ms{\iota}{T}$ is a  $(T \! \times \!1)$ vector of ones. Operator $\otimes$ is the Kronecker product. Elements of vector $\bm{\beta}$ as well as $\lambda$ and $\rho$ are parameters of the model. The disturbance vector $\bm{u}$ ($NT \!\times \!1$) is a sum of two terms: the unobserved individual effects $\bm{\mu}$ and spatially autocorrelated innovations $\bm{\varepsilon}$. The $(N \!\times \!1)$ vector $\bm{\mu}$ holds time-invariant and spatially uncorrelated individual effects. Innovations $\bm{\varepsilon}$ are spatially autocorrelated with a spatial error autoregressive parameter $\rho$ where $|\rho| < 1$. $\bm{\upsilon}$ is a vector of spatially independent innovations: $\upsilon_{it} \sim \textit{IID} \left( 0,\sigma_{\upsilon}^2 \right)$.}
+\end{frame}
+%---------------------------------------------------------------------
+
+
+
+
+
 
 
 
