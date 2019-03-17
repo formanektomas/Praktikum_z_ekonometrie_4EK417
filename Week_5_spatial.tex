@@ -770,7 +770,7 @@ Getis' $G^{\ast}$: spatial clusters and hotspot analysis\\
 \begin{itemize}
 	\item Great proportion of spatial effects (spatial dependencies) is closely related to missing variables (significant yet often non-measurable) for a regression model.
 	\smallskip
-	\item Spatial autocorrelation -- proxy variable for a series of unobservable factors. For example, using EU's labor market and/unemployment regression models:
+	\item Spatial lag is a proxy variable for (potentially many) unobservable factors. For example, using EU's labor market and/unemployment regression models:
 	\smallskip
 	\begin{itemize}
 		\item Work commuting among regions/districts/states and the problematic consistent measurements of this phenomenon.
@@ -844,7 +844,7 @@ where $\bm{I}_{N}$ is an $(N\! \times \!N)$ identity matrix and the RHS regressi
 \bm{y} = \lambda \bm{W\!y} + \alpha \bm{\iota} + \bm{X \beta} + \bm{\varepsilon}\,.
 \end{equation*}
 \begin{itemize}
-    \item For each $y_i$, the element $\textit{SpatialLag}(y_{i}) = \bm{w}_i^{\prime} \bm{y}$ enters the equation, where $\bm{w}_i^{\prime}$ is the $i$-th row of $\bm{W}$.
+    \item For each $y_i$, the element $\textit{SpatialLag}(y_{i}) = \bm{w}_i \bm{y}$ enters the equation, where $\bm{w}_i$ is the $i$-th row of $\bm{W}$.
     \smallskip
     \item For model stability, we assume $\lambda \in (-1,1)$. \\(rule of thumb, see Elhorst, 2014, Spatial Econometrics; From Cross-Sectional Data to Spatial Panels and the discussion provided next).
     \smallskip
@@ -890,7 +890,7 @@ Theoretical (macroeconomic) reasoning of the spatial dependency is not required 
 %---------------------------------------------------------------------
 \begin{frame}{ML estimation of SLMs and SDMs}
 \begin{itemize}
-    \item The RHS regressor element $\bm{W\!y}$ SLM or SDM is correlated with the error term. Hence, OLS estimation of models with spatially lagged endogenous variables is biased and inconsistent.
+    \item The RHS regressor element $\bm{W\!y}$ in SLM or SDM is correlated with the error term. Hence, OLS estimation of models with spatially lagged endogenous variables is biased and inconsistent.
     \smallskip 
     \item ML estimators for such models are consistent (other methods are possible: GMM, 2SLS).
     \smallskip
@@ -1197,7 +1197,7 @@ For convenience and clarity, the RHS may also be re-written as:
 \end{equation*}
 Estimated marginal effects are usually presented in an aggregated form. For each regressor, we usually report two (sometimes three) statistics:
  \begin{itemize}
-    \item Summary indicator for direct effects is calculated as the average of all diagonal elements (Jacobian for a given regressor $\bm{x}_k$). 
+    \item Summary indicator for direct effects is calculated as the average of all diagonal elements (of the Jacobian for a given regressor $\bm{x}_k$). 
     \medskip
     \item Indirect effects are reported as the average of all off-diagonal elements. 
     \medskip
@@ -1247,11 +1247,11 @@ Total effect                                                                    
 %---------------------------------------------------------------------
 \begin{frame}{Drawbacks of SLMs/SDMs/SEMs}
 \begin{itemize}
-\item In SDM/SLM, the ratio between direct and indirect effect for a regressor $\bm{x}_k$ is independent of $\beta_k$. This is because the $\beta_k$ coefficients cancel out in the numerator and denominator of such ratio (direct/indirect effects). 
+\item In SDM/SLM, the ratio between direct and indirect effect for \\a regressor $\bm{x}_k$ is independent of $\beta_k$. This is because the $\beta_k$ coefficients cancel out in the numerator and denominator of such ratio (direct/indirect effects). 
 \smallskip
 \item This ratio depends only on the parameter $\lambda$ and on the $\bm{W}$ matrix specification. 
 \smallskip 
-\item Hence, direct/indirect effect ratio is the same for all regressors in a given spatial model.
+\item Hence, direct/indirect effect ratio is the same for all regressors in \\a given spatial model.
 \smallskip
 \item Unfortunately, this ``behavior'' (identical relative strengths of direct and indirect effects for all regressors) seems rather implausible in many types of empirical applications.
 \end{itemize}
@@ -1522,9 +1522,9 @@ For repeated geo-coded observations, spatial panel models depict interactions am
     \smallskip
     \item By analogy to the GNS model (for CS data), the above specification is simplified (restricted) before estimation.
     \smallskip
-    \item Generally, $\bm{\beta}$ parameters do not constitute marginal effects -- direct/indirect effects have to be calculated (in principle, using the same approach as for CS data).
+    \item Generally, $\bm{\beta}$ parameters do not constitute marginal effects -- direct/indirect effects have to be calculated (using the same general approach as for CS data).
     \smallskip
-    \item With the ``random effects'' (RE) models, we assume that unobserved individual effects $\bm{\mu}$ are not correlated to other regressors of the model. 
+    \item With ``random effects'' (RE) models, we assume that unobserved individual effects $\bm{\mu}$ are not correlated to other regressors of the model. 
     \smallskip
     \item For ``fixed effects'' (FE) models, some level of correlation between individual effects and other regressors is acceptable.
 \end{itemize}
