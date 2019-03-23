@@ -1,0 +1,293 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+
+\documentclass{beamer}
+
+\mode<presentation>
+{
+  \usetheme{Madrid}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{default} % or try albatross, beaver, crane, ...
+  \usefonttheme{serif}  % or try default, serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+  \setbeamertemplate{headline}{}
+}
+%\usepackage[dvipsnames]{xcolor}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}  
+\usepackage{tikz}%boxy  
+\usetikzlibrary{arrows,positioning}
+\usetikzlibrary{calc}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+%----------------------------------------------------------------------------------------
+\newcommand{\mytikzmark}[2]{%
+  \tikz[remember picture,inner sep=0pt,outer sep=0pt,baseline,anchor=base] 
+    \node (#1) {\ensuremath{#2}};}
+%
+%
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+    \node[shape=circle,draw=Red,inner sep=2pt] (char) {#1};}}
+%
+\newcommand*\circledd[1]{\tikz[baseline=(char.base)]{
+    \node[shape=circle,draw=blue, dashed, inner sep=2pt] (char) {#1};}}
+%
+%
+\newcommand*{\boxcolor}{Red}
+\makeatletter
+\renewcommand{\boxed}[1]{\textcolor{\boxcolor}{%
+\tikz[baseline={([yshift=-1ex]current bounding box.center)}] \node [rectangle,semithick, minimum width=1ex,draw, dashed] {\normalcolor\m@th$\displaystyle#1$};}}
+ \makeatother
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[Panel data models]{Praktikum z ekonometrie - Týden 7 \\Panel data models and tests} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{VŠE Praha} % Your name
+\institute[4EK417] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+{
+% Your institution for the title page
+\medskip
+\textit{Tomáš Formánek} % Your email address
+}
+\date{} % Date, can be changed to a custom date
+
+\begin{document}
+
+\begin{frame}
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}
+\frametitle{Content} % Table of contents slide, comment this block out to remove it
+\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%---------------------------------------------------------------------
+\section{Poolability tests}
+\begin{frame}{Poolability tests}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LSDV-based test for individual intercepts}
+\begin{itemize}
+    \item Null hypothesis of common intercept is tested against the alternative of individual-specific intercepts.
+    \medskip
+    \item Common slopes are assumed (not tested)
+    \medskip
+    \item Unrestricted model: $y_{it} = \beta_{0} + \bm{d}^{\prime}\bm{\delta}_{0} + \beta_1 x_{it1} + \beta_2 x_{it2} + u_{it}$ \\ 
+    where $\bm{d}$ is a vector of CSID-based dummy variables and $\bm{\delta}_{0}$ is a vector of regression coefficients ($N-1$ dummies used to avoid dummy variable trap).
+    \medskip
+    \item Restricted model: $~~y_{it} = \beta_{0}~ \, + \beta_1 x_{it1} + \beta_2 x_{it2} + u_{it}$.
+    \medskip
+    \item Can be implemented as an $F$-test for linear (zero) restrictions: Pooled regression vs LSDV model
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Chow test for identical slopes}
+\begin{itemize}
+    \item \texttt{pooltest()} from the \texttt{\{plm\}} package 
+    \smallskip
+    \item We allow for different intercepts \& test for equal slopes \\in all CS-units
+    \begin{itemize}
+        \item Estimate model separately for each CS unit.
+        \item Compare with ``FE'' model (individual intercept, common slopes on regressors) using an $F$-test -- are the slopes identical among CS-units?
+    \end{itemize}
+    \smallskip
+    \item Drawback: test cannot handle time-invariant regressors (as the unrestricted model is estimated individually for each CS-unit, such regressors are perfectly correlated with the intercept and $\mu_i$ elements)
+    \medskip
+    \item Unrestricted model: $y_{it} = \beta_{0} + \beta_{i1} x_{it} + \mu_i + u_{it}$
+    \smallskip
+    \item Restricted model: $\,~~y_{it} = \beta_{0}~ \, + \beta_1 x_{it} + \mu_i + u_{it}$
+\begin{itemize}
+    \item[] $H_0:~\beta_{11}=\beta_{21}=\dots=\beta_{N1}$  
+    \item[] $H_1:~\neg H_0$
+\end{itemize}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Chow test for identical slopes}
+\vspace{2.5cm}
+\vfill
+\bigskip
+$F=\frac{ \mytikzmark{SSRr}{\textit{SSR}_r}- \mytikzmark{SSRur}{\textit{SSR}_{ur}}}{\textit{SSR}_{ur}} \cdot \frac{(NT-N-Nk)}{(N-1)k};$ \\
+\bigskip
+{\small under $H_0$ of no structural break, $F \sim F[(N-1)k, (NT- \mytikzmark{TTk}{\circledd{$N-Nk$)}}]$} \\
+\bigskip
+\begin{itemize}
+\item Alternatively, the restricted model can be amended to feature \\a single intercept (no $\mu_i$ individual effects).
+\end{itemize}
+\begin{tikzpicture}[<-,overlay,remember picture,inner sep=1.5pt,shorten <=0.2em,font=\scriptsize]
+\tikzset{
+    mynode/.style={rectangle,draw=blue, dashed, fill=white, semithick, inner sep=.2em, minimum size=2em, text centered, text width=9em},
+    myarrow/.style={->, >=stealth, thin, blue}
+}
+\node[mynode] at (1.8,7.2) (SSRr*){$\textit{SSR}_r$: restricted model – allow for different $a_i$, impute common slopes.};
+\draw[myarrow] (SSRr*) -- ++   (SSRr);
+	\node[mynode] at (5.5,7.2) (SSRur*){$\textit{SSR}_{ur}$:run a regression for each of the CS units. $\textit{SSR}_{ur} = 			\textit{SSR}_1 + \textit{SSR}_2 + \dots + \textit{SSR}_N$};
+	\draw[myarrow] (SSRur*) -- ++   (SSRur);
+		\node[mynode] at (9.3,7.2) (TTk*){$N + Nk$ parameters estimated in the unrestricted model, $k$ is \# regressors};
+		\draw[myarrow] (TTk*) -- ++   (TTk);
+\end{tikzpicture}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Honda (1985) test for individual and time effects}
+\begin{itemize}
+    \item \texttt{plmtest(..., type="honda")} from the \texttt{\{plm\}} package
+    \medskip
+    \item Using OLS-based (``pooling'') residuals, we test the null hypothesis of redundant individual $(\mu_i)$ and/or time $ (\lambda_t) $ effects.
+    \medskip
+    \item Individual effects: 
+    $$y_{it} = \beta_{0} + \beta_{1} x_{it1} + \dots + \beta_k x_{itk} + \mu_i + \nu_{it}$$
+    \item Time effects: 
+    $$y_{it} = \beta_{0} + \beta_{1} x_{it1} + \dots + \beta_k x_{itk} + \lambda_t + \nu_{it}$$  
+    \item Twoways effects: 
+    $$~~~~~y_{it} = \beta_{0} + \beta_{1} x_{it1} + \dots + \beta_k x_{itk} + \mu_i + \lambda_t + \nu_{it}$$ \item Note: for this LM-based tests, we only use the residuals of the pooling model (if performed on RE of FE model, corresponding pooling model is calculated internally first). \\ \smallskip Notation follows Baltagi (2008)
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Honda (1985) test for individual and time effects}
+Panel model\\ \bigskip
+\begin{itemize}
+    \item $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + u_{it} \qquad$    where $u_{it}=\mu_i + \lambda_t + \nu_{it}$
+    \medskip
+    \item Assumptions for Honda (1985) test: \\ \smallskip {\it i.i.d.} individual effects: $\mu_i \sim N(0,\sigma^2_{\mu})$; \\{\it i.i.d.} time effects: $\lambda_t \sim N(0,\sigma^2_{\lambda})$; \\{\it i.i.d.} idiosyncratic errors: $\nu_{it} \sim N(0,\sigma^2_{\nu})$.
+    \medskip
+    \item Null hypotheses to be tested:
+    \smallskip
+    \begin{itemize}
+        \item $H_0^{\mu}: \sigma^2_{\mu} = 0 \qquad \qquad$ ~~~(no individual effects)
+        \smallskip
+        \item $H_0^{\lambda}: \sigma^2_{\lambda} = 0 \qquad \qquad$ ~~~(no time effects)
+        \smallskip
+        \item $H_0^{\mu \lambda}: \sigma^2_{\mu} = \sigma^2_{\lambda} = 0 \qquad \,$ (no individual nor time effects)
+    \end{itemize}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Honda (1985) test for individual and time effects}
+$y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + u_{it} \qquad$    where $u_{it}=\mu_i + \lambda_t + \nu_{it}$\\ \smallskip Balanced panel assumed. \bigskip
+\begin{itemize}
+    \item Error component in stacked (matrix form): \\ \smallskip
+    $\bm{u}_i = \left( u_{i1}, u_{i2}, \dots, u_{iT} \right)^{\prime}$ and $\bm{u} = \left( \bm{u}_1^{\prime}, \bm{u}_2^{\prime}, \dots, \bm{u}_N^{\prime} \right)^{\prime}$ \\ \smallskip
+    $\bm{u}_i$ is $T \times 1$ and $\bm{u}$ is $NT \times 1$.
+    \medskip
+    \item In matrix form, $\bm{u}$ can be cast as: \\
+    $\bm{u} = \bm{D}_{\mu} \bm{\mu} + \bm{D}_{\lambda} \bm{\lambda} + \bm{\nu}$ \\ \smallskip
+    where \\$\bm{\mu} = (\mu_1, \dots, \mu_N)^{\prime}$, \\$\bm{\lambda} = (\lambda_1, \dots, \lambda_T)^{\prime}$, \\$\bm{\nu}$ follows the structure of $\bm{u}$,\\
+    $\bm{D}_{\mu} = (\bm{I}_N \otimes \bm{\iota}_T)$ i.e. $\bm{I}_N$ with each row repated $T$-times; $(NT \times N)$, \\
+    $\bm{D}_{\lambda} = ( \bm{\iota}_N \otimes \bm{I}_T )$ i.e. $\bm{I}_T$ stacked vertically $N$-times; $(NT \times T)$, \\ 
+    note that time is the ``fast index'' here.
+    \end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Honda (1985) test for individual and time effects}
+$y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + u_{it} \qquad$    where $u_{it}=\mu_i + \lambda_t + \nu_{it}$\\ \medskip
+$\bm{u} = \bm{D}_{\mu} \bm{\mu} + \bm{D}_{\lambda} \bm{\lambda} + \bm{\nu}$ \\ \bigskip
+\begin{itemize}
+    \item $\bm{D}_{\mu} \bm{D}_{\mu}^{\prime} = \left(\bm{I}_N \otimes \bm{J}_T \right)$ i.e. block-diagonal matrix of $\bm{J}_T$-matrices \\where $\bm{J}_T=\iota_T \iota_T^{\prime}$  ($\bm{J}_T$ is a $T \times T$ matrix of ones).
+    \medskip
+    \item $\bm{D}_{\lambda} \bm{D}_{\lambda}^{\prime} = \left(\bm{J}_N \otimes \bm{I}_T   \right)$ i.e. $N\times N$ array of $\bm{I}_T$-matrices.
+    \medskip
+    \item Now, we define\\ \medskip
+    $A_r = \left[ \left( \frac{\bm{u}^{\prime}\bm{D}_r \bm{D}_r^{\prime} \bm{u}}{\bm{u}^{\prime}\bm{u}} \right) - 1 \right]$ for $r=\mu$ or $r=\lambda$.
+    \end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Honda (1985) test for individual and time effects}
+$y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + u_{it} \qquad$    where $u_{it}=\mu_i + \lambda_t + \nu_{it} \qquad$ (balanced panel)\\ \medskip
+\begin{itemize}
+    \item Honda (1985) derives a uniformly most powerful {\it LM} statistics for \\
+    $H_0^{\mu}: \sigma_{\mu}^2=0$ against a one-sided $H_1^{\mu}: \sigma_{\mu}^2>0$:
+    $$
+    \textnormal{HO}_{\mu} = \sqrt{\frac{NT}{2(T-1)}} ~ A_{\mu} ~ \underset{H_0}{\rightarrow}~N(0,1)
+    $$
+    \item Similarly, for $H_0^{\lambda}: \sigma_{\lambda}^2=0$ against a one-sided $H_1^{\lambda}: \sigma_{\lambda}^2>0$:
+    $$
+    \textnormal{HO}_{\lambda} = \sqrt{\frac{NT}{2(T-1)}} ~ A_{\lambda} ~ \underset{H_0}{\rightarrow}~N(0,1)
+    $$
+\end{itemize}    
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Honda (1985) test for individual and time effects}
+$y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + u_{it} \qquad$    where $u_{it}=\mu_i + \lambda_t + \nu_{it} \qquad$ (balanced panel)\\ \medskip
+\begin{itemize}
+    \item Honda (1985) provides a test statistic for $H_0^{\mu \lambda}: \sigma_{\mu}^2=\sigma_{\lambda}^2=0$ against a one-sided alternative
+    \\(not derived as a uniformly most powerful {\it LM} statistics):
+    $$
+    \textnormal{HO}_{\mu \lambda} = \frac{\textnormal{HO}_{\mu}+\textnormal{HO}_{\lambda}}{\sqrt{2}} {\rightarrow}~N(0,1)
+    $$
+    \bigskip
+    \item Honda (1985) statistics can be generalized to the unbalanced case. \\see e.g.: \footnotesize{\textcolor{blue}{\underline{http://www.eviews.com/help/}}}
+\end{itemize}    
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{$F$-test for unobserved effects (FE-based) vs pooling model}
+$y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \lambda_t + \nu_{it}$\\ \medskip
+\begin{itemize}
+    \item \texttt{pFtest()} from the \texttt{\{plm\}} package
+    \medskip
+    \item $F$-test of effects based on the comparison of ``pooling'' and ``within'' models (either ``individual'', ``time'' or ``twoways'' effects can be tested).
+    \medskip
+    \item Hence, two main arguments to the test function are \texttt{plm}-estimated ``pooling'' and ``within'' models. 
+    \medskip 
+    \item d.f. of the $F$-test depend on the number of observations and parameters restricted:\\
+    \texttt{df1} is the number of parameters restricted, \\
+    \texttt{df2} $= NT -$ (\# parameters estimated in the unrestricted model). \\
+\end{itemize}    
+\end{frame}
+%---------------------------------------------------------------------
+\section{Estimator selection \& corresponding tests}
+\begin{frame}{Estimator selection \& corresponding tests}
+\end{frame}
+%---------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%---------------------------------------------------------------------
+
+\end{document}
