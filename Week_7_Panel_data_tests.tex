@@ -253,7 +253,7 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \lambda_t + \nu_{it
     \medskip 
     \item d.f. of the $F$-test depend on the number of observations and parameters restricted:\\
     \texttt{df1} is the number of parameters restricted, \\
-    \texttt{df2} $= NT -$ (\# parameters estimated in the unrestricted model). \\
+    \texttt{df2} $= N(T-1)~-$ (\# parameters est. in the unrestricted model)    \dots remember that for each C-S observation $i$, we loose one d.f. as the demeaned errors $\ddot{\nu}_{it}$ add up to zero when summed over time.
 \end{itemize}    
 \end{frame}
 %---------------------------------------------------------------------
@@ -261,10 +261,103 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \lambda_t + \nu_{it
 \begin{frame}{Estimator selection \& corresponding tests}
 \end{frame}
 %---------------------------------------------------------------------
+\begin{frame}{Hausman test: RE vs FE estimator}
+\begin{itemize}
+    \item \texttt{phtest()} from the \texttt{\{plm\}} package
+    \medskip
+    \item Hausman test is based on the comparison of two sets of estimates
+    \medskip
+    \item A classical application of the Hausman test for panel data is to compare the fixed and the random effects models:
+    {\small $$H=(\hat{\bm{\beta}}_{FE} - \hat{\bm{\beta}}_{RE})^T [\widehat{\textit{Avar}}(\hat{\bm{\beta}}_{FE}) - \widehat{\textit{Avar}}(\hat{\bm{\beta}}_{RE})]^{-1} (\hat{\bm{\beta}}_{FE} - \hat{\bm{\beta}}_{RE}) \underset{H_0}{\sim} \chi^2(m)$$}
+    {\footnotesize where $m$ is the number of regressors varying across $i$ and $t$.}
+    \smallskip
+    \item[] $H_0$: $\textnormal{cov}(\bm{x}_{it},\mu_i) = 0$ \dots i.e. the crucial RE assumption holds
+    \item[] $H_1$: RE assumptions violated.
+\end{itemize}
+\end{frame}
+%---------------------------------
+\begin{frame}{Hausman test: RE vs FE estimator}
 
-
-
-
+{\small $$H=(\hat{\bm{\beta}}_{FE} - \hat{\bm{\beta}}_{RE})^T [\widehat{\textit{Avar}}(\hat{\bm{\beta}}_{FE}) - \widehat{\textit{Avar}}(\hat{\bm{\beta}}_{RE})]^{-1} (\hat{\bm{\beta}}_{FE} - \hat{\bm{\beta}}_{RE}) \underset{H_0}{\sim} \chi^2(m)$$}
+\medskip
+\begin{itemize}
+    \item If $\hat{\bm{\beta}}_{FE}$ and $\hat{\bm{\beta}}_{RE}$ do not differ too much [or when the asymptotic variances are relatively large] we do not reject $H_0$. 
+    \medskip
+    \item If we may assume RE assumptions hold, both RE and FE are consistent, and RE is efficient. 
+    \medskip
+    \item For asymptotic variance estimators ($\widehat{\textit{Avar}}$), see Wooldridge (2010). 
+    \medskip
+    \item If we reject $H_0$, we need to assume that RE assumptions are violated $\rightarrow$ RE is not consistent [we use FE].
+\end{itemize}
+\end{frame}
+%---------------------------------
+\begin{frame}{Wooldridge's FD-based test: FD vs FE estimator}
+$y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medskip
+\begin{itemize}
+    \item \texttt{pwfdtest()} from the \texttt{\{plm\}} package
+    \smallskip
+    \item Serial correlation test that can be used as a specification test to choose the most efficient estimator -- FD vs FE.
+    \item If $\nu_{it}$ are not serially correlated: 
+    \begin{itemize}
+          \item FE is more efficient than FD.
+          \item Residuals in the FD model: $e_{it} \equiv \nu_{it}-\nu_{i,t-1}$ are correlated, \\with~~ $\textnormal{cor}\left(e_{it},e_{i,t-1}\right)=-0.5$.
+        \end{itemize}
+        \item Test (for models with individual effects) can be based on estimating the model $\hat{e}_{it}=\delta \hat{e}_{i,t-1}+\eta_{it}$ based on residuals of the FD model, where we test $H_0: \delta=-0.5$, corresponding to the null of no serial correlation in the original (undifferenced) residuals $\nu_{it}$. 
+        \item If this $H_0$ is not rejected, we would prefer FE.
+\end{itemize}
+\end{frame}
+%---------------------------------
+\begin{frame}{Wooldridge's FD-based test: FD vs FE estimator}
+$y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medskip
+\begin{itemize}
+    \item If $\nu_{it}$ follow a unit root: 
+    \begin{itemize}
+          \item FD is more efficient than FE.
+          \item Residuals in the FE model: $\nu_{it}=\nu_{i,t-1}+e_{it}$.
+          \item Residuals in the FD model: $e_{it} = \nu_{it}-\nu_{i,t-1}$ are not serially correlated, \\(definition of a random walk for $\nu_{it}$).
+        \end{itemize}
+        \smallskip
+        \item \texttt{pwfdtest(..., h0="fd")} \\
+        $H_0:$ no serial correlation in FD-errors $e_{it}$, \\if not rejected, use FD.
+        \smallskip
+        \item \texttt{pwfdtest(..., h0="fe")} \\
+        $H_0:$ no serial correlation in FE-errors $\nu_{it}$, \\if not rejected, use FE.
+        \smallskip
+        \item If both rejected, whichever estimator is chosen will have serially correlated errors: use the autocorrelation-robust covariance estimators.
+    \smallskip
+\end{itemize}
+\end{frame}
+%---------------------------------
+\section{Robust statistical inference}
+\begin{frame}{Robust statistical inference}
+\end{frame}
+%---------------------------------
+\begin{frame}{Robust statistical inference}
+\begin{itemize}
+    \item \texttt{vcovHC()} from the \texttt{\{plm\}} package, 
+    \\used together with functions from \texttt{\{lmtest\}}
+    \smallskip
+    \item 
+\end{itemize}
+\end{frame}
+%---------------------------------
+\section{Cross-sectional dependence (XSD)}
+\begin{frame}{Cross-sectional dependence (XSD)}
+\end{frame}
+%---------------------------------
+\begin{frame}{Cross-sectional dependence (XSD)}
+\begin{itemize}
+    \item \texttt{pcdtest()} from the \texttt{\{plm\}} package, 
+    \item Analogous yet distinct to the more familiar issue of serial correlation.
+    \smallskip
+    \item Can arise, e.g., if individuals respond to common shocks or if spatial diffusion processes are present, relating individuals in a way depending on a measure of distance (spatial models)
+    \smallskip
+    \item If XSD is present, the consequence is, at a minimum, inefficiency of the usual estimators and invalid inference when using the standard covariance matrix.
+    \smallskip
+    \item In \texttt{\{plm\}}, only misspeciffication tests to detect XSD are available – no robust method to perform valid inference in its presence.
+\end{itemize}
+\end{frame}
+%---------------------------------
 
 
 
