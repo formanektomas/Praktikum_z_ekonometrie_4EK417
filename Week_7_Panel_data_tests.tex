@@ -607,6 +607,8 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
         \end{itemize}
         \item Test (for models with individual effects) can be based on estimating the model $\hat{e}_{it}=\delta \hat{e}_{i,t-1}+\eta_{it}$ based on residuals of the FD model, where we test $H_0: \delta=-0.5$, corresponding to the null of no serial correlation in the original (undifferenced) residuals $\nu_{it}$. 
         \item If this $H_0$ is not rejected, we would prefer FE.
+        \medskip
+    \item Test performs well for $T$ asymptotics. For short panels, other serial correlation tests are available.
 \end{itemize}
 \end{frame}
 %---------------------------------
