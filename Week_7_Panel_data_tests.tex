@@ -560,8 +560,8 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \lambda_t + \nu_{it
 \end{itemize}    
 \end{frame}
 %---------------------------------------------------------------------
-\section{Estimator selection \& corresponding tests}
-\begin{frame}{Estimator selection \& corresponding tests}
+\section{Estimator selection \& serial correlation tests}
+\begin{frame}{Estimator selection \& serial correlation tests}
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Hausman test: RE vs FE estimator}
@@ -603,7 +603,7 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
     \item If $\nu_{it}$ are not serially correlated: 
     \begin{itemize}
           \item FE is more efficient than FD.
-          \item Residuals in the FD model: $e_{it} \equiv \nu_{it}-\nu_{i,t-1}$ are correlated, \\with~~ $\textnormal{cor}\left(e_{it},e_{i,t-1}\right)=-0.5$.
+          \item Residuals in the FD model: $e_{it} = \nu_{it}-\nu_{i,t-1}$ are correlated, \\with~~ $\textnormal{cor}\left(e_{it},e_{i,t-1}\right)=-0.5$.
         \end{itemize}
         \item Test (for models with individual effects) can be based on estimating the model $\hat{e}_{it}=\delta \hat{e}_{i,t-1}+\eta_{it}$ based on residuals of the FD model, where we test $H_0: \delta=-0.5$, corresponding to the null of no serial correlation in the original (undifferenced) residuals $\nu_{it}$. 
         \item If this $H_0$ is not rejected, we would prefer FE.
@@ -632,6 +632,76 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
     \smallskip
 \end{itemize}
 \end{frame}
+%---------------------------------
+\begin{frame}{Serial correlation tests}
+\begin{itemize}
+    \item \texttt{pwtest()} ~~ Unobserved effects: ``Wooldridge''-type test\\
+        $H_0: \sigma_{\mu}^2 = 0$ for RE model. ~~Under $H_0$, average value of the scaled elements of error covariance matrix (upper/lower triangle, excluding diagonal) asymptotically follow $N(0,1)$.
+        \smallskip 
+        \item[] Non-rejection of $H_0$ favours pooled OLS, yet rejecting may be due to serial correlation (in random effects). $H_0$ rejection does not imply existence of individual effects (may be due to serial corr.).
+        \bigskip
+        \item \texttt{pbsytest()} ~~ Bera, Sosa-Escudero, Yoon (2001)\\
+        Solution to the previous problem: three tests:\\
+        $H_0:$ no serial correlation while controlling for random effects\\
+        $H_0:$ no random effects (while controlling for possible ser. corr.)\\
+        $H_0:$ no random effects \& no serial correlation.
+        \bigskip
+        \item For detailed description of both tests, see: \\
+        Wooldridge, 2002 (CS and panel data analysis)\\
+        \url{https://www.jstatsoft.org/article/view/v027i02}
+\end{itemize}
+\end{frame}
+%---------------------------------
+\begin{frame}{General serial correlation tests}
+\begin{itemize}
+    \item \texttt{pbgtest()} ~~ Breusch-Godfrey test for panels,\\ Mainly for RE (and pooling) model.\\
+    \smallskip
+    \item Under RE assumptions of homoskedasticity and no serial correlation in the idiosyncratic error, the residuals of the quasi-demeaned regression must be spherical as well.\\
+    Hence, serial correlation test (BG test) is applied to residuals in the quasi-demeaned model (may be applied to pooled OLS residuals as well).\\
+    \smallskip
+    \item Technically, \texttt{pbgtest()} is a wrapper to \texttt{bgtest()} from the \texttt{lmtest()} package. 
+    \smallskip
+    \item With BG-test, we can test for different orders of serial correlation.
+    \smallskip
+    \item NOT suited for FE-estimated models, for $N \gg T$, test is severely biased towards rejecting $H_0$ of no ser. corr. (see next page).
+    \medskip
+    \item \texttt{pdwtest()} ~~ Durbin-Watson test for panels (\dots analogous).
+\end{itemize}
+\end{frame}
+%---------------------------------
+\begin{frame}{General serial correlation tests}
+$y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medskip
+\begin{itemize}
+    \item \texttt{pwartest()}~~Wooldridge test for FE model and short panels.\\
+    \smallskip
+    \item Under the null hypothesis of no serial correlation in the idiosyncratic residuals $\nu_{it}$, residuals in the FE-estimated model (time demeaned data) are correlated: $$\textnormal{cor}\left(e_{it},e_{is}\right)=-1/(T-1).$$
+    \item $H_0$ of no serial correlation in $\nu_{it}$ can be tested using residuals from the FD-estimated model and auxiliary regression:
+    $$ \hat{e}_{it} = \alpha + \delta \hat{e}_{i,t-1} + \eta_{it}$$
+    By rejecting $H_0: \delta = -1/(T-1)$, we reject the original null hypothesis of no serial correlation in  $\nu_{it}$.
+    \smallskip
+    \item Test applicable to any ``FE model'', particularly with $N \gg T$.
+    \smallskip
+    \item As $T$ grows, $-1/(T-1) \rightarrow 0$ and \texttt{pbgtest()} can be used as well.
+\end{itemize}
+\end{frame}
+%---------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %---------------------------------
 \section{Robust statistical inference}
 \begin{frame}{Robust statistical inference}
