@@ -654,7 +654,7 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
 %---------------------------------
 \begin{frame}{General serial correlation tests}
 \begin{itemize}
-    \item \texttt{pbgtest()} ~~ Breusch-Godfrey test for panels,\\ Mainly for RE (and pooling) model.\\
+    \item \texttt{pbgtest()} ~~ Breusch-Godfrey test for panels,\\ Mainly for RE (and pooling) models.\\
     \smallskip
     \item Under RE assumptions of homoskedasticity and no serial correlation in the idiosyncratic error, the residuals of the quasi-demeaned regression must be spherical as well.\\
     Hence, serial correlation test (BG test) is applied to residuals in the quasi-demeaned model (may be applied to pooled OLS residuals as well).\\
@@ -684,24 +684,6 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
     \item As $T$ grows, $-1/(T-1) \rightarrow 0$ and \texttt{pbgtest()} can be used as well.
 \end{itemize}
 \end{frame}
-%---------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 %---------------------------------
 \section{Robust statistical inference}
 \begin{frame}{Robust statistical inference}
