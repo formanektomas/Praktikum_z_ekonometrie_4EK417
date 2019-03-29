@@ -675,8 +675,8 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
     \item \texttt{pwartest()}~~Wooldridge test for FE model and short panels.\\
     \smallskip
     \item Under the null hypothesis of no serial correlation in the idiosyncratic residuals $\nu_{it}$, residuals in the FE-estimated model (time demeaned data) are correlated: $$\textnormal{cor}\left(e_{it},e_{is}\right)=-1/(T-1).$$
-    \item $H_0$ of no serial correlation in $\nu_{it}$ can be tested using residuals from the FD-estimated model and auxiliary regression:
-    $$ \hat{e}_{it} = \alpha + \delta \hat{e}_{i,t-1} + \eta_{it}$$
+    \item $H_0$ of no serial correlation in $\nu_{it}$ can be tested using residuals from the FE-estimated model and auxiliary regression:
+    $$ \hat{e}_{it} = \alpha + \delta \, \hat{e}_{i,t-1} + \eta_{it}$$
     By rejecting $H_0: \delta = -1/(T-1)$, we reject the original null hypothesis of no serial correlation in  $\nu_{it}$.
     \smallskip
     \item Test applicable to any ``FE model'', particularly with $N \gg T$.
