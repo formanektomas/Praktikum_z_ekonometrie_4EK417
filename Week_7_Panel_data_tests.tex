@@ -674,7 +674,7 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
 \begin{itemize}
     \item \texttt{pwartest()}~~Wooldridge test for FE model and short panels.\\
     \smallskip
-    \item Under the null hypothesis of no serial correlation in the idiosyncratic residuals $\nu_{it}$, residuals in the FE-estimated model (time demeaned data) are correlated: $$\textnormal{cor}\left(e_{it},e_{is}\right)=-1/(T-1).$$
+    \item Under the null hypothesis of no serial correlation in the idiosyncratic errors $\nu_{it}$, residuals in the FE-estimated model (time demeaned data) are correlated: $$\textnormal{cor}\left(e_{it},e_{is}\right)=-1/(T-1).$$
     \item $H_0$ of no serial correlation in $\nu_{it}$ can be tested using residuals from the FE-estimated model and auxiliary regression:
     $$ \hat{e}_{it} = \alpha + \delta \, \hat{e}_{i,t-1} + \eta_{it}$$
     By rejecting $H_0: \delta = -1/(T-1)$, we reject the original null hypothesis of no serial correlation in  $\nu_{it}$.
@@ -697,9 +697,9 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
     \item three types of HC/HAC covariance matrix estimators \\(sandwich estimator)
     \smallskip
     \item Based on White's general form (for CS data):\\ \medskip 
-    $\textnormal{var}(\hat{\bm{\beta}|\bm{X}})= \sigma^2
+    $\textnormal{var}(\hat{\bm{\beta}|\bm{X}})= 
     \left[ \bm{X}^{\prime} \bm{X} \right]^{-1}
-    \left[ \bm{X}^{\prime} \bm{\Omega} \bm{X} \right]
+    \left[ \bm{X}^{\prime} \sigma^2 \bm{\Omega} \bm{X} \right]
     \left[ \bm{X}^{\prime} \bm{X} \right]^{-1}$ \\ \medskip
     \smallskip
     \item For the panel extension of White's HC/HAC estimator, we assume no correlation between errors of different CS-units (groups) while allowing for heteroskedasticity across CS-units (and for serial correlation)
@@ -712,7 +712,7 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
     \medskip
     \item \texttt{"white1"} allows for general heteroskedasticity but no serial correlation, i.e.,
     $$
-    \bm{\Omega}_i = 
+    \sigma^2 \bm{\Omega}_i = \bm{\Sigma}_i =
     \begin{bmatrix}
     \sigma_{i1}^2 & \dots & \dots & 0 \\
     0 & \sigma_{i2}^2 &  & 0 \\
@@ -720,15 +720,15 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
     0 & \dots & \dots & \sigma_{iT}^2
     \end{bmatrix}
     $$
-    and $\bm{\Omega}$ is a block-diagonal matrix of $\bm{\Omega}_i$ matrices
+    and $\bm{\Sigma}$ is a block-diagonal matrix of $\bm{\Sigma}_i$ matrices
     \smallskip
-    \item \texttt{"white2"} is \texttt{"white1"} with common CS-variance: $\bm{\Omega}_i = \sigma^2_i \bm{I}_T$.
+    \item \texttt{"white2"} is \texttt{"white1"} with common CS-variance: $\bm{\Sigma}_i = \sigma^2_i \bm{I}_T$.
     \smallskip
-    \item The counterpart to CS-related $\left[ \bm{X}^{\prime} \bm{\Omega} \bm{X} \right]$ would be:
+    \item The counterpart to CS-related $\left[ \bm{X}^{\prime} \bm{\Sigma} \bm{X} \right]$ would be:
     $$
-    \ddot{\bm{X}}^{\prime} \bm{\Omega} \ddot{\bm{X}} = 
+    \ddot{\bm{X}}^{\prime} \bm{\Sigma} \ddot{\bm{X}} = 
     \sum_{i=1}^N \left( 
-    \ddot{\bm{X}}_i^{\prime} \bm{\Omega}_i \ddot{\bm{X}_i}
+    \ddot{\bm{X}}_i^{\prime} \bm{\Sigma}_i \ddot{\bm{X}_i}
     \right)
     $$
     where $\ddot{\bm{X}}$ are the transformed (time-demeaned) regressors.
@@ -741,7 +741,7 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
     \medskip
     \item \texttt{"arellano"} allows a fully general structure w.r.t. heteroskedasticity and serial correlation:
     $$
-    \bm{\Omega}_i = 
+    \bm{\Sigma}_i = 
     \begin{bmatrix}
     \sigma_{i1}^2 & \sigma_{i1,i2} & \dots & \dots & \sigma_{i1,iT} \\
     \sigma_{i2,i1} & \sigma_{i2}^2 &       &       & \vdots \\
@@ -750,7 +750,7 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
    \sigma_{iT,i1}       &   \dots & \dots    &  \sigma_{iT,iT-1}    & \sigma_{iT}^2 \\
     \end{bmatrix}
     $$
-    and $\bm{\Omega}$ is a block-diagonal matrix of $\bm{\Omega}_i$ matrices
+    and $\bm{\Sigma}$ is a block-diagonal matrix of $\bm{\Sigma}_i$ matrices
     \smallskip
     \item \texttt{"arellano"}: consistent w.r.t. timewise correlation of the errors, but (unlike \texttt{"white1"},\texttt{"white2"}), it relies on large $N$ asymptotics with small $T$ (short panels).
     \smallskip
