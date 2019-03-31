@@ -230,28 +230,6 @@ and we assume $u_{0j}$ are $iid$ and independent from $\varepsilon_{ij}$.\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{LME model with random intercept}
-\begin{itemize}
-\item \textit{Random effects} model with random intercept:\\
-\bigskip
-Exogenous regressors are also used in LMEs (like in LRMs).\\
-\smallskip
-For example, \texttt{math5} grades depend on \texttt{math3} ($3{^{\textnormal{rd}}}$ year grades).\\
-\medskip
-$ y_{ij} = \beta_{0} + \beta_1 \, x_{ij} + u_{0j} + \varepsilon_{ij}, $\\
-\medskip
-i.e.\\
-$ \texttt{math5}_{ij} = \beta_{0} + \beta_1 \, \texttt{math3}_{ij} + u_{0j} + \varepsilon_{ij}, $\\
-\medskip
-\begin{itemize}
-\item Intercept is random.
-\smallskip
-\item Slope of the regression line for each school is fixed at $\beta_1$.\\
-\dots \texttt{math3} has a \textit{fixed effect}.
-\end{itemize}
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
 \begin{frame}{LME model: ICC}
 \begin{itemize}
 \item \textbf{ICC:} Intra class correlation (in a LME regression model) \qquad
@@ -279,6 +257,28 @@ $y_{ij} = \beta_{0} + \bm{x}_{ij} \bm{\beta} + u_{0j} + \varepsilon_{ij},$\\ \me
 Here, ICC measures correlation between $y_{ij}$  observations for \\a given individual.
 \medskip
 \item ICC is interpreted as the correlation between two \textbf{appropriately defined} observations from the same cluster/group \\(individual in a longitudinal study). 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LME model with random intercept}
+\begin{itemize}
+\item \textit{Random effects} model with random intercept:\\
+\bigskip
+Exogenous regressors are also used in LMEs (like in LRMs).\\
+\smallskip
+For example, \texttt{math5} grades depend on \texttt{math3} ($3{^{\textnormal{rd}}}$ year grades).\\
+\medskip
+$ y_{ij} = \beta_{0} + \beta_1 \, x_{ij} + u_{0j} + \varepsilon_{ij}, $\\
+\medskip
+i.e.\\
+$ \texttt{math5}_{ij} = \beta_{0} + \beta_1 \, \texttt{math3}_{ij} + u_{0j} + \varepsilon_{ij}, $\\
+\medskip
+\begin{itemize}
+\item Intercept is random.
+\smallskip
+\item Slope of the regression line for each school is fixed at $\beta_1$.\\
+\dots \texttt{math3} has a \textit{fixed effect}.
+\end{itemize}
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -362,7 +362,7 @@ $j$-th region ($j=1,\dots,9$),\\
 \medskip
 \item We fit \texttt{GDP} as a function of productivity \texttt{P} and unemployment \texttt{U}.\\
 \smallskip
-We treat states as nested within regions, so we have 2 levels of random intercepts: one due to the regions, and another due to the state within region (random slopes can be added as well).
+We treat states as nested within regions, so we have 2 levels of random intercepts: one due to the regions ($v_{0j}$), and another due to the state within region (random slopes can be added as well).
 \bigskip
 \item $\texttt{GDP}_{tij} = \beta_0 + \beta_1 \, \texttt{P}_{tij} 
 + \beta_2 \, \texttt{U}_{tij} + u_{0i(j)} + v_{0j}  + \varepsilon_{tij}.$
