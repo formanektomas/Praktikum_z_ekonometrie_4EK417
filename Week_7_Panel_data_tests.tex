@@ -708,7 +708,7 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
 %---------------------------------
 \begin{frame}{Robust statistical inference}
 \begin{itemize}
-    \item \texttt{vcovHC(... , type="white1")}
+    \item \texttt{vcovHC(... , method="white1")}
     \medskip
     \item \texttt{"white1"} allows for general heteroskedasticity but no serial correlation, i.e.,
     $$
@@ -737,7 +737,7 @@ $y_{it} = \alpha + \bm{x}^{\prime}_{it} \bm{\beta} + \mu_i + \nu_{it}$\\ \medski
 %---------------------------------
 \begin{frame}{Robust statistical inference}
 \begin{itemize}
-    \item \texttt{vcovHC(... , type="arellano")}
+    \item \texttt{vcovHC(... , method="arellano")}
     \medskip
     \item \texttt{"arellano"} allows a fully general structure w.r.t. heteroskedasticity and serial correlation:
     $$
