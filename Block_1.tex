@@ -174,10 +174,10 @@ With mean substitution & 69 & .54 &  310.747 & 59.12 \\
 \end{frame}
 %------------------------------------------------
 \begin{frame}
-\frametitle{Traditional treatment of missing data}
+\frametitle{More advanced treatment of missing data}
 \textbf{Regression substitution}
   \begin{itemize}
-  \item Uses linear regression (auxiliary LRM) to predict what the missing values of regressors should be, on the basis of other variables that are present.
+  \item Uses linear regression (auxiliary LRM) to predict what the missing values of regressors should be -- on the basis of other variables that are present.
   \item For SLRMs, the same problem of error variance as in mean substitution remains. We do not add more information but we increase the sample size and (spuriously) reduce the standard error.
   \item May be useful for MLRMs.
    \end{itemize}
@@ -188,9 +188,8 @@ With mean substitution & 69 & .54 &  310.747 & 59.12 \\
    \end{itemize}
 \end{frame}
 %------------------------------------------------
-\section{Modern Approaches to missing data}
 \begin{frame}
-\frametitle{Modern Approaches to missing data}
+\frametitle{More advanced treatment of missing data}
 
 \textbf{Maximum Likelihood Expectation-Maximization}
   \begin{itemize}
@@ -201,10 +200,12 @@ With mean substitution & 69 & .54 &  310.747 & 59.12 \\
 \end{frame}
 
 %------------------------------------------------
+\section{Modern Approaches to missing data}
+\subsection{Multiple imputation for CS data}
 \begin{frame}
-\frametitle{Multiple imputation (MI)}
+\frametitle{Multiple imputation  for CS data}
 \textbf{Multiple Imputation (MI) }\\
-\texttt{R}: $\left\lbrace \textnormal{mice}  \right\rbrace , \,\, \left\lbrace \textnormal{mi}  \right\rbrace, \,\, \left\lbrace \textnormal{Amelia}  \right\rbrace, \, $ \dots\\
+\texttt{R}: $\left\lbrace \texttt{mice}  \right\rbrace , \,\, \left\lbrace \texttt{mi}  \right\rbrace, \,\, \left\lbrace \texttt{Amelia}  \right\rbrace, \, $ \dots\\
   \vspace{0.5cm}
 MI motivation and algorithm\\
   \vspace{0.2cm}
@@ -224,11 +225,14 @@ Multiple imputation scheme (example with $m=3$ imputations):\\
 \begin{figure}
 \includegraphics[width=1\linewidth]{IMG/mice_scheme.pdf}
 \end{figure}
+\centering
+\vspace{-2.2cm}
+$\left\lbrace \texttt{mice}  \right\rbrace$ object--types used for MI.
  \end{frame}
 %------------------------------------------------
 \begin{frame}
 \frametitle{Multiple imputation (MI)}
-\textbf{Multiple imputation - 7 choices of model specification}\\
+\textbf{Multiple imputation - 7 choices to be made}\\
 \smallskip
 \begin{enumerate}
     \item Decide on MAR assumption plausibility (MAR/MNAR).
@@ -251,13 +255,13 @@ However -- all the choices are always made in MI and they affect the resulting i
 \bigskip
 \begin{itemize}
     \item Implemented in \{mice\} and other packages.
-    \smallskip
+    \medskip
     \item General purpose semi-parametric imputation method.
-    \smallskip
+    \medskip
     \item Suitable especially for imputing quantitative variables \\that are not normally distributed.
-    \smallskip
-    \item Imputations are restricted to observed values.
-    \smallskip
+    \medskip
+    \item Imputations are restricted to previously observed values.
+    \medskip
     \item Can preserve non-linear relations even if the structural part \\of the imputation model is wrong.
 \end{itemize}
 \end{frame}
@@ -266,16 +270,21 @@ However -- all the choices are always made in MI and they affect the resulting i
 \frametitle{Multiple imputation (MI)}
 \textbf{Predictive mean matching (\texttt{pmm}) in \texttt{R}} -- algorithm\\
 \medskip
-Suppose there is a single variable $x$ that has some cases with missing data, and a set of variables $\bm{z}$ (with no missing data, used to impute $x$).
-\bigskip
+Suppose there is a single variable $x$ that has some cases with missing data, and a set of relevant variables $\bm{z}$ with no missing data:
+$$
+\{ x_i, \bm{z}_i\};~i = 1, \dots , n
+$$
+\vspace{-0.5cm}
 \begin{enumerate}
-    \item[1] For cases with no missing data, estimate LRM $x \leftarrow \bm{z}$, \\producing $\hat{\bm{\beta}}$ and $\textnormal{var}(\hat{\bm{\beta}})$ estimates.
-    \smallskip
+    \item[1] For cases with no missing data, estimate LRM $x_i \leftarrow \bm{z}_i$, \\producing $\hat{\bm{\beta}}$ and $\textnormal{var}(\hat{\bm{\beta}})$ estimates.
+    \medskip
     \item[2] Make a random draw from the ``posterior predictive distribution'' of $\hat{\bm{\beta}}$, producing a new set of coefficients $\hat{\bm{\beta}}^{\ast}$.\\
-    \smallskip
-    Typically, this would be a random draw from a multivariate normal distribution with mean $\hat{\bm{\beta}}$ and cov. matrix $\textnormal{var}(\hat{\bm{\beta}})$. \\
-    \smallskip 
-    This step is necessary to produce sufficient variability in the imputed values, and is common to all ``proper'' methods of MI.
+    \medskip
+    \begin{itemize}
+        \item Typically, this would be a random draw from a multivariate normal distribution with mean $\hat{\bm{\beta}}$ and cov. matrix $\textnormal{var}(\hat{\bm{\beta}})$. \\
+    \medskip 
+    \item This step is necessary to produce sufficient variability in the imputed values, and is common to all ``proper'' methods of MI.
+    \end{itemize}
 \end{enumerate}
 \end{frame}
 %------------------------------------------------
@@ -284,42 +293,55 @@ Suppose there is a single variable $x$ that has some cases with missing data, an
 \textbf{Predictive mean matching (\texttt{pmm}) in \texttt{R}} -- algorithm contnd.\\
 \bigskip
 \begin{enumerate}
-    \item[3] Using $\hat{\bm{\beta}}^{\ast}$, generate predicted values for $x$ for \textbf{all cases}, \\both with data missing on $x$ and with data present.
-    \smallskip
-    \item[4] For each case with missing $x$, identify a set of cases with observed $x$ whose \textbf{predicted} values are close to the predicted value for the case with missing data.
-    \smallskip
-    \item[5] From among those close cases, randomly choose one and assign its observed value to substitute for the missing value.
-    \smallskip
-    \item[6] Repeat steps 2 through 5 for each of the $m$ imputed datasets.  
+    \item[3] Using ~$(\bm{z}_i \hat{\bm{\beta}}^{\ast})$~, generate predicted values $\hat{x}_i$ for \textbf{all cases}, \\both with data missing on $x_i$ and with data observations present.
+    \medskip
+    \item[4] For each case with missing $x_i$, identify a set of cases with observed $x_j$ values whose \textbf{predicted} $\hat{x}_j$ values are ``close'' to the predicted $\hat{x}_i$ values (missing data cases).
+    \medskip
+    \begin{itemize}
+        \item For ``close'' values, proximity rules are defined separately.
+    \end{itemize}
+    \medskip
+    \item[5] From among the close cases for each missing $x_i$, randomly choose one $x_j$ and use its observed value to substitute for the missing value.
+    \medskip
+    \item[6] In MI algorithm, repeat steps 2 through 5 for each of the $m$ imputed datasets.  
 \end{enumerate}
 \end{frame}
 %------------------------------------------------
 \begin{frame}
 \frametitle{Multiple imputation (MI)}
 \textbf{Predictive mean matching (\texttt{pmm}) in \texttt{R}} -- recap.\\
-\bigskip
+\medskip
 \begin{itemize}
     \item Compared with regression-based methods, \texttt{pmm} produces imputed values that are much more like real values. 
+    \smallskip
     \begin{itemize}
-        \item If the original variable is skewed, the imputed values will also be skewed.
-        \item If the original variable is bounded by 0 and 100, the imputed values will also be bounded by 0 and 100.
-        \item If the real values are discrete (number of children), the imputed values will also be discrete. 
+        \item If the original variable is skewed, imputed values will also be skewed.
+        \smallskip
+        \item If the original variable is bounded by 0 and 100, imputed values will also be bounded by 0 and 100.
+        \smallskip
+        \item If the real values are discrete (say, number of children), imputed values will also be discrete. 
     \end{itemize} 
     \smallskip
-    \item Unfortunately, for \texttt{pmm}, there’s no mathematical theory to justify it (only Monte Carlo simulations support its use).
+    \item Generally speaking,  there’s no mathematical proof/theory to justify \texttt{pmm}.
     \smallskip
-    \item Based on MC simulations,  \texttt{pmm} does almost as well as parametric methods for a correctly specified model, and a little better than parametric methods in certain misspecified models.
+    \item \texttt{pmm} efficiency can be demonstrated by Monte Carlo simulations.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
 \begin{frame}
 \frametitle{Multiple imputation (MI)}
-\textbf{Multiple Imputation (contnd.) }
+\textbf{Multiple Imputation (empirical output example) }
 \begin{figure}
 \includegraphics[width=0.7\linewidth]{IMG/mitable.jpg}
 \end{figure}
 \scriptsize{\url{https://www.uvm.edu/~dhowell/StatPages/Missing_Data/Missing-Part-Two.html}}
 \end{frame}
+%------------------------------------------------
+\subsection{Multiple imputation for TS data}
+\begin{frame}
+\frametitle{Multiple imputation for TS data}
+
+ \end{frame}
 %------------------------------------------------
 
 \section{Missing dependent variable data}
