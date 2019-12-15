@@ -33,16 +33,16 @@
 \newcommand{\Ms}[2]{\bm{#1}_{#2}}
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
-%
-%
-\title[Spatial analysis]{Spatial Analysis} % The short title appears at the bottom of every slide, the full title is only on the title page
+%----------------------------------------------------------------------------------------
 
-\author{Tomáš Formánek} % Your name
-\institute[2019] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+\title[Spatial econometrics]{Spatial econometrics} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{VŠE Praha} % Your name
+\institute[7. 11. 2019] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
 {
 % Your institution for the title page
 \medskip
-\textit{Seminar held at: Universidad del País Vasco, Bilbao, 2019} % Your email address
+\textit{Tomáš Formánek} % Your email address
 }
 \date{} % Date, can be changed to a custom date
 
@@ -51,7 +51,7 @@
 \begin{frame}
 \titlepage % Print the title page as the first slide
 \end{frame}
-
+%---------------------------------------------------------------------
 \begin{frame}
 \frametitle{Outline} % Table of contents slide, comment this block out to remove it
 \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
@@ -332,6 +332,15 @@ Three main features of an estimated empirical semivariogram:
 \begin{frame}{Spatio-temporal stochastic processes}
 The above discussion can be generalized to accommodate processes that are observed repeatedly over time. \\ \medskip 
 Such observations usually exhibit both spatial and temporal dependency and variability.\\ \medskip  
+Given the frequency and density limitations of empirical measurements in continuous space and time, we model our observations as realizations of a spatio-temporal random function (random field)
+\begin{equation*} 
+Z(\bm{s},t), \hspace{1cm} \textnormal{where~} (\bm{s},t) \in \, \mathbb{R}^d \! \times \mathbb{R} \,,
+\end{equation*}
+the spatio-temporal domain is indexed in space by $\bm{s} \in \mathbb{R}^d$ and in time by $t \in \mathbb{R}$. \\ \medskip 
+The separation between spatial and time dimensions is substantial, which is reflected in the notation.
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatio-temporal stochastic processes}
 Weak and intrinsic stationarity concepts can be easily expanded from spatial to spatio-temporal data. \\ \medskip
 For an intrinsically stationary process $Z(\bm{s},t)$, spatio-temporal semivariograms (STSV) is:
 \begin{equation*} 
@@ -351,7 +360,7 @@ STSV does not depend on the selection of origin $(\bm{s}_0, t_0) \in \mathbb{R}^
 \begin{frame}{Data exploration \& descriptive methods}
 \end{frame}
 %---------------------------------------------------------------------
-%\subsection{Interpolation and Krigging}
+\subsection{Interpolation and Krigging}
 \begin{frame}{Interpolation}
 \textbf{Inverse distance weighting (IDW):} a deterministic method of interpolation with a known scattered set of points. \\ \smallskip Assigned values to unknown points are calculated with a weighted average of the values available at the known points.
 \\ \smallskip 
@@ -427,8 +436,7 @@ Weight decreases as distance increases from the interpolated points. High $p$ as
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-
-%\subsection{Definition of neighbors}
+\subsection{Definition of neighbors}
 \begin{frame}{Definition of neighbors}
 \begin{itemize}
     \item Fotheringham et al (2002): ``Spatial dependency is the extent to which the value of an attribute in one location depends on the values of the attribute in nearby locations.''
@@ -589,7 +597,7 @@ $$
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-%\subsection{Spatial dependency tests}
+\subsection{Spatial dependency tests}
 \begin{frame}{Spatial dependency tests}
 \begin{itemize}
     \item Positive spatial autocorrelation occurs if high or low values \\of a variable cluster in space. 
@@ -601,8 +609,6 @@ $$
     \item Sometimes, spatial dependency patterns are easy to discern visually using choropleths. 
     \medskip
     \item However, a formal approach towards evaluation of spatial dependency is often required.
-    \medskip
-    \item Tests: Moran's $I$, Local Moran's $I$, Geary's $C$
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -670,7 +676,68 @@ and test for statistical significance of Moran's $I$: whether neighboring units 
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\section{Spatial regression models}
+\begin{frame}{Geary's $C$}
+ Variance test similar (in principle) to the Durbin-Watson test statistic for residuals' autocorrelation in time-series regressions.
+ \begin{equation*}
+C = \frac{N-1}{2W}\,
+    \frac{\sum_{i}\sum_{j}w_{ij}(y_i-y_j)^2}
+         {\sum_{i}(y_i-\bar{y})^2} \,,
+\end{equation*}   
+where all elements follow from previous slides. Empirical Geary's $C$ values range from 0 to 2. However, occurrences of $C>2$ are possible.\\
+\smallskip
+\begin{itemize}
+    \item Under the null of no spatial autocorrelation, first two moments are:
+\begin{equation*}
+E(C) = 1\, ,\hspace{0.5cm}
+\textnormal{var}(C) = \frac{(N-1)(2W_1 + W_2) - 4W^2 }{2(N+1)W^2} \,,
+\end{equation*}  
+\item Positive spatial dependency: $C < 1$.\\ Negative spatial autocorrelation is reflected in $C > 1$.
+\smallskip
+\item $z$-transformation is asymptotically normally distributed. Therefore, $z(C)$ can be used for testing spatial randomness.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\subsection{Clusters -- hotspots and coldspots}
+\begin{frame}{Clusters -- hotspots and coldspots}
+Getis' $G^{\ast}$: spatial clusters and hotspot analysis\\
+\smallskip
+\begin{itemize}
+    \item Clustering analysis by Getis can only be performed for positively autocorrelated spatial data.
+    \smallskip
+    \item $G_i^{\ast}(\tau) = \frac{\sum_{j=1}^N c_{ij}^{\ast} y_j}{\sum_{j=1}^N y_j} \,,$\\
+    \smallskip
+    where $c_{ij}^{\ast}$ come from amended distance-based (arbitrary $\tau$ used) connectivity matrix $\bm{C}^{\ast} = \bm{C}+\bm{I}_N$; i.e. $y_i$ observations enter $G_i^{\ast}(\tau)$ calculation. Observations of $y$ are assumed to have a natural origin and positive support.
+    \smallskip
+    \item $G_i^{\ast}(\tau)$ is a local stastic, a proportion of the aggregated $y_j$ values that lie within $\tau$ of $i$ to the total sum of $y_j$ observations.
+    \smallskip
+    \item Alternatively, Getis' statistic is calculated using $\bm{C}$ (not $\bm{C}^{\ast}$) and denoted $G_i(\tau)$ 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Clusters -- hotspots and coldspots}
+\begin{itemize}
+    \item If we observe high values of $y_j$ within distance $\tau$ of unit $i$, then $G_i^{\ast}(\tau)$ would be relatively high compared to its expected value under the null hypothesis of full spatial randomness: $$E \left[G_i^{\ast}(\tau) \right] = \frac{c_i^{\ast}}{N}\,,$$ where $c_i^{\ast}$ is the sum of elements of $i$-th row of $\bm{C}^{\ast}$.
+    \medskip 
+    \item Also, under the $H_0$ of spatial randomness, we can write
+    $$
+    \textnormal{var} \left[G_i^*(\tau) \right] = 
+    \frac{c_i^*(N-c_i^*)}{N^2 (N-1)}
+    \left( \frac{Y_{i2}^*}{(Y_{i1}^*)^2} \right) , 
+    $$ 
+    where $Y_{i1}^*=\tfrac{\sum_j y_j}{N}$ and $Y_{i2}^*=\tfrac{\sum_j y_j^2}{N}-(Y_{i1}^*)^2$.
+    \medskip 
+    \item High positive $z$-score indicates ``hotspot'' (cluster of high values) and vice versa. Critical values provided by Getis and Ord. \\Say, for $N = 100$ and $\alpha = 5\%$, the $z$-scores would have to exceed $\pm 3.289$ for a statistically significant hot/cold spot.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Clusters -- hotspots and coldspots}
+\begin{figure}
+	\includegraphics[width=.7\textwidth]{IMG/sp_coldspot.PNG}
+	\caption{Spatial clusters (hot and cold spots) of the municipalities in Serbia by the level of average monthly net earning from 2001 to 2010}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\section{Spatial regression models (parametric)}
 \begin{frame}{Spatial regression models}
 \end{frame}
 %---------------------------------------------------------------------
@@ -687,6 +754,8 @@ and test for statistical significance of Moran's $I$: whether neighboring units 
 \medskip
 \begin{itemize}
 	\item House prices depend on utility-related variables (area in m$^2$, number of rooms/bedrooms, elevator, etc.). At the same time, prices in a given area/neighborhood tend to be correlated -- usually, positive spatial autocorrelation is present. 
+	\smallskip
+	\item Highway gas-stations' revenues depend on distance from \\a capital/major city (traffic intensities may be measured -- or proxied by distances). \\Can be considered as a special case of one-dimensional spatial dependency (distance measured along the highway route). 
 	\smallskip
 	\item Increased policing activity in a given area (county) may decrease local crime levels while causing increased illegal activities in nearby counties -- a negative spatial autocorrelation example.
 	\smallskip
@@ -1073,6 +1142,26 @@ For convenience and clarity, the RHS may also be re-written as:
 \end{equation*}
 \begin{itemize}
 	\item In absence of spatial autocorrelation of $\bm{y}$ and $\bm{x}_k$, i.e. if both $\lambda = 0$ and $\theta_k = 0$, then all off-diagonal elements equal zero. In this case, indirect effects are not present. Also, direct effects are constant (equal to $\beta_k$) across all spatial units as $(\bm{I}_N - \lambda \bm{W})^{-1}$ simplifies to $\bm{I}_N$ if $\lambda=0$. 
+	\medskip
+    \item The indirect effects that occur if $\theta_k \neq 0$ and $\lambda = 0$ are referred to as \textbf{local effects}. The name arises from the fact that such effect only arise from the neighborhood of a given unit. For example, the effect of $x_{jk}$ ($k$-th regressor for the $j$-th unit) on $y_i$ is nonzero only if units $i$ and $j$ are neighbors (i.e. $w_{ij} > 0$). For non-neighboring units, $x_{jk}$ has no effect on $y_i$.
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
+    =(\bm{I}_N - \lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
+\begin{itemize}
+	\item The indirect effects that occur if $\lambda \neq 0$ and $\theta_k = 0$ are referred to as \textbf{global effects}. The name comes from the fact that effects on $y_i$ originate from units that lie within the neighborhood of $i$ as well as from units outside this neighborhood. Mathematically, this is due to the fact that matrix $(\bm{I}_N-\lambda \bm{W})^{-1}$ does not contain zero elements (given $\lambda \neq 0$) -- even though $\bm{W}$ does contain (usually many) zero elements.
+	\medskip
+    \item For $\lambda \neq 0$ and $\theta_k \neq 0$, both local and global indirect effect are present and they cannot be separated from each other.
 \end{itemize}	
 \end{frame}
 %---------------------------------------------------------------------
@@ -1199,6 +1288,387 @@ Analogous approach can be used for $k$NN, contiguity neighbors, etc.
 \begin{figure}
 	\includegraphics[width=.65\textwidth]{IMG/sp_Stability.pdf}
 \end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\section{Spatial filtering and semi-parametric models}
+\begin{frame}{Spatial filtering and semi-parametric models}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial filtering and semi-parametric models}
+\begin{itemize}
+    \item Parametric methods are potentially not robust in a situation where the model suffers from a simultaneous presence of different sources of misspecification. \\Unaccounted nonlinear relationship among spatially correlated variables, spatially varying relationships (non-stationarity), uncontrolled common factors (spatial and time-related) and other instances of spatial heterogeneity can disrupt spatial dependencies or even manifest themselves as such. 
+    \medskip
+    \item Spatial filtering may be used to remove global and/or local spatial dependencies among geo-coded variables. 
+    \medskip
+    \item Spatial filtering does not rely on distributional assumptions and is fairly robust to model misspecification. 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial filtering and semi-parametric models}
+\begin{itemize}
+    \item Getis' nonparametric filtering can be used to eliminate spatial autocorrelation from observed data by ``spatial demeaning''. \\Based on $G_i(\tau)$ by Getis -- only applicable for positive spatial autocorrelation and positive support of the observed spatial variables.
+    \bigskip
+    \item Moran eigenvector map (MEM) filtering can be used to preserve some level of spatial properties within the model -- it is a semi-parametric method.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Getis univariate filtering}
+\begin{itemize}
+    \item Approach based on $G_i(\tau)$ statistic by Getis: 
+    $$
+    G_i(\tau) = \frac{\sum_{j=1}^N c_{ij} \, y_j}{\sum_{j=1}^N y_j},
+    \qquad ; \qquad
+    E \left[G_i(\tau) \right] = \frac{c_i}{N}\,,
+    $$
+    where $c_i$ is the sum of elements of $i$-th row of $\bm{C}$ \\(note that $\bm{C}$ is used for filtering, not the $\bm{C}^{\ast} = \bm{C}+\bm{I}_N$).
+    \bigskip
+    \item Multiplicative transformation (filtering) of a spatial variable $y_i$: 
+    \begin{equation*}
+    \ddot{y}_i = \frac{E \left[G_i(\tau) \right]}{G_i(\tau)} \cdot y_i \>,
+    \end{equation*}
+    where $\ddot{y}_i$ is the spatially filtered value of $y_i$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Getis univariate filtering}
+$$\ddot{y}_i = \frac{E \left[G_i(\tau) \right]}{G_i(\tau)} \cdot y_i \>,$$
+\begin{itemize}
+    \item Corrects for positive spatial autocorrelation in observed data by counterbalancing the clustering.
+    \smallskip
+    \item Filtering factor shrinks $y_i$ if the majority of observations $y_j$ within the $\tau$ distance of unit $i$ are above average. 
+    \smallskip
+    \item Similarly, $y_i$ is inflated if neighboring observations feature below-average values.
+    \smallskip
+    \item Simple and intuitive, yet positive support assumption can be a limitation. Also, the process of setting $\tau$ is arbitrary (robustness evaluation possible). 
+    \item Univariate -- to estimate models using filtered data, such as $\bm{\ddot{y}} = 
+  \alpha \bm{\iota} + \bm{\ddot{X} \beta} + \bm{\varepsilon} \, ,$ all variables have to be filtered individually.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Moran's eigenvector map (MEM) filtering}
+Econometric models are partitioned into two elements that are both employed within the spatial regression:
+\medskip
+\begin{itemize}
+    \item  Exogenous regressors (say, macroeconomic indicators) 
+    \smallskip
+    \item Complementary spatial-filter variate (e.g. a MEM) describing spatial dependency that would otherwise affect model's residuals.
+    \smallskip
+    \item For MEM-based spatial filtering, all units need to be connected -- i.e. there has to be a ``path'' between any two regions, based on connections (edges) between neighboring units. Hence, for spatial filtering applications, $\tau$ value must not be lower than the longest edge of a minimum spanning tree of a graph based on $\bm{D}$ (where $d_{ij}$ are distances between units). Maximum limit on $\tau$ also applies (recall weak dependency assumptions).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+\begin{itemize}
+    \item[1] Use $\bm{C}$ to construct a double-centered connectivity matrix $\bm{\Omega}$:
+\begin{equation*}
+\bm{\Omega} = (\bm{I}_N - \frac{1}{N}\,\bm{\iota}_N \bm{\iota}_N^{\prime})\, \bm{C} \, (\bm{I}_N - \frac{1}{N}\,\bm{\iota}_N \bm{\iota}_N^{\prime}) \,,
+\end{equation*}
+where $\bm{I}_N$ is the identity matrix and $\bm{\iota}_N$ is a column vector of ones. Double-centering standardizes $\bm{C}$ so that all rows and columns in $\bm{\Omega}$ add up to zero. $\bm{C}$ may be full rank (not guaranteed), $\bm{\Omega}$ is always rank deficient.
+\medskip
+\item[2] Calculate all distinct eigenvectors $\bm{v}_i$ and eigenvalues $\kappa_i$ for the double-centered matrix $\bm{\Omega}$ -- by solving the characteristic equation system  $(\bm{\Omega} - \kappa\, \bm{I}_{N}) \, \bm{v} = \bm{0} $. As $\bm{\Omega}$ is a real symmetric matrix, all distinct eigenvectors are orthogonal and linearly independent (given rank-deficiency of $\bm{\Omega}$, some eigenvalues and eigenvectors are duplicated). \\ \medskip 
+MEM -- convenient subset of eigenvectors $\bm{v}$ -- can be used as a synthetic explanatory variable in semiparametric regression.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+\begin{itemize}
+    \item[4] Semiparametric model is established using a misspecification paradigm and based on a regression model with spatially autocorrelated disturbances:
+    \begin{equation*} 
+    \begin{aligned}
+    \bm{y} & = \bm{X\beta} + \bm{u} \,, \\
+    \bm{u} & = \bm{E\gamma} + \bm{\varepsilon} \, ,
+    \end{aligned}
+    \end{equation*}
+    where $\bm{u}$ are the spatially autocorrelated disturbances that may be decomposed into $\bm{\varepsilon}$ (white noise) and $\bm{E}$: a set of missing (unobservable) exogenous variables that follow common spatial dependency pattern ($\bm{C}$) and $\bm{\gamma}$ is a vector of parameters.
+    \\ \medskip The $\bm{E\gamma}$ term is based on approximation and it is not directly comparable with the SEM parametric specification
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+\begin{itemize}
+    \item[5] Using a stepwise algorithm described next, the misspecification term $\bm{E}$ is approximated by MEM -- a convenient subset of Morans eigenvectors
+\begin{equation*} 
+\left\lbrace
+\bm{v}_1, \dots , \bm{v}_{r} 
+\right\rbrace 
+\equiv 
+\textnormal{evec}
+\left(\bm{\Omega}\right) \, ,
+\end{equation*}
+where $r=\textnormal{rank}(\Omega)$ is the number of distinct eigenvectors of $\bm{\Omega}$. 
+\\ \medskip 
+We can approximate $\bm{E}$ by a parsimonious subset of eigenvectors $\bm{v}$ such that $\bm{M} = \left\lbrace \bm{v}_1, \dots , \bm{v}_{\ell} \right\rbrace$ where $\ell \leq r$. 
+\\ \medskip 
+Since spatial misspecification term $\bm{E}$ is correlated with $\bm{X}$ (at least potentially), the explicit inclusion of proxy element (MEM) $\bm{M}$ corrects for the bias in estimated coefficients $\hat{\bm{\beta}}$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+\begin{itemize}
+    \item[6] After substitution of $\bm{E}$ by $\bm{M}$, we get
+\begin{equation*}
+\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon} \, ,
+\end{equation*}
+where $\bm{y}$ is decomposed into a systematic component (featuring $\bm{X}$), stochastic spatial component and white-noise residuals. 
+\\ \medskip 
+For conveniently specified $\bm{M}$, the stochastic spatial term $\bm{M \hat{\gamma}}$ removes a significant portion of the mean squared error (MSE) term, attributable to spatial autocorrelation 
+\\ \medskip 
+Hence, $\bm{M \hat{\gamma}}$ is often referred to as spatial filter. 
+\\ \medskip 
+Filtering is fairly robust to model specification errors when compared with fully parametric models.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+Stepwise algorithm for choosing $\bm{M}$:
+\medskip
+\begin{itemize}
+    \item We choose $\bm{M}$ so that the residuals $\bm{\hat{\varepsilon}}$ become spatially random (independent with respect to the underlying spatial domain). 
+    \smallskip
+    \item We aim to find a parsimonious, i.e. smallest possible subset of eigenvectors $\bm{v}$, leading to spatial independence of $\bm{\hat{\varepsilon}}$.
+    \smallskip
+    \item Stepwise regression approach is often used.
+    \smallskip
+    \item Stepwise algorithm often based on a modified Moran's $I$ coefficient: Moran's $\textit{MC}$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+Stepwise algorithm for choosing $\bm{M}\,$:
+\medskip
+\begin{itemize}
+    \item $\textit{MC}_{\bm{v}_i} = \frac{N}{\bm{\iota}_N^{\prime} \, \bm{Z} \, \bm{\iota}_N } \, \bm{v}_i^{\prime} \bm{C} \bm{v}_i \, ,$\\ \smallskip
+    where $\bm{Z}$ is a distance-based similarity matrix with $[z_{ij}] = 1 - (\tfrac{h_{ij}}{\textnormal{max}(h_{ij})})^2$. Individual $z_{ij}$ vary between zero for $h_{ij} = \textnormal{max}(h_{ij})$ and 1 for $h_{ij} = 0$.
+    \smallskip
+    \item First eigenvector is selected by maximizing $\textit{MC}_{\bm{v}_i}$. 
+    \smallskip 
+    \item Using such $\bm{v}_i$ as a starting eigenvector subset for $\bm{M}$, equation $\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon}$ is estimated and residuals are evaluated for spatial autocorrelation (e.g. using Moran's $I$). 
+    \smallskip
+    \item If residuals are spatially dependent, new eigenvector is added to $\bm{M}$ using the same $\textit{MC}$ criterion, model is re-estimated and spatial autocorrelation in residuals is tested again. \smallskip 
+    \item Eigenvectors are iteratively added to $\bm{M}$, until spatial autocorrelation in residuals $\bm{\hat{\varepsilon}}$ falls below a predetermined threshold (e.g. 5 \% significance level).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+$\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon}$
+\medskip
+\begin{itemize}
+    \item Eigenvectors in $\bm{M}$ are orthogonal and follow a strictly decreasing sequence.
+    \smallskip
+    \item Each eigenvector explains a specific proportion of variance in residuals of the model -- the largest proportion of variance is explained by the first eigenvector selected into $\bm{M}$, the second largest amount of variance is explained by the second eigenvector, etc. 
+    \smallskip
+    \item This leads to identical $\bm{M}$ matrices, obtained through forward and backward stepwise selection methods. 
+    \smallskip
+    \item Convenient linear combination of the above eigenvectors (i.e. $\bm{M\hat{\gamma}}$) is our spatial filter. 
+    \smallskip
+    \item Often, we only take into account positive spatial autocorrelation: only $\bm{v}_i$ associated with positive $\kappa_i$ are considered.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+$\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon}$\\
+\medskip
+Individual $\bm{v}$ elements of $\bm{M}$ bear the following interpretation:\\
+\bigskip
+\begin{itemize}
+    \item  MEMs -- spaces spanned by single or multiple $\bm{v}$ eigenvectors -- with associated ``large'' positive eigenvalues $\kappa_i$ represent global-scale spatial trends (say, landscape-wide dynamics in observed spatial data). 
+    \medskip
+    \item Eigenvectors with medium eigenvalues represent medium scale dynamics. 
+    \medskip
+    \item Eigenvectors with small positive eigenvalues would represent small scale dependencies (``local'' patchiness).   
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{MEM - illustrative example}
+\vspace{-0.3cm}
+\begin{figure}
+	\includegraphics[width=.8\textwidth]{IMG/sp_Eigen.eps}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\section{Spatial panel models (parametric)}
+\begin{frame}{Spatial panel models (parametric)}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial panel models}
+For repeated geo-coded observations, spatial panel models depict interactions among variables across spatial units and over time:
+\begin{equation*}
+\begin{aligned}
+  \bm{y}  &= 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + \bm{X\beta} + \bm{u}\,, \\
+  \bm{u} &= 
+  \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + \bm{\varepsilon}\,, \\
+  \bm{\varepsilon} &= \rho
+  \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{\varepsilon} + \bm{\upsilon}\,,
+\end{aligned}
+\end{equation*}
+\small{where $\bm{y}$ is a $NT \!\times \!1$ column vector of dependent variable observations ($i = 1, 2, \dots, N$, $t=1,2, \dots, T$ and $i$ is the ``fast'' index). $\bm{W}$ is a spatial weights matrix and $\bm{X}$ is a $(NT \!\times \!k)$ matrix of exogenous regressors. Elements $\Ms{I}{T}$ and $\Ms{I}{N}$ are identity matrices and $\Ms{\iota}{T}$ is a  $(T \! \times \!1)$ vector of ones. Operator $\otimes$ is the Kronecker product. Elements of vector $\bm{\beta}$ as well as $\lambda$ and $\rho$ are parameters of the model. The disturbance vector $\bm{u}$ ($NT \!\times \!1$) is a sum of two terms: the unobserved individual effects $\bm{\mu}$ and spatially autocorrelated innovations $\bm{\varepsilon}$. The $(N \!\times \!1)$ vector $\bm{\mu}$ holds time-invariant and spatially uncorrelated individual effects. Innovations $\bm{\varepsilon}$ are spatially autocorrelated with a spatial error autoregressive parameter $\rho$ where $|\rho| < 1$. $\bm{\upsilon}$ is a vector of spatially independent innovations: $\upsilon_{it} \sim \textit{IID} \left( 0,\sigma_{\upsilon}^2 \right)$.}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial panel models}
+\begin{equation*}
+\begin{aligned}
+  \bm{y}  &= 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + \bm{X\beta} + \bm{u}\,, \\
+  \bm{u} &= 
+  \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + \bm{\varepsilon}\,, \\
+  \bm{\varepsilon} &= \rho
+  \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{\varepsilon} + \bm{\upsilon}\,,
+\end{aligned}
+\end{equation*}
+\begin{itemize}
+    \item Spatial dependency  tests (Moran's $I$) for panel data are available.
+    \smallskip
+    \item By analogy to the GNS model (for CS data), the above specification is simplified (restricted) before estimation.
+    \smallskip
+    \item Generally, $\bm{\beta}$ parameters do not constitute marginal effects -- direct/indirect effects have to be calculated (using the same general approach as for CS data).
+    \smallskip
+    \item With ``random effects'' (RE) models, we assume that unobserved individual effects $\bm{\mu}$ are not correlated to other regressors of the model. 
+    \smallskip
+    \item For ``fixed effects'' (FE) models, some level of correlation between individual effects and other regressors is acceptable.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial panel models}
+We shall briefly discuss three types of spatial panel models:
+\bigskip
+\begin{itemize}
+    \item Fixed effects spatial lag model
+    \medskip
+    \item Fixed effects spatial error model
+    \medskip
+    \item Random effects spatial lag model
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Fixed effects spatial lag model}
+\begin{itemize}
+    \item FE spatial lag model that does not feature spatial autocorrelation in the error term can be written as 
+\begin{equation*}
+  \bm{y}  = 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + 
+  \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + 
+  \bm{X \beta} + \bm{\upsilon} \,,
+\end{equation*}
+where $\bm{\upsilon}$ is a vector of spatially independent and normally distributed innovations.
+\medskip
+\item First step in FE spatial lag model estimation: eliminating the individual effects: 
+\begin{equation*}
+  \ddot{\bm{y}}  = 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \ddot{\bm{y}} + 
+  \ddot{\bm{X}} \bm{\beta} + \ddot{\bm{\upsilon}} \,,
+\end{equation*}
+where $\ddot{y}_{it}=y_{it}-\bar{y}_i$, etc.
+\medskip
+\item As individual effects are time-invariant, $\ddot{\mu}_{i}=\mu_{i}-\bar{\mu}_i=0$ \\and $\bm{\mu}$ disappears from equation.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Fixed effects spatial lag model}
+$$
+\bm{y}  = 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + 
+  \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + 
+  \bm{X \beta} + \bm{\upsilon}
+$$
+\begin{itemize}
+    \item FE spatial lag model is estimated by MLE method. For detailed description, see \textcolor{blue}{\underline{\href{https://www.jstatsoft.org/article/view/v047i01}{Milo, Piras (2012)}}}
+    \medskip
+    \item Direct/indirect/total effects and their statistical significance is calculated (bootstrapped standard errors) -- see Milo, Piras (2012).
+    \medskip
+    \item From estimated FE model, we can calculate individual effects:
+\begin{equation*}
+\hat{\mu}_i =
+\frac{1}{T} \sum_{t=1}^T \left[ y_{it} - \hat{\lambda} \left( \sum_{j=1}^N \! w_{ij} y_{jt} \right)
+- \bm{x}_{it} \bm{\hat{\beta}} \right] \,.
+\end{equation*}
+However, for short panels $(N \gg T)$, enough observations for reliable $\mu_i$ estimation often do not accumulate.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Fixed effects spatial error model}
+\begin{itemize}
+    \item Spatial lag is absent in the FE spatial error model:
+    \begin{equation*}
+    \begin{aligned}
+      \bm{y}  &= 
+      \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + \bm{X\beta} + \bm{\varepsilon}\,, \\
+      \bm{\varepsilon} &= \rho
+      \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{\varepsilon} + \bm{\upsilon}\,.
+    \end{aligned}
+    \end{equation*}
+    \item Model is estimated by MLE (time-demeaning is used).
+    \smallskip
+    \item Coefficients $\bm{\beta}$ are the marginal effects here
+    \smallskip
+    \item Individual effects can be retrieved from the estimated model as 
+\begin{equation*} 
+\hat{\mu}_i =
+\frac{1}{T} \sum_{t=1}^T \left( y_{it} - \bm{x}_{it} \bm{\hat{\beta}} \right),
+\end{equation*}
+and reliability issues for short panels $(N \gg T)$ apply.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Random effects spatial lag model}
+\begin{itemize}
+    \item Individual effects can be viewed as random and independent of regressors -- random effect (RE) model and RE estimator provide efficient estimates. RE properties of $\bm{\mu}$: \\$\mu_i \sim \textit{IID} \left( 0,\sigma_{\mu}^2 \right)$; normality is often assumed.
+    \medskip
+    \item Under RE assumptions, GNS panel model can be re-written as:
+    \begin{equation*} 
+     \begin{aligned}
+      \bm{y}  &= 
+      \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + \bm{X\beta} + \bm{u}\,, \\
+      \bm{u} &= 
+      \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + 
+      \left( \Ms{I}{T} \otimes \Ms{B}{N}^{-1} \right) \bm{\upsilon}
+     \end{aligned}
+    \end{equation*}
+    where $\Ms{B}{N}= \left( \Ms{I}{N} - \rho \bm{W} \right)$ and error variance may be outlined as
+    \begin{equation*}
+  \textnormal{var} \left( \bm{u} \right) = \bm{\Omega}_{\bm{u}} =
+  \sigma_{\bm{\mu}}^2 \left( \Ms{\iota}{T} \Ms{\iota}{T}^\prime \otimes \Ms{I}{N} \right) 
+  + \sigma_{\bm{\upsilon}}^2 \left[ \Ms{I}{T} \otimes \left( \Ms{B}{N}^\prime \Ms{B}{N} \right)^{-1} \right].
+\end{equation*}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Random effects spatial lag model}
+    \begin{equation*} 
+     \begin{aligned}
+      \bm{y}  &= 
+      \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + \bm{X\beta} + \bm{u}\,, \\
+      \bm{u} &= 
+      \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + 
+      \left( \Ms{I}{T} \otimes \Ms{B}{N}^{-1} \right) \bm{\upsilon}
+     \end{aligned}
+    \end{equation*}
+\begin{itemize}
+    \item Model is estimated by MLE (iterative estimation involving concentrated $LL$ functions), see Milo, Piras (2012).
+    \medskip
+    \item Direct/indirect/total effects can be calculated.
+    \medskip
+    \item RE vs. FE: Generalized Hausman test can be applied: 
+    \begin{equation*} 
+    H = NT \left( \bm{\hat{\theta}}_{RE} - \bm{\hat{\theta}}_{FE} \right)^{\prime}
+    \! \left( \bm{\hat{\Sigma}}_{RE} - \bm{\hat{\Sigma}}_{FE} \right)^{-1}
+    \! \left( \bm{\hat{\theta}}_{RE} - \bm{\hat{\theta}}_{FE} \right)
+    \,\,\, \underset{H_0}{\sim} \,\,\, \chi_k^2 \,\,,
+\end{equation*}
+where $\bm{\hat{\theta}}_{RE}$ and $\bm{\hat{\theta}}_{FE}$ are the RE and FE-based estimates, $\bm{\hat{\Sigma}}_{RE}$ and $\bm{\hat{\Sigma}}_{FE}$ are corresponding variance-covariance matrices. Under $H_0$ (RE assumptions hold), the test statistic is asymptotically $\chi^2$-distributed with $k$ d.f. ($k$ is the number of regressors).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial analysis and regression models in R}
+\begin{itemize}
+	\item \{spdep\} 
+	\item \{splm\}
+	\item \{sf\}, \{sp\}, \{ggplot2\}
+	\item \textcolor{blue}{\underline{\href{https://cran.r-project.org/web/views/Spatial.html}{https://cran.r-project.org/web/views/Spatial.html}}}
+\end{itemize}
+ \begin{figure}
+ 	\includegraphics[width=.7\textwidth]{IMG/sp_unemp.PNG}
+ \end{figure}
 \end{frame}
 %---------------------------------------------------------------------
 \end{document}
