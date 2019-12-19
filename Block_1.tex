@@ -340,6 +340,23 @@ $$
 \subsection{Multiple imputation for TS data}
 \begin{frame}
 \frametitle{Multiple imputation for TS data}
+\begin{itemize}
+    \item Univariate TS imputation
+    \medskip
+        \begin{itemize}
+        \item \texttt{R} packages \texttt{imputeTS}, \texttt{zoo}, etc.
+        \medskip
+        \item LOCF, linear \& spline interpolation, Kalman filter, \dots
+    \end{itemize}
+    \bigskip
+    \item Multivariate TS imputation
+    \medskip
+    \begin{itemize}
+        \item \texttt{R} package \texttt{Amelia}
+        \medskip
+        \item Use time trend (and polynomes), leads, lags, priors, \dots
+    \end{itemize}
+\end{itemize}
 
  \end{frame}
 %------------------------------------------------
