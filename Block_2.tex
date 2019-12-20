@@ -57,7 +57,7 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{4EK417 Block 2 topics: Outline} % Table of contents slide, comment this block out to remove it
+\frametitle{Block 1 -- Model selection -- Outline} % Table of contents slide, comment this block out to remove it
 \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
 \end{frame}
 
@@ -950,19 +950,21 @@ PCR: algorithm
 \medskip
 \item First, we apply principal components analysis (PCA) to find suitable linear combinations of predictors for use in our regression.
 \medskip
-\item The first principal component is that (normalized) linear
+
+\begin{itemize}
+    \item The first principal component is the (normalized) linear
 combination of the regressors that has the largest variance.
-\medskip
+\medskip 
 \item The second principal component has largest variance,
 subject to being uncorrelated with the first.
 \medskip
 \item And so on. 
+\end{itemize}
 \medskip
 \item The dependent variable is then regressed on few principal components, rather than many original regressors.\\ \medskip
 The optimal number of principal components can be assessed using cross validation.
 \end{itemize}
 \bigskip
-
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Principal component regression (PCR)}
