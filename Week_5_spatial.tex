@@ -17,6 +17,7 @@
 \usefonttheme{serif} 
 \setbeamertemplate{navigation symbols}{} 
 }
+%\usepackage{caption}
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage[T1]{fontenc}
@@ -737,10 +738,45 @@ Getis' $G^{\ast}$: spatial clusters and hotspot analysis\\
 \end{figure}
 \end{frame}
 %---------------------------------------------------------------------
-\section{Spatial regression models (parametric)}
-\begin{frame}{Spatial regression models}
+\section{Spatial regression models (CS data)}
+\begin{frame}{Spatial regression models (CS data)}
 \end{frame}
 %---------------------------------------------------------------------
+\begin{frame}{Spatial regression models (CS data)}
+\begin{columns}[T] % align columns
+\begin{column}{.48\textwidth}
+\vspace{-0.1cm}
+$\blacksquare~~$Parametric models \\
+\vspace{-0.1cm}
+        \begin{itemize}
+        \item Spatial dependency \\is estimated (different functional forms exist).
+        \end{itemize}
+        \smallskip
+$\blacksquare~~$Getis' filter (``nonparametric'')\\
+\vspace{-0.1cm}
+        \begin{itemize}
+        \item Spatial dependency is removed from observed variabled (like s.a. in TS).
+        \end{itemize}
+        \smallskip
+$\blacksquare~~$Semiparametric approach \\
+\vspace{-0.1cm}
+        \begin{itemize}
+        \item Observed variables are not transformed, spatial dependency is modelled separately, using map patterns/processes.
+        \end{itemize}
+
+\end{column}%
+\hfill%
+\begin{column}{.48\textwidth}
+\vspace{-0.1cm}
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 3cm 1cm 2cm, clip=true, width=1\textwidth]{IMG/sp_GDP_Choropleth.pdf}\vspace{-0.4cm}\tiny{{\caption{Relative GDP per capita \\ (100 = EU avg.), 2016, NUTS 2. Source: Eurostat (\texttt{nama\_10r\_lfu3rt})}}}
+\end{figure}
+\end{column}%
+\end{columns}
+\end{frame}
+%---------------------------------------------------------------------
+\subsection{Parametric spatial models}
 \begin{frame}{Spatial regression models}
 \begin{itemize}
 \item Spatial regression models allow us to discern the influence of geographic factors (spatial autocorrelation, spill-over effects) from other relevant factors/variables -- say, economic -- that may be subject to macroeconomic policy tools.
@@ -1290,11 +1326,11 @@ Analogous approach can be used for $k$NN, contiguity neighbors, etc.
 \end{figure}
 \end{frame}
 %---------------------------------------------------------------------
-\section{Spatial filtering and semi-parametric models}
-\begin{frame}{Spatial filtering and semi-parametric models}
+\subsection{Spatial filtering and semiparametric models}
+\begin{frame}{Spatial filtering and semiparametric models}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{Spatial filtering and semi-parametric models}
+\begin{frame}{Spatial filtering and semiparametric models}
 \begin{itemize}
     \item Parametric methods are potentially not robust in a situation where the model suffers from a simultaneous presence of different sources of misspecification. \\Unaccounted nonlinear relationship among spatially correlated variables, spatially varying relationships (non-stationarity), uncontrolled common factors (spatial and time-related) and other instances of spatial heterogeneity can disrupt spatial dependencies or even manifest themselves as such. 
     \medskip
@@ -1304,14 +1340,15 @@ Analogous approach can be used for $k$NN, contiguity neighbors, etc.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{Spatial filtering and semi-parametric models}
+\begin{frame}{Spatial filtering and semiparametric models}
 \begin{itemize}
     \item Getis' nonparametric filtering can be used to eliminate spatial autocorrelation from observed data by ``spatial demeaning''. \\Based on $G_i(\tau)$ by Getis -- only applicable for positive spatial autocorrelation and positive support of the observed spatial variables.
     \bigskip
-    \item Moran eigenvector map (MEM) filtering can be used to preserve some level of spatial properties within the model -- it is a semi-parametric method.
+    \item Moran eigenvector map (MEM) filtering can be used to preserve some level of spatial properties within the model -- it is a semiparametric method.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
+\subsection{Getis' spatial filtering (``nonparametric'' spatial models)}
 \begin{frame}{Getis univariate filtering}
 \begin{itemize}
     \item Approach based on $G_i(\tau)$ statistic by Getis: 
@@ -1345,6 +1382,7 @@ $$\ddot{y}_i = \frac{E \left[G_i(\tau) \right]}{G_i(\tau)} \cdot y_i \>,$$
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
+\subsection{Moran's eigenvector map filtering (semiparametric spatial models)}
 \begin{frame}{Moran's eigenvector map (MEM) filtering}
 Econometric models are partitioned into two elements that are both employed within the spatial regression:
 \medskip
