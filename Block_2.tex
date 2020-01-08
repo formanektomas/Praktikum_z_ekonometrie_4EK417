@@ -1107,15 +1107,99 @@ Example 7.10 (Greene): Income Elasticity of Credit Cards Expenditure\\
 \includegraphics[width=10cm, height=6.7cm]{IMG/QREG.pdf}
 \end{frame}
 %---------------------------------------------
-\subsection{Polynomial and step (piecewise-constant) regression}
+\subsection{Polynomial and step regression}
 \begin{frame}{Polynomial regression}
+Standard way to apply LRMs in situations where the relationship between a regressor and a dependent variable is non-linear.\\ \smallskip
+\begin{itemize}
+    \item Simple linear regression model $$y_i = \beta_0 + \beta_1 x_i + u_i,$$
+    \item is replaced by a polynomial function (linear in parameters): 
+    $$ y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \dots  + \beta_d x_i^d + u_i .$$
+    \item This approach extends easily to logistic regression models if $y_i$ is binary (applies to count and similar LDVs by analogy):
+    $$\textnormal{Pr}(y_i=1|x_i) 
+    = \frac{\exp(\beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \dots  + \beta_d x_i^d)}{1 + \exp(\beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \dots  + \beta_d x_i^d)} $$
+    
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Polynomial regression (LRM \& logit examples)}
+\centering
+\medskip
+\texttt{~~~~~~Wage} $\leftarrow$ \texttt{Age~~~~~~} \qquad \qquad \texttt{1[Wage>250]} $\leftarrow$ \texttt{Age}\\
 
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.9\textwidth]{IMG/ISLR71.pdf}
+\end{figure}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Polynomial regression}
+\begin{itemize}
+    \item Mostly, we are not interested in exact values of coeffcients.\\
+    Usually, we seek to obtain ``good'' fitted values for some $x_0$: \\ \smallskip 
+    $\hat{f}(x_0) = \hat{\beta}_0 + \hat{\beta}_1 x_0 + \hat{\beta}_2 x_0^2 + \dots + \hat{\beta}_d x_0^d $\\ \smallskip 
+    and we study the general  prediction properties (variance, bias) \\of  $\hat{f}(x_0)$.
+    \smallskip
+    \item Either fix the $d$ at some low value (4 at most), or use cross-validation to choose $d$.
+    \smallskip
+    \item Caveat: polynomials have notorious tail behavior -- bad for extrapolation.
+    \smallskip 
+    \item We can use polynomials for several separate regressors in a LRM: we just stack the variables into one $\bm{X}$ matrix (see GAMs next).
+    
+\end{itemize}
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Step (piecewise-constant) regression}
+\begin{itemize}
+    \item Polynomial regression function imposes a \textit{global} structure on the non-linear function.
+    \smallskip
+    \item Instead, we can use a step function where regressor $x$ is broken into different bins and we fit a different constant for each bin (our regressor is transformed into a ordered categorical variable).
+    \smallskip
+    \item Alternatively, we select adequate (ad-hoc) cutpoints $c_1, c_2, \dots, c_K$ for a continuous regressor $x$ and construct $K+1$ dummy variables:
+    \begin{equation*}
+       \begin{aligned}
+       C_0(X) \quad &= \quad 1[X < c_1], \\
+       C_1(X) \quad &= \quad 1[c_1 \leq X < c_2], \\
+        &~ \vdots \\
+       C_{K-1}(X) \quad &= \quad 1[c_{K-1} \leq X < c_{K}], \\
+       C_K(X) \quad &= \quad 1[c_{K} \leq X] \\
+        \end{aligned}    
+        \end{equation*}
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Step (piecewise-constant) regression}
+\begin{itemize}
+    \item Next, we use $C_0(X), C_1(X), C_2(X), \dots, C_K(X)$ to fit LRM:
+    $$y_i = \beta_0 + \beta_1 C_1(x_i) + \beta_2 C_2(x_i) + \dots + \beta_K C_K(x_i) + u_i .$$
+    $C_0$ is excluded from the model to avoid perfect multicolinearity. Exclusion is arbitrary -- any of the dummies may be excluded. Alternatively, we may include all dummies and drop $\beta_0$.
+    \bigskip
+    \item Again, this approach extends easily to logistic regression models if $y_i$ is binary (applies to count and similar LDVs by analogy):
+    \small
+    $$\textnormal{Pr}(y_i=1|x_i) 
+    = \frac{\exp[\beta_0 + \beta_1 C_1(x_i) + \beta_2 C_2(x_i) + \dots + \beta_K C_K(x_i)]}{1 + \exp[\beta_0 + \beta_1 C_1(x_i) + \beta_2 C_2(x_i) + \dots + \beta_K C_K(x_i)]}. $$
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Piecewise-constant regression (LRM \& logit examples)}
+\centering
+\medskip
+\texttt{~~~~~~Wage} $\leftarrow$ \texttt{Age~~~~~~} \qquad \qquad \texttt{1[Wage>250]} $\leftarrow$ \texttt{Age}\\
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.9\textwidth]{IMG/ISLR72.pdf}
+\end{figure}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Step (piecewise-polynomial) regression}
 
 \end{frame}
 %---------------------------------------------
+
+
+
+
+
+
 \subsection{Splines}
 \begin{frame}{Regression splines}
 
