@@ -62,12 +62,12 @@
 \end{frame}
 
 %---------------------------------------------
-\section{Theoretical basis for model selection algorithms}
+\section{Model selection}
 \begin{frame}{Theoretical basis for model selection algorithms}
 
 \end{frame}
 %---------------------------------------------
-\subsection{Alternative approaches to econometric modeling}
+\subsection{Theoretical approach: specific-to-general, general-to-specific}
 \begin{frame}{Alternative approaches to econometric modeling}
 Simple-to-general approach\\
 \vspace{0.3cm}
@@ -128,7 +128,6 @@ Advantages of the general-to-specific approach\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------
-\section{Model selection basics - repetition from previous courses}
 \begin{frame}{Model selection basics - repetition from previous courses}
 \end{frame}
 %---------------------------------------------
@@ -246,7 +245,6 @@ As we evaluate predictions from two or more models,
 \end{itemize}
 \end{frame}
 %------------------------------------------------
-\section{Model selection algorithms}
 \begin{frame}{Model selection algorithms}
 \end{frame}
 %---------------------------------------------
@@ -291,7 +289,7 @@ predictors to fit \\a linear regression model by least squares.
 \end{frame}
 
 %------------------------------------------------
-\subsection{Best subset selection}
+\subsection{Stepwise model selection}
 \begin{frame}
 \frametitle{Best subset selection}
 
@@ -316,7 +314,6 @@ predictors to fit \\a linear regression model by least squares.
 
 
 %------------------------------------------------
-\subsection{Forward stepwise selection}
 \begin{frame}
 \frametitle{Forward stepwise selection}
 
@@ -336,7 +333,6 @@ prediction error, $C_p$, $\textit{AIC}, \textit{BIC}$ or adj. $R^2$.
 \end{frame}
 
 %------------------------------------------------
-\subsection{Backward stepwise selection}
 \begin{frame}
 \frametitle{Backward stepwise selection}
 
@@ -377,7 +373,7 @@ Forward \& Backward stepwise [and their hybrid combinations] tends to do well in
 \end{frame}
 
 %------------------------------------------------
-\section{Parameter Shrinkage}
+\section{Model selection \& regularization}
 \begin{frame}{Parameter shrinkage methods}
 \end{frame}
 %------------------------------------------------
@@ -398,6 +394,7 @@ variability.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
+\subsection{Penalized regression}
 \begin{frame}{Parameter shrinkage methods}
 \textbf{Ridge regression and lasso regression}
 \medskip
@@ -409,7 +406,6 @@ should improve the fit -- details discussed next.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
-\subsection{Ridge regression}
 \begin{frame}{Ridge regression}
 Consider a LRM: $y = f( x_1, x_2, \dots , x_p)$
 
@@ -539,7 +535,6 @@ This was the main motivation for ridge regression when it was first introduced i
 
 \end{frame}
 %------------------------------------------------
-\subsection{Lasso regression}
 \begin{frame}{Lasso regression}
 \begin{itemize}
 \item Ridge regression does have one obvious disadvantage:
@@ -608,7 +603,6 @@ response is never known a priori for real data sets.
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Ridge \& Lasso - $\lambda$ selection}
-
 Cross-validation is used to determine $\lambda$, as follows:
 \bigskip
 \begin{enumerate}
@@ -629,7 +623,6 @@ The above steps 1 and 2 can be performed for both ridge and lasso.\\
 
 \end{frame}
 %------------------------------------------------
-\subsection{Elastic net regression}
 \begin{frame}{Elastic net regression (penalty)}
 $$\min \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
          - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
@@ -670,7 +663,7 @@ Logit (GLM/MLE) example of elastic net penalty generalization:\\
 \end{itemize}
 \end{frame}
 %------------------------------------------------
-\section{Dimension reduction}
+\subsection{Dimension reduction: PCR \& PLS}
 \begin{frame}{High dimensionality \& dimension reduction methods}
 \end{frame}
 %------------------------------------------------
@@ -702,7 +695,6 @@ transformed variables:
 \end{itemize}
 \end{frame}
 %------------------------------------------------
-\subsection{Principal component analysis (PCA)}
 \begin{frame}{Principal component analysis (PCA)}
 \begin{itemize}
 \item PCA produces a low-dimensional representation of a dataset. It finds a sequence of linear combinations of the variables that have maximal variance and are mutually uncorrelated.
@@ -894,9 +886,7 @@ $\textit{KMO}$-based variable selection:
 \end{itemize}
 \end{frame}
 %------------------------------------------------
-\subsection{Principal component regression (PCR)}
 \begin{frame}{Principal component regression (PCR)}
-
 \textbf{PCR motivation:}\\
 \bigskip
 If we have many correlated original variables as regressors in a LRM, we can replace them with a small set of principal components that capture their joint variation.
@@ -925,7 +915,6 @@ outperform OLS regression in terms of CV errors, etc.
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Principal component regression (PCR)}
-
 From equation/definition \eqref{PCR1}, we can write
 $$ \sum_{m=1}^M \theta_m z_{im} 
 = \sum_{m=1}^M \theta_m \sum_{j=1}^p \phi_{jm} x_{ij} 
@@ -936,7 +925,6 @@ where
 \begin{equation} \label{PCR3}
 \beta_j = \sum_{m=1}^M \theta_m \phi_{jm}.
 \end{equation}
-
 \begin{itemize}
 \item Therefore, model \eqref{PCR2} can be thought of as a special case of the original linear regression model.
 \item Dimension reduction serves to constrain the estimated $\beta_j$ coefficients, since now they must take the form \eqref{PCR3}.
@@ -950,7 +938,6 @@ PCR: algorithm
 \medskip
 \item First, we apply principal components analysis (PCA) to find suitable linear combinations of predictors for use in our regression.
 \medskip
-
 \begin{itemize}
     \item The first principal component is the (normalized) linear
 combination of the regressors that has the largest variance.
@@ -992,7 +979,6 @@ Potential solutions to the problem:
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\subsection{Partial least squares (PLS)}
 \begin{frame}{Partial least squares (PLS)}
 \end{frame}
 %---------------------------------------------------------------------
@@ -1059,4 +1045,97 @@ Statistical Learning, ch. 3.5.1---3.5.2}}})
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
+\section{Moving beyond linearity}
+\begin{frame}{Moving beyond linearity}
+\end{frame}
+%------------------------------------------------
+\begin{frame}{Moving beyond linearity}
+Different approaches are discussed (from simple to more complex), QREG is included mostly for reference.\\
+\bigskip
+
+\begin{itemize}
+\item Quantile regression (quick repetition)
+\smallskip
+\item Polynomial and step (piecewise-constant) regression
+\smallskip
+\item Regression splines
+\smallskip
+\item Smoothing splines
+\smallskip
+\item Generalized Additive Models (GAM)
+\end{itemize}
+\end{frame}
+%-------------------------------------------------------------------
+\subsection{QREG - quick repetition}
+\begin{frame}{QREG - quick repetition}
+\begin{itemize}
+\item Quantile regression estimates the relationship between regressors and a specified quantile of dependent variable.
+\medskip
+\item One important special case of quantile regression is the least absolute deviations (LAD) estimator, which corresponds to fitting the conditional median of the response variable ($q=\frac{1}{2}$).
+\medskip
+\item QREG (LAD) estimator can be motivated as a robust  alternative to OLS (with respect to outliers).
+\medskip
+\item Linear programming can be used for finding QREG estimates (Koenkerr and Bassett (around 1980).
+\medskip
+\item QREG-based predictions: Conditional quantiles (expected values) can be produced.
+\medskip
+\item To optimize prediction properties, QREG may be combined with parameter-shrinkage methods (lasso, ridge).
+\end{itemize}
+\end{frame}
+%------------------------------------------------
+\begin{frame}{Quantile regression (QREG)}
+For LRMs, the $q$-th quantile regression estimator $\bm{\beta}_q$ minimizes:
+$$
+\underset{\bm{\hat{\beta}}_q}{\textnormal{min:}} \quad Q_n(\bm{\hat{\beta}}_q) =
+\! \! \sum^n_{i:\, e_i \, \geq \, 0} q|y_i - \bm{x}_i\bm{\hat{\beta}}_q| \,\, +
+\! \! \sum^n_{i:\, e_i\, < \, 0} (1-q)|y_i - \bm{x}_i\bm{\hat{\beta}}_q|,
+$$
+where $e_i = (y_i - \bm{x}_i\bm{\hat{\beta}}_q)$.
+
+\begin{itemize}
+    \item We use the notation $\bm{\hat{\beta}}_q$ to make clear that different choices of $q$ lead to different  $\bm{\hat{\beta}}$.
+    \item Slope of the loss function $Q_n$ is asymmetrical \\(around $e_i=0$).
+    \item The loss function is not differentiable (at $e_i=0$) \\$\rightarrow$ gradient methods are not applicable \\(linear programming can be used).
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Quantile regression example}
+Example 7.10 (Greene): Income Elasticity of Credit Cards Expenditure\\
+\medskip
+\texttt{CCexpend} $\leftarrow$ \texttt{log(INCOME) + AGE + \#DEPENDANTS}
+\centering
+\includegraphics[width=10cm, height=6.7cm]{IMG/QREG.pdf}
+\end{frame}
+%---------------------------------------------
+\subsection{Polynomial and step (piecewise-constant) regression}
+\begin{frame}{Polynomial regression}
+
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Step (piecewise-constant) regression}
+
+\end{frame}
+%---------------------------------------------
+\subsection{Splines}
+\begin{frame}{Regression splines}
+
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Smoothing splines}
+
+\end{frame}
+%---------------------------------------------
+\subsection{Generalized Additive Models (GAM)}
+\begin{frame}{Generalized Additive Models (GAM)}
+
+\end{frame}
+%---------------------------------------------
+
+
+\begin{frame}{Final note}
+\centering
+For a complex and advanced discussion of the above topics,\\ \medskip you may consult e.g.: (\textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{The Elements of Statistical Learning}}})
+\end{frame}
+%---------------------------------------------
+
 \end{document}
