@@ -33,6 +33,7 @@
 \usepackage{scrextend}
 \usepackage{pifont}
 \usepackage{hyperref}
+\usepackage{pifont}
 \usepackage{bm}
 
 %----------------------------------------------------------------------------------------
@@ -1191,15 +1192,75 @@ Standard way to apply LRMs in situations where the relationship between a regres
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Step (piecewise-polynomial) regression}
+Combines polynomial regression with step (piecewise) regression.
 
+\bigskip
+\textbf{Piecewise-polynomial regression:} \\Fit separate (low-degree) polynomials over different regions of $X$ \\(instead of one high-degree polynomial over the entire range of $X$). \\ \bigskip
+Example: piecewise cubic polynomial with a single knot (cutpoint) $c_1$:
+\medskip
+\begin{equation*}
+y_i = 
+    \begin{cases}
+        \beta_{01} + \beta_{11} x_i + \beta_{21} x_i^2 + \beta_{31} x_i^3 + u_i \textnormal{~~if~~} x_i <  c_1 ;& \\ ~ & \\
+         \beta_{02} + \beta_{12} x_i + \beta_{22} x_i^2 + \beta_{32} x_i^3 + u_i \textnormal{~~if~~} x_i \geq  c_1 .& 
+    \end{cases}
+\end{equation*}
+\medskip
+\begin{itemize}
+    \item Here, we fit two different polynomials to the data.
+    \item For $K$ knots (cutpoints), we fit $K+1$ different polynomials.\\(i.e. with one knot, twice as much parameters are estimated) 
+    \item Different $d$ are possible: $d=1~\rightarrow~$ piecewise linear function.
+\end{itemize}
 \end{frame}
 %---------------------------------------------
+\begin{frame}{Step (piecewise-polynomial) regression}
+Example: piecewise cubic polynomial with one knot:\\
+\centering
+\medskip
+\texttt{Wage} $\leftarrow$ \texttt{Age}\\
+\vspace{-0.2cm}
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 9.5cm 10.5cm 0cm, clip=true, width=0.4\textwidth]{IMG/ISLR73.pdf}
+\end{figure}
 
-
-
-
-
-
+\vspace{-0.5cm}
+\begin{itemize}
+    \item[\ding{51}] Improved flexibility
+    \item[\ding{55}] Fitted curve non-continuous
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\subsection{Splines}
+\begin{frame}{Regression splines - motivation}
+\centering
+Piecewise linear regression with one knot at $c_1$:\\
+\vspace{-0.2cm}
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.4\textwidth]{IMG/ISLR73a.pdf}
+\end{figure}
+\vspace{-0.2cm}
+\begin{equation*}
+y_i = 
+    \begin{cases}
+        \beta_{01} + \beta_{11} x_i + u_i \textnormal{~~if~~} x_i <  c_1 ;& \\ ~ & \\
+         \beta_{02} + \beta_{12} x_i + u_i \textnormal{~~if~~} x_i \geq  c_1 .& 
+    \end{cases}
+\end{equation*}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Regression splines}
+\centering
+Piecewise linear ``continuous'' regression with one knot at $c_1$:
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.4\textwidth]{IMG/ISLR73b.pdf}
+\end{figure}
+``Continuity'' can be easily imposed as follows:
+$$ y_i = \beta_0 + \beta_1x_i + \beta_2\{1[x_i > c_1](x_i-c_1)\} + u_i$$
+\end{frame}
+%---------------------------------------------
 \subsection{Splines}
 \begin{frame}{Regression splines}
 
