@@ -1261,7 +1261,28 @@ Piecewise linear ``continuous'' regression with one knot at $c_1$:
 $$ y_i = \beta_0 + \beta_1x_i + \beta_2\{1[x_i > c_1](x_i-c_1)\} + u_i$$
 \end{frame}
 %---------------------------------------------
-\subsection{Splines}
+\begin{frame}{Regression splines}
+Linear spline regression model with $K$ knots $\xi_k, k=1,\dots, K$ can be represented using \textcolor{blue}{basis functions} as follows:
+$$y_i = \beta_0 + \beta_1 b_1 (x_i) + \beta_2 b_2 (x_i) + \cdots, + \beta_{K+1} b_{K+1} (x_i) + u_i  $$
+where $b_k$ are the basis functions:\\
+\smallskip
+\qquad $b_1 (x_i) = x_i$,\\
+\qquad $b_2 (x_i) = (x_i-\xi_1)_{+} = 1[x_i > \xi_1](x_i-\xi_1)\}$,\\
+\qquad $b_3 (x_i) = (x_i-\xi_2)_{+}$, \\ \qquad etc.\\
+\medskip
+\begin{itemize}
+    \item The $(x_i-\xi_k)_{+}$ means the positive part of the difference.
+    \smallskip
+    \item With linear splines, each knot only adds one estimated parameter to the estimation (compare to non-continuous piecewise linear regression).
+    \smallskip
+    \item Basis functions (notation) will be useful in subsequent discussion.
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Regression splines}
+
+\end{frame}
+%---------------------------------------------
 \begin{frame}{Regression splines}
 
 \end{frame}
