@@ -1294,11 +1294,11 @@ where:\\
 \smallskip
 \qquad $h_3 (x_i) = x_i^3$\,,\\
 \smallskip
-\qquad $h_4 (x_i) = (x_i-\xi_1)_{+}^3 \,$ \qquad (note that $h_4 = h_{k+3}$)\, ,\\
+\qquad $h_4 (x_i) = (x_i-\xi_1)_{+}^3 \,$ \qquad (note that $h_4 = h_{k+3}$)\,,\\
 \smallskip
 \qquad $h_5 (x_i) = (x_i-\xi_2)_{+}^3 \,$ ,\\
 \qquad $\cdots$ \\
-\qquad $h_{K+3} (x_i) = (x_i-\xi_K)_{+}^3 \,$,\\
+\qquad $h_{K+3} (x_i) = (x_i-\xi_K)_{+}^3 \,$.\\
 \medskip
 \end{frame}
 %---------------------------------------------
@@ -1324,12 +1324,66 @@ Example: cubic spline with one knot:\\
     \smallskip
     \item Cubic spline popularity is based on human perception: this is the lowest-order spline where knot-discontinuity is not visible to the human eye.
     \smallskip
-    \item Unfortunately, $d$-splines (incl. cubic splines) tend to have high variance at the outer range of the predictor (i.e. when $X$ is very low or very high). Possible solution: use ``natural splines'' with additional bounary constraints.
+    \item Unfortunately, $d$-splines (incl. cubic splines) tend to have high variance at the outer range of the predictor (i.e. when $X$ is very low or very high). Possible solution: use ``natural splines'' with additional boundary constraints.
 \end{itemize}
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Regression splines (natural spline)}
-
+\textbf{Natural cubic spline:} a cubic regression spline with additional boundary constraints:\\
+\smallskip
+\begin{itemize}
+    \item For a cubic spline regression model $y \leftarrow x$ with $K$ knots, \\$f(X)$ is required to be linear for $X \leq \xi_1$ and for $X > \xi_K$.
+    \smallskip
+    \item Additional restrictions free 4 d.f. (compared to cubic spline), \\so we use $K$ d.f. for estimation.
+\end{itemize}
+\vspace{-0.4cm}
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 0cm 0cm 1cm, clip=true, width=0.5\textwidth]{IMG/ISLR74.pdf}
+\end{figure}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Regression splines (natural spline)}
+Example: For $K=4$ and using the truncated power bases of cubic splines, we can write:
+$$y_i = \beta_0 \, N_1 (x_i)  + \beta_1 \, N_2 (x_i) + \beta_2 \, N_3 (x_i) + \beta_3 \, N_4 (x_i) + u_i  $$\\
+\vspace{-0.2cm}
+where:\\
+\smallskip
+\qquad $N_1 (x_i) = 1$\, \qquad ($\beta_0$ is the intercept),\\
+\smallskip
+\qquad $N_2 (x_i) = x_i$\,,\\
+\smallskip
+\qquad $N_3 (x_i) = d_1(X)-d_{3}(X)$\\
+\smallskip
+\qquad $N_4 (x_i) = d_2(X)-d_{3}(X)$\\
+\medskip
+\qquad and $d_k(X)=\frac{(X-\xi_k)_{+}^3-(X-\xi_K)_{+}^3}{\xi_K+\xi_k}$.\\
+\medskip
+Note that $N_{k+2}=d_k(X)-d_{K-1}(X)$ is the general notation \\for $N_3$ and $N_4$ and we only use knots up to $K-2$ (i.e. $\xi_1, \xi_2$).\\ All basis functions $N$ have zero $2^{nd}$ and $3^{rd}$ derivatives \\for $X < \xi_1$ and for $X \geq \xi_K$.
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Regression splines (knot selection)}
+Where should we place the knots?\\
+\bigskip
+\begin{itemize}
+    \item Specify the number of knots and use uniformly distributed quantiles.\\
+    \medskip    
+    \begin{itemize}
+        \item 1 knot: at median, 2 knots: at $q_{0.33}$ and $q_{0.66\,}$, etc.
+        \smallskip
+        \item Optimum number of knots can be determined by $k$FCV.
+    \end{itemize}
+    \bigskip
+    \item Spline function is most flexible in regions that contain a lot of knots. Hence:\\
+    \medskip    
+    \begin{itemize}
+        \item Place more knots in places where we assume the function \\may vary most rapidly.
+        \smallskip
+        \item Place fewer knots where the function seems more stable.
+        \smallskip
+        \item Ad-hoc and potentially missleading approach.
+    \end{itemize}
+\end{itemize}
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Smoothing splines}
