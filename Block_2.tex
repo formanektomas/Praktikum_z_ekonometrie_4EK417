@@ -1252,38 +1252,83 @@ y_i =
 %---------------------------------------------
 \begin{frame}{Regression splines}
 \centering
-Piecewise linear ``continuous'' regression with one knot at $c_1$:
+Piecewise linear ``continuous'' regression with one knot at $c_1$:\\
+\vspace{-0.2cm}
 \begin{figure}
   \centering
   \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.4\textwidth]{IMG/ISLR73b.pdf}
 \end{figure}
+\vspace{-0.5cm}
 ``Continuity'' can be easily imposed as follows:
 $$ y_i = \beta_0 + \beta_1x_i + \beta_2\{1[x_i > c_1](x_i-c_1)\} + u_i$$
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Regression splines}
-Linear spline regression model with $K$ knots $\xi_k, k=1,\dots, K$ can be represented using \textcolor{blue}{basis functions} as follows:
-$$y_i = \beta_0 + \beta_1 b_1 (x_i) + \beta_2 b_2 (x_i) + \cdots, + \beta_{K+1} b_{K+1} (x_i) + u_i  $$
+\begin{frame}{Regression splines (linear spline)}
+\textbf{Linear spline:} fit regression line in each region of the predictor space, requiring continuity in each knot. Regression model with $K$ knots $\xi_k, k=1,\dots, K$ can be represented using \textcolor{blue}{basis functions} as follows:
+$$y_i = \beta_0 + \beta_1 \, b_1 (x_i) + \beta_2 \, b_2 (x_i) + \cdots, + \beta_{K+1} \, b_{K+1} (x_i) + u_i  $$
 where $b_k$ are the basis functions:\\
 \smallskip
-\qquad $b_1 (x_i) = x_i$,\\
+\qquad $b_1 (x_i) = x_i$\,,\\
 \qquad $b_2 (x_i) = (x_i-\xi_1)_{+} = 1[x_i > \xi_1](x_i-\xi_1)\}$,\\
-\qquad $b_3 (x_i) = (x_i-\xi_2)_{+}$, \\ \qquad etc.\\
+\qquad $b_3 (x_i) = (x_i-\xi_2)_{+}$\,, \\ \qquad etc.\\
 \medskip
 \begin{itemize}
     \item The $(x_i-\xi_k)_{+}$ means the positive part of the difference.
     \smallskip
-    \item With linear splines, each knot only adds one estimated parameter to the estimation (compare to non-continuous piecewise linear regression).
+    \item With linear splines, each knot only adds one estimated parameter to the estimation, i.e. $K\!+\!2\,$ d.f. are used (compare to non-continuous piecewise linear regression: $2K$ d.f. used).
     \smallskip
     \item Basis functions (notation) will be useful in subsequent discussion.
 \end{itemize}
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Regression splines}
-
+\begin{frame}{Regression splines (cubic spline)}
+\textbf{Cubic spline} with knots $\xi_k,~k=1,\dots, K$ is a piecewise cubic polynomial with continuous derivatives up to order 2 at each knot.\\
+\medskip
+Again we can represent this model with truncated power basis functions:
+$$y_i = \beta_0 + \beta_1 \, h_1 (x_i) + \beta_2 \, h_2 (x_i) + \cdots, + \beta_{K+3} \, h_{K+3} (x_i) + u_i  $$
+where:\\
+\smallskip
+\qquad $h_1 (x_i) = x_i$\,,\\
+\smallskip
+\qquad $h_2 (x_i) = x_i^2$\,,\\
+\smallskip
+\qquad $h_3 (x_i) = x_i^3$\,,\\
+\smallskip
+\qquad $h_4 (x_i) = (x_i-\xi_1)_{+}^3 \,$ \qquad (note that $h_4 = h_{k+3}$)\, ,\\
+\smallskip
+\qquad $h_5 (x_i) = (x_i-\xi_2)_{+}^3 \,$ ,\\
+\qquad $\cdots$ \\
+\qquad $h_{K+3} (x_i) = (x_i-\xi_K)_{+}^3 \,$,\\
+\medskip
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Regression splines}
+\begin{frame}{Regression splines (cubic spline)}
+\centering
+Example: cubic spline with one knot:\\
+\centering
+\medskip
+\texttt{Wage} $\leftarrow$ \texttt{Age}\\
+\vspace{-0.2cm}
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 0cm 10.5cm 9.5cm, clip=true, width=0.4\textwidth]{IMG/ISLR73.pdf}
+\end{figure}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Regression splines (cubic spline)}
+\begin{itemize}
+    \item Cubic spline uses $4+K$ d.f.
+    \smallskip
+    \item Cubic spline has continuous derivatives up to order 2 at each knot.\\
+    $d$-spline (degree-$d$ spline) has continuous derivatives up to degree $d-1$ at each knot.
+    \smallskip
+    \item Cubic spline popularity is based on human perception: this is the lowest-order spline where knot-discontinuity is not visible to the human eye.
+    \smallskip
+    \item Unfortunately, $d$-splines (incl. cubic splines) tend to have high variance at the outer range of the predictor (i.e. when $X$ is very low or very high). Possible solution: use ``natural splines'' with additional bounary constraints.
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Regression splines (natural spline)}
 
 \end{frame}
 %---------------------------------------------
