@@ -1454,6 +1454,7 @@ $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda 
   \includegraphics[trim=0cm 0cm 0cm 1cm, clip=true, width=0.6\textwidth]{IMG/ISLR78.pdf}
 \end{figure}
 \centering
+\vspace{-0.5cm}
 \tiny{Note that \textit{df} in the legend refer to $(df_{\lambda})$ used by the estimation.}
 \end{frame}
 %---------------------------------------------
@@ -1497,7 +1498,7 @@ Local regression at $X = x_0$\\
     \smallskip
     \item Functional form in Step 3 (constant, linear, quadratic, etc.).
     \smallskip
-    \item Span $s$ controls flexibility of the fit (can use CV).
+    \item Span $s$ controls flexibility of the fit (can choose using CV).
 \end{itemize}
 \bigskip
 \textbf{Local regression: notes}\\
@@ -1511,15 +1512,54 @@ Local regression at $X = x_0$\\
 %---------------------------------------------
 \subsection{Generalized Additive Models (GAM)}
 \begin{frame}{Generalized Additive Models (GAM)}
-
+So far, polynomial and step regression, splines and local regression have been discussed as univariate regression models with $y_i \leftarrow f(x_i)$.\\
+\medskip GAMs extend LRM by allowing non-linear functions in each variable, while maintaining additivity (and ceteris paribus interpretation!).\\ \medskip
+Multiple-regressor LRM:
+$$ y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip} + u_i~~~~~~~~~~~~~~~~~$$
+can be generalized to
+$$ y_i = \beta_0 + \beta_1 \, f_1(x_{i1}) + \beta_2 \, f_2(x_{i2}) + \cdots + \beta_p \, f_p(x_{ip}) + u_i$$ 
+where $f_j(x_{ij})$ represents any convenient function of $x$: piecewise constant, linear, polynomial, spline, etc.
+\end{frame}
+%---------------------------------------------
+\begin{frame}{GAM example}
+$\texttt{wage} = \beta_0 + \beta_1 \, f_1(\texttt{year}) + \beta_2 \, f_2(\texttt{age}) + \beta_3 \, f_3(\texttt{education}) + u_i$\\
+\bigskip
+where $f_1$ and $f_2$ are natural splines and $f_3$ is a step function (\texttt{education} is a qualitative variable with four levels).
+\vspace{-0.2cm}
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.8\textwidth]{IMG/ISLR711.pdf}
+\end{figure}
+\centering
+\vspace{-0.3cm}
+\tiny
+As we hold \texttt{age} and \texttt{education} fixed, \texttt{wage} increases slightly with \texttt{year}.\\
+Ceteris paribus, \texttt{wage} tends to be highest for intermediate values of  \texttt{age} \\and lowest for the very young and very old workers.
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Generalized Additive Models (GAM)}
-
+\begin{itemize}
+    \item[\ding{51}] GAMs extend easily to logistic regression models if $y_i$ is binary (applies to count and similar LDVs by analogy):
+    $$ \log \left( \frac{p_i}{1+p_i}
+    \right) = \beta_0 + \beta_1 \, f_1(\texttt{year}) + \beta_2 \, f_2(\texttt{age}) + \beta_3 \, f_3(\texttt{education}) + u_i$$
+where $p_i = P(\texttt{wage}_i > 250~|~ \texttt{year}_i, \texttt{age}_i, \texttt{education}_i)$
+\bigskip
+\item[\ding{51}] Individual $f_j$ in GAMs can be very flexible -- we do not have to manually try different transformations for each regressor.
+\bigskip
+\item[\ding{51}] Non-linear fits can produce more accurate predictions.
+\end{itemize}
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Generalized Additive Models (GAM)}
-
+\begin{itemize}
+    \item[\ding{51}] As GAMs are additive, they provide ceteris paribus interpretation. 
+    \bigskip
+    \item[\ding{51}] Also, GAMs provide useful representation for statistical inference.
+    \bigskip
+    \item[\ding{51}] For each regressor, smoothness of $f_j$ can be represented by (effective) \textit{df} used.
+    \bigskip
+    \item[\ding{55}] Additive nature of GAMs may lead to missing important interactions. \\ \smallskip However, low-dimensional interactions can be included manually; e.g. by adding some $f_{jm}(X_j,X_m)$ term into the model.
+\end{itemize}
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Final note}
@@ -1528,7 +1568,7 @@ For a detailed technical discussion of the above topics,\\ \medskip you may cons
 \end{frame}
 %---------------------------------------------
 \begin{frame}[noframenumbering]{Final note 2}
-John Von Neumann: ``With 4 parameters, I can fit an elephant\\ and with 5, I can make him wiggle his trunk.''
+John von Neumann: ``With 4 parameters, I can fit an elephant\\ and with 5, I can make him wiggle his trunk.''
 \begin{figure}
   \includegraphics[width=0.6\textwidth]{IMG/Elephant.jpg}
 \end{figure}
