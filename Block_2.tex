@@ -1459,15 +1459,54 @@ $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda 
 %---------------------------------------------
 \subsection{Local regression}
 \begin{frame}{Local regression}
-
+\begin{itemize}
+    \item Another approach for fitting flexible (non-linear) functions.
+    \item For a given target point $x_0$, regression is fit using nearby observations only.
+\end{itemize}
+\bigskip
+\centering
+Local regression example (artificial data)
+\vspace{-0.4cm}
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 0cm 0cm 1.1cm, clip=true, width=0.7\textwidth]{IMG/ISLR79.pdf}
+\end{figure}
+\vspace{-0.4cm}
+\tiny{Legend: orange: local regression, blue: DGP, yellow bell: weight of observations used in regression.}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Local regression algorithm}
+Local regression at $X = x_0$\\
+\bigskip
+\begin{enumerate}
+    \item Gather the fraction $s = k/n$ of training points whose $x_i$ \\are closest to $x_0$.
+    \medskip
+    \item Assign a weight $K_{i0} = K(x_i , x_0)$ to each point in this neighborhood, so that the closest point has the highest weight \\and vice versa. All but the nearest $k$ neighbors get zero weights.
+    \medskip
+    \item Fit \textit{weighted least squares regression} of $y_i$ on $x_i$ by finding $\beta$ parameters that minimize the following expression:
+    $$\min : ~~~ \sum_{i=1}^n K_{i0} (y_i - \beta_0 - \beta_1 x_i)^2 \,.$$
+    \item Fitted value at $x_0$ is given by $\hat{f}(x_0) = \hat{\beta}_0 + \hat{\beta}_1 x_0\,$.
+\end{enumerate}
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Local regression}
-
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Local regression}
-
+\textbf{Local regression: choices to be made}\\
+\smallskip
+\begin{itemize}
+    \item Weighting function $K$ must be defined (e.g.: $\tfrac{1}{(x_0 - x_i)^2}, x_0 \neq x_i$).
+    \smallskip
+    \item Functional form in Step 3 (constant, linear, quadratic, etc.).
+    \smallskip
+    \item Span $s$ controls flexibility of the fit (can use CV).
+\end{itemize}
+\bigskip
+\textbf{Local regression: notes}\\
+\smallskip
+\begin{itemize}
+    \item Local regression can be generalized to models with multiple regressors: the model is global in some regressors and local in others (time). Such model adapts to the most recently gathered observations.
+    \smallskip
+    \item Local regression can be generalized to neighborhoods of higher dimensions (say, over $X_1$ and $X_2$). However, this approach does not extend easily to higher dimensions (beyond 3 or 4).
+\end{itemize}
 \end{frame}
 %---------------------------------------------
 \subsection{Generalized Additive Models (GAM)}
@@ -1475,9 +1514,17 @@ $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda 
 
 \end{frame}
 %---------------------------------------------
+\begin{frame}{Generalized Additive Models (GAM)}
+
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Generalized Additive Models (GAM)}
+
+\end{frame}
+%---------------------------------------------
 \begin{frame}{Final note}
 \centering
-For a complex and advanced discussion of the above topics,\\ \medskip you may consult e.g.: \textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{The Elements of Statistical Learning}}}
+For a detailed technical discussion of the above topics,\\ \medskip you may consult e.g.: \textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{The Elements of Statistical Learning}}}
 \end{frame}
 %---------------------------------------------
 \begin{frame}[noframenumbering]{Final note 2}
