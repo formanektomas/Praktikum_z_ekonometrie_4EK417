@@ -1231,7 +1231,7 @@ Example: piecewise cubic polynomial with one knot:\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------
-\subsection{Splines}
+\subsection{Regression splines and smoothing splines}
 \begin{frame}{Regression splines - motivation}
 \centering
 Piecewise linear regression with one knot at $c_1$:\\
@@ -1304,14 +1304,10 @@ where:\\
 %---------------------------------------------
 \begin{frame}{Regression splines (cubic spline)}
 \centering
-Example: cubic spline with one knot:\\
-\centering
-\medskip
-\texttt{Wage} $\leftarrow$ \texttt{Age}\\
 \vspace{-0.2cm}
 \begin{figure}
   \centering
-  \includegraphics[trim=0cm 0cm 10.5cm 9.5cm, clip=true, width=0.4\textwidth]{IMG/ISLR73.pdf}
+  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.75\textwidth]{IMG/ISLR73.pdf}
 \end{figure}
 \end{frame}
 %---------------------------------------------
@@ -1344,22 +1340,41 @@ Example: cubic spline with one knot:\\
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Regression splines (natural spline)}
-Example: For $K=4$ and using the truncated power bases of cubic splines, we can write:
+Example: For $K\!=\!4$ and using the truncated power bases of cubic splines $(X-\xi_k)_{+}^3 \,$, we can write:
 $$y_i = \beta_0 \, N_1 (x_i)  + \beta_1 \, N_2 (x_i) + \beta_2 \, N_3 (x_i) + \beta_3 \, N_4 (x_i) + u_i  $$\\
 \vspace{-0.2cm}
 where:\\
 \smallskip
-\qquad $N_1 (x_i) = 1$\, \qquad ($\beta_0$ is the intercept),\\
+\qquad $N_1 (x_i) = 1$\, \hspace{3.5cm} ~($\beta_0$ is the intercept),\\
 \smallskip
 \qquad $N_2 (x_i) = x_i$\,,\\
 \smallskip
-\qquad $N_3 (x_i) = d_1(X)-d_{3}(X)$\\
+\qquad $N_3 (x_i) = d_1(X)-d_{3}(X)$ \qquad \qquad (note that $N_3=N_{k+2}$),\\
 \smallskip
 \qquad $N_4 (x_i) = d_2(X)-d_{3}(X)$\\
 \medskip
-\qquad and $d_k(X)=\frac{(X-\xi_k)_{+}^3-(X-\xi_K)_{+}^3}{\xi_K+\xi_k}$.\\
-\medskip
-Note that $N_{k+2}=d_k(X)-d_{K-1}(X)$ is the general notation \\for $N_3$ and $N_4$ and we only use knots up to $K-2$ (i.e. $\xi_1, \xi_2$).\\ All basis functions $N$ have zero $2^{nd}$ and $3^{rd}$ derivatives \\for $X < \xi_1$ and for $X \geq \xi_K$.
+\qquad and $d_k(X)=\frac{(X-\xi_k)_{+}^3 \,-\, (X-\xi_K)_{+}^3}{\xi_K \,-\, \xi_k}$.\\
+\bigskip
+For basis functions, we only use knots up to $K\!-\!2$ (i.e. $\xi_1, \xi_2$ for $K\!=\!4$).
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Regression splines (natural spline)}
+General notation for natural cubic splines with $K$ knots:
+$$y_i = \beta_0 \, N_1 (x_i)  + \beta_1 \, N_2 (x_i) + \beta_2 \, N_{k+1} (x_i) + \cdots + \beta_{K-3} \, N_{K-2} (x_i) + u_i  $$\\
+\vspace{-0.2cm}
+~\,where:\\
+\smallskip
+\qquad $N_1 (x_i) = 1$\,,\\
+\smallskip
+\qquad $N_2 (x_i) = x_i$\,,\\
+\smallskip
+\qquad $N_{k+2} (x_i) = d_k(X)-d_{K-1}(X)\,$,\\
+\qquad $\cdots$\\
+\qquad $N_{K-2} (x_i) = d_{K-2}(X)-d_{K-1}(X)\,$,\\
+\bigskip
+\qquad and $d_k(X)=\frac{(X-\xi_k)_{+}^3 - \, (X-\xi_K)_{+}^3}{\xi_K \,-\, \xi_k}$.\\
+\bigskip
+All basis functions $N_1,N_2,N_{k+2},\dots,N_{K-2}$ have $2^{nd}$ and $3^{rd}$ derivatives \\equal to zero for $X < \xi_1$ and for $X \geq \xi_K$.
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Regression splines (knot selection)}
@@ -1377,16 +1392,81 @@ Where should we place the knots?\\
     \item Spline function is most flexible in regions that contain a lot of knots. Hence:\\
     \medskip    
     \begin{itemize}
-        \item Place more knots in places where we assume the function \\may vary most rapidly.
+        \item Place more knots in regions where we assume the function \\may vary most rapidly.
         \smallskip
         \item Place fewer knots where the function seems more stable.
         \smallskip
-        \item Ad-hoc and potentially missleading approach.
+        \item Ad-hoc and potentially misleading approach.
     \end{itemize}
 \end{itemize}
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Smoothing splines}
+\begin{frame}{Smoothing splines (quick overview)}
+\begin{itemize}
+    \item Smoothing splines -- alternative approach to splines.\\
+    \bigskip
+    \item Search for a function $g(x)$ that minimizes RSS and is smooth.
+\end{itemize} \medskip
+$$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda \int g''(t)^2 \textit{dt}$$
+\begin{itemize}
+    \item $\sum_{i=1}^n [y_i - g(x_i)]^2$ is a loss function, makes $g(x)$ fit the data.\\  \smallskip
+    $g(x)$ can be any function for which the second term is defined.\\
+    \bigskip
+    \item $\lambda \int \! g''(t)^2 \textit{dt}~$ penalizes high variability in $g(x)$.\\  \smallskip
+    $\lambda$ is a penalty term. For $\lambda=\infty$, smoothing splines lead to OLS fit.
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Smoothing splines (quick overview)}
+$$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda \int g''(t)^2 \textit{dt}$$
+\begin{itemize}
+    \item $g'(t)$ is the first derivative, measures slope of $g(t)$ at $t$.\\
+    \smallskip
+    $g''(t)$ indicates $2^{nd}$ derivative and corresponds to the amount \\by which the slope is changing.
+    \medskip
+    \item $g''(t)$ is a measure of ``\textit{roughness}'' of $g(t)$ around $t$.\\
+    \smallskip
+    it is large (in absolute value) if $g(t)$ is ``wiggly'' near $t$,\\
+    \smallskip
+    it is zero if $g(t)$ is a straight line around $t$.
+    \medskip
+    \item $\int g''(t)^2 \textit{dt}$ ~is a (specific) measure of the total change in $g'(t)$ \\over the entire range. 
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Smoothing splines (quick overview)}
+$$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda \int g''(t)^2 \textit{dt}$$
+\begin{itemize}
+    \item While $g$ can be any function, it may be shown that $\textnormal{RSS}(g,\lambda)$ has an explicit \& unique minimizer: natural cubic spline with $N$ knots at the unique values of $x_i,~i=1,2,\dots,N$. \\(more precisely, a penalized natural cubic spline with $N$ knots)
+    \medskip
+    \item With a suitable $\lambda$ parameter, the model is not overparameterized: \textcolor{blue}{effective degrees of freedom} used for estimation $(df_{\lambda})$ decrease from $N$ to 2 as $\lambda$ increases from 0 to $\infty$.
+    \medskip
+    \item Cross-validation can be used to find $\lambda$ with the lowest cross-validated RSS (LOOC is computationally very efficient here).
+    \vspace{-0.3cm}
+    \item For technical discussion of smoothing splines, see (\textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{ESL, ch. 5.4}}}).
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Smoothing splines (quick overview)}
+\vspace{-0.4cm}
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 0cm 0cm 1cm, clip=true, width=0.6\textwidth]{IMG/ISLR78.pdf}
+\end{figure}
+\centering
+\tiny{Note that \textit{df} in the legend refer to $(df_{\lambda})$ used by the estimation.}
+\end{frame}
+%---------------------------------------------
+\subsection{Local regression}
+\begin{frame}{Local regression}
+
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Local regression}
+
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Local regression}
 
 \end{frame}
 %---------------------------------------------
@@ -1395,12 +1475,18 @@ Where should we place the knots?\\
 
 \end{frame}
 %---------------------------------------------
-
-
 \begin{frame}{Final note}
 \centering
-For a complex and advanced discussion of the above topics,\\ \medskip you may consult e.g.: (\textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{The Elements of Statistical Learning}}})
+For a complex and advanced discussion of the above topics,\\ \medskip you may consult e.g.: \textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{The Elements of Statistical Learning}}}
 \end{frame}
 %---------------------------------------------
-
+\begin{frame}[noframenumbering]{Final note 2}
+John Von Neumann: ``With 4 parameters, I can fit an elephant\\ and with 5, I can make him wiggle his trunk.''
+\begin{figure}
+  \includegraphics[width=0.6\textwidth]{IMG/Elephant.jpg}
+\end{figure}
+\centering
+\textcolor{blue}{\underline{\href{https://fermatslibrary.com/s/drawing-an-elephant-with-four-complex-parameters}{Drawing an elephant with four complex parameters}}}
+\end{frame}
+%---------------------------------------------
 \end{document}
