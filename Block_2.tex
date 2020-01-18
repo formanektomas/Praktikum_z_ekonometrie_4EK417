@@ -1537,6 +1537,53 @@ As we hold \texttt{age} and \texttt{education} fixed, \texttt{wage} increases sl
 Ceteris paribus, \texttt{wage} tends to be highest for intermediate values of  \texttt{age} \\and lowest for the very young and very old workers.
 \end{frame}
 %---------------------------------------------
+\begin{frame}{GAM estimation (backfitting)}
+\vspace{-0.3cm}
+$$ y_i = \beta_0 + \beta_1 \, f_1(x_{i1}) + \beta_2 \, f_2(x_{i2}) + \cdots + \beta_p \, f_p(x_{ip}) + u_i$$
+\vspace{-0.3cm}
+\begin{itemize}
+    \item $f_j$ functions are unspecified smooth (``nonparametric'') functions.
+    \smallskip
+    \item We do not use an expansion of basis functions for estimation \\(say, all constituent parts of a natural spline $f_j(x_{j})$ function). \\If all such elements were used in matrix of regressors $\bm{X}$, the model could be estimated by least squares.
+    \smallskip
+    \item Instead, we fit all $p$ functions using a scatterplot smoother (e.g. natural spline) ``simultaneously'', using a \textbf{backfitting algorithm}.
+    \smallskip
+    \item Say, we use cubic smoothing splines. The penalized RSS (PRSS) can be specified as:
+    \small{$$\textnormal{PRSS}(\alpha,f_1,\dots,f_p,\bm{\lambda}) = \sum_{i=1}^n \left[y_i - \alpha - \sum_{j=1}^p f_j(x_{ij}) \right]^2 + \sum_{j=1}^p \lambda_j \int f_j''(t_j)^2 \textit{dt}_j\,,$$}
+    where $\lambda_j \geq 0$ and PRSS is used for estimaton (described next).
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{GAM estimation (backfitting)}
+\vspace{-0.3cm}
+$$ y_i = \beta_0 + \beta_1 \, f_1(x_{i1}) + \beta_2 \, f_2(x_{i2}) + \cdots + \beta_p \, f_p(x_{ip}) + u_i$$
+\textbf{Backfitting algorithm for GAMs}\\ \medskip
+\begin{enumerate}
+    \item Initialize: $\hat{\alpha}=\frac{1}{n} \sum_{i=1}^n y_i~~\textnormal{and}~~\hat{f}_j \equiv 0,~~\forall i,j.$
+    \bigskip
+    \item Cycle: $j = 1,2,\dots,p,1,2,\dots,p,\dots$
+    \bigskip
+    \begin{itemize}
+        \item[(a)] $\hat{f}_j~\leftarrow ~ \mathcal{S}_j \left[ \left\lbrace y_i - \hat{\alpha} - \sum_{k \neq j} \hat{f}_k (x_{ik}) \right\rbrace_1^n \right]~~~$(backfitting step)
+        \bigskip
+        \item[(b)] $\hat{f}_j~\leftarrow ~ \hat{f}_j - \frac{1}{n} \sum_{i-1}^n \hat{f}_j (x_{ij}) ~~~$(mean centering of estimated function)\\
+        \bigskip
+        until functions $\hat{f}_j$ change less than a prespecified threshold.
+    \end{itemize}
+\end{enumerate}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{GAM estimation (backfitting)}
+\textbf{Backfitting algorithm for GAMs}\\ \medskip
+\begin{itemize}
+    \item 
+    
+    
+    
+    
+\end{itemize}
+\end{frame}
+%---------------------------------------------
 \begin{frame}{Generalized Additive Models (GAM)}
 \begin{itemize}
     \item[\ding{51}] GAMs extend easily to logistic regression models if $y_i$ is binary (applies to count and similar LDVs by analogy):
