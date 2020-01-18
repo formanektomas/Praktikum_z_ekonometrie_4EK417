@@ -1517,12 +1517,12 @@ So far, polynomial and step regression, splines and local regression have been d
 Multiple-regressor LRM:
 $$ y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip} + u_i~~~~~~~~~~~~~~~~~$$
 can be generalized to
-$$ y_i = \beta_0 + \beta_1 \, f_1(x_{i1}) + \beta_2 \, f_2(x_{i2}) + \cdots + \beta_p \, f_p(x_{ip}) + u_i$$ 
+$$ y_i = \alpha + \, f_1(x_{i1}) + \, f_2(x_{i2}) + \cdots + \, f_p(x_{ip}) + u_i$$ 
 where $f_j(x_{ij})$ represents any convenient function of $x$: piecewise constant, linear, polynomial, spline, etc.
 \end{frame}
 %---------------------------------------------
 \begin{frame}{GAM example}
-$\texttt{wage} = \beta_0 + \beta_1 \, f_1(\texttt{year}) + \beta_2 \, f_2(\texttt{age}) + \beta_3 \, f_3(\texttt{education}) + u_i$\\
+$\texttt{wage} = \alpha + f_1(\texttt{year}) + f_2(\texttt{age}) + f_3(\texttt{education}) + u_i$\\
 \bigskip
 where $f_1$ and $f_2$ are natural splines and $f_3$ is a step function (\texttt{education} is a qualitative variable with four levels).
 \vspace{-0.2cm}
@@ -1539,7 +1539,7 @@ Ceteris paribus, \texttt{wage} tends to be highest for intermediate values of  \
 %---------------------------------------------
 \begin{frame}{GAM estimation (backfitting)}
 \vspace{-0.3cm}
-$$ y_i = \beta_0 + \beta_1 \, f_1(x_{i1}) + \beta_2 \, f_2(x_{i2}) + \cdots + \beta_p \, f_p(x_{ip}) + u_i$$
+$$ y_i = \alpha + f_1(x_{i1}) + f_2(x_{i2}) + \cdots + f_p(x_{ip}) + u_i$$
 \vspace{-0.3cm}
 \begin{itemize}
     \item $f_j$ functions are unspecified smooth (``nonparametric'') functions.
@@ -1556,7 +1556,7 @@ $$ y_i = \beta_0 + \beta_1 \, f_1(x_{i1}) + \beta_2 \, f_2(x_{i2}) + \cdots + \b
 %---------------------------------------------
 \begin{frame}{GAM estimation (backfitting)}
 \vspace{-0.3cm}
-$$ y_i = \beta_0 + \beta_1 \, f_1(x_{i1}) + \beta_2 \, f_2(x_{i2}) + \cdots + \beta_p \, f_p(x_{ip}) + u_i$$
+$$ y_i = \alpha + f_1(x_{i1}) + f_2(x_{i2}) + \cdots + f_p(x_{ip}) + u_i$$
 \textbf{Backfitting algorithm for GAMs}\\ \medskip
 \begin{enumerate}
     \item Initialize: $\hat{\alpha}=\frac{1}{n} \sum_{i=1}^n y_i~~\textnormal{and}~~\hat{f}_j \equiv 0,~~\forall i,j.$
@@ -1594,7 +1594,7 @@ $$ y_i = \beta_0 + \beta_1 \, f_1(x_{i1}) + \beta_2 \, f_2(x_{i2}) + \cdots + \b
     \bigskip
     \item[\ding{51}] GAMs extend easily to logistic regression models if $y_i$ is binary (applies to count and similar LDVs by analogy):
     $$ \log \left( \frac{p_i}{1+p_i}
-    \right) = \beta_0 + \beta_1 \, f_1(\texttt{year}) + \beta_2 \, f_2(\texttt{age}) + \beta_3 \, f_3(\texttt{education}) + u_i$$
+    \right) = \alpha + f_1(\texttt{year}) + f_2(\texttt{age}) + f_3(\texttt{education}) + u_i$$
 where $p_i = P(\texttt{wage}_i > 250~|~ \texttt{year}_i, \texttt{age}_i, \texttt{education}_i)$.
 \bigskip
 \item[\ding{51}] Individual $f_j$ in GAMs can be very flexible -- we do not have to manually try different transformations for each regressor.
