@@ -1576,20 +1576,26 @@ $$ y_i = \beta_0 + \beta_1 \, f_1(x_{i1}) + \beta_2 \, f_2(x_{i2}) + \cdots + \b
 \begin{frame}{GAM estimation (backfitting)}
 \textbf{Backfitting algorithm for GAMs}\\ \medskip
 \begin{itemize}
-    \item 
-    
-    
-    
-    
+    \item Each of the $f_j$ functions is a cubic spline (as per our example).
+    \smallskip
+    \item Without further restrictions, solution is non-unique -- constant $\alpha$ is non-identifiable as we can add/subtract any constant to each of the $f_j$ functions.
+    \smallskip
+    \item This is solved by Step 1 (i.e. by setting $\hat{\alpha} = \textnormal{mean}(y_i)$. Note that this setting does not change troughout the backfitting estimation.
+    \smallskip
+    \item Step 2 (a) applies a cubic smoothing spline $\mathcal{S}_j$ to the $X_j$ regressor while fixing all other $\hat{f}_k$ at their current estimates when computing the $\left\lbrace y_i - \hat{\alpha} - \sum_{k \neq j} \hat{f}_k (x_{ik}) \right\rbrace_1^n$ term.
+    \smallskip
+    \item Step 2 (b) is technical -- it adjusts for rounding errors in the algorithm (in theory, fit to a mean-zero response has mean zero).
 \end{itemize}
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Generalized Additive Models (GAM)}
 \begin{itemize}
+    \item[\ding{51}] GAM backfitting can accommodate regression/natural splines, piecewise and local regression and even interaction terms in the \\$f_j$ functions.
+    \bigskip
     \item[\ding{51}] GAMs extend easily to logistic regression models if $y_i$ is binary (applies to count and similar LDVs by analogy):
     $$ \log \left( \frac{p_i}{1+p_i}
     \right) = \beta_0 + \beta_1 \, f_1(\texttt{year}) + \beta_2 \, f_2(\texttt{age}) + \beta_3 \, f_3(\texttt{education}) + u_i$$
-where $p_i = P(\texttt{wage}_i > 250~|~ \texttt{year}_i, \texttt{age}_i, \texttt{education}_i)$
+where $p_i = P(\texttt{wage}_i > 250~|~ \texttt{year}_i, \texttt{age}_i, \texttt{education}_i)$.
 \bigskip
 \item[\ding{51}] Individual $f_j$ in GAMs can be very flexible -- we do not have to manually try different transformations for each regressor.
 \bigskip
@@ -1605,16 +1611,18 @@ where $p_i = P(\texttt{wage}_i > 250~|~ \texttt{year}_i, \texttt{age}_i, \texttt
     \bigskip
     \item[\ding{51}] For each regressor, smoothness of $f_j$ can be represented by (effective) \textit{df} used.
     \bigskip
-    \item[\ding{55}] Additive nature of GAMs may lead to missing important interactions. \\ \smallskip However, low-dimensional interactions can be included manually; e.g. by adding some $f_{jm}(X_j,X_m)$ term into the model.
+    \item[\ding{55}] Additive nature of GAMs may lead to missing important interactions. 
+    \bigskip 
+    \item[\ding{51}] However, low-dimensional interactions can be included manually; e.g. by adding some $f_{jm}(X_j,X_m)$ term into the model.
 \end{itemize}
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Final note}
 \centering
-For a detailed technical discussion of the above topics,\\ \medskip you may consult e.g.: \textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{The Elements of Statistical Learning}}}
+For a detailed technical discussion of the topics covered in Block 2,\\ \medskip you may consult e.g.: \textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{The Elements of Statistical Learning}}}
 \end{frame}
 %---------------------------------------------
-\begin{frame}[noframenumbering]{Final note 2}
+\begin{frame}[noframenumbering]{Final note }
 John von Neumann: ``With 4 parameters, I can fit an elephant\\ and with 5, I can make him wiggle his trunk.''
 \begin{figure}
   \includegraphics[width=0.6\textwidth]{IMG/Elephant.jpg}
