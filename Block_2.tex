@@ -1265,7 +1265,7 @@ $$ y_i = \beta_0 + \beta_1x_i + \beta_2\{1[x_i > c_1](x_i-c_1)\} + u_i$$
 %---------------------------------------------
 \begin{frame}{Regression splines (linear spline)}
 \textbf{Linear spline:} fit regression line in each region of the predictor space, requiring continuity in each knot. Regression model with $K$ knots $\xi_k, k=1,\dots, K$ can be represented using \textcolor{blue}{basis functions} as follows:
-$$y_i = \beta_0 + \beta_1 \, b_1 (x_i) + \beta_2 \, b_2 (x_i) + \cdots, + \beta_{K+1} \, b_{K+1} (x_i) + u_i  $$
+$$y_i = \beta_0 + \beta_1 \, b_1 (x_i) + \beta_2 \, b_2 (x_i) + \cdots + \beta_{K+1} \, b_{K+1} (x_i) + u_i  $$
 where $b_k$ are the basis functions:\\
 \smallskip
 \qquad $b_1 (x_i) = x_i$\,,\\
@@ -1285,7 +1285,7 @@ where $b_k$ are the basis functions:\\
 \textbf{Cubic spline} with knots $\xi_k,~k=1,\dots, K$ is a piecewise cubic polynomial with continuous derivatives up to order 2 at each knot.\\
 \medskip
 Again we can represent this model with truncated power basis functions:
-$$y_i = \beta_0 + \beta_1 \, h_1 (x_i) + \beta_2 \, h_2 (x_i) + \cdots, + \beta_{K+3} \, h_{K+3} (x_i) + u_i  $$
+$$y_i = \beta_0 + \beta_1 \, h_1 (x_i) + \beta_2 \, h_2 (x_i) + \cdots + \beta_{K+3} \, h_{K+3} (x_i) + u_i  $$
 where:\\
 \smallskip
 \qquad $h_1 (x_i) = x_i$\,,\\
