@@ -1265,7 +1265,7 @@ $$ y_i = \beta_0 + \beta_1x_i + \beta_2\{1[x_i > c_1](x_i-c_1)\} + u_i$$
 %---------------------------------------------
 \begin{frame}{Regression splines (linear spline)}
 \textbf{Linear spline:} fit regression line in each region of the predictor space, requiring continuity in each knot. Regression model with $K$ knots $\xi_k, k=1,\dots, K$ can be represented using \textcolor{blue}{basis functions} as follows:
-$$y_i = \beta_0 + \beta_1 \, b_1 (x_i) + \beta_2 \, b_2 (x_i) + \cdots + \beta_{K+1} \, b_{K+1} (x_i) + u_i  $$
+$$y_i = \beta_0 + \beta_1 \, b_1 (x_i) + \beta_2 \, b_2 (x_i) + \cdots  + \beta_{K+1} \, b_{K+1} (x_i) + u_i  $$
 where $b_k$ are the basis functions:\\
 \smallskip
 \qquad $b_1 (x_i) = x_i$\,,\\
@@ -1360,7 +1360,7 @@ For basis functions, we only use knots up to $K\!-\!2$ (i.e. $\xi_1, \xi_2$ for 
 %---------------------------------------------
 \begin{frame}{Regression splines (natural spline)}
 General notation for natural cubic splines with $K$ knots:
-$$y_i = \beta_0 \, N_1 (x_i)  + \beta_1 \, N_2 (x_i) + \beta_2 \, N_{k+1} (x_i) + \cdots + \beta_{K-3} \, N_{K-2} (x_i) + u_i  $$\\
+$$y_i = \beta_0 \, N_1 (x_i)  + \beta_1 \, N_2 (x_i) + \beta_2 \, N_{k+2} (x_i) + \cdots + \beta_{K-3} \, N_{K-2} (x_i) + u_i  $$\\
 \vspace{-0.2cm}
 ~\,where:\\
 \smallskip
@@ -1522,13 +1522,13 @@ where each $f_j(x_{ij})$ represents any convenient function of $x$: piecewise co
 \end{frame}
 %---------------------------------------------
 \begin{frame}{GAM example}
-$\texttt{wage} = \alpha + f_1(\texttt{year}) + f_2(\texttt{age}) + f_3(\texttt{education}) + u_i$\\
+$$\texttt{wage} = \alpha + f_1(\texttt{year}) + f_2(\texttt{age}) + f_3(\texttt{education}) + u_i$$
 \bigskip
-where $f_1$ and $f_2$ are natural splines and $f_3$ is a step function (\texttt{education} is a qualitative variable with four levels).
+where $f_1$ and $f_2$ are smoothing splines and $f_3$ is a step function (\texttt{education} is a qualitative variable with four levels).
 \vspace{-0.2cm}
 \begin{figure}
   \centering
-  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.8\textwidth]{IMG/ISLR711.pdf}
+  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.85\textwidth]{IMG/ISLR712.pdf}
 \end{figure}
 \centering
 \vspace{-0.3cm}
@@ -1544,11 +1544,11 @@ $$ y_i = \alpha + f_1(x_{i1}) + f_2(x_{i2}) + \cdots + f_p(x_{ip}) + u_i$$
 \begin{itemize}
     \item $f_j$ functions are unspecified smooth (``nonparametric'') functions.
     \smallskip
-    \item We do not use an expansion of basis functions for estimation \\(say, all constituent parts of a natural spline $f_j(x_{j})$ function). \\If all such elements were used in some matrix of regressors $\bm{X}$, \\the model could be estimated by least squares.
+    \item With smoothing splines, we do not use an expansion of basis functions for estimation (i.e. constituent elements used in some matrix of regressors $\bm{X}$).
     \smallskip
-    \item Instead, we fit all $p$ functions using a scatterplot smoother (e.g. natural spline) ``simultaneously'', using a \textbf{backfitting algorithm}.
+    \item Instead, we fit all $p$ functions ``simultaneously'', using a scatterplot smoother (e.g. smoothing spline, natural spline, polynomial function, etc.) , using a \textbf{backfitting algorithm}.
     \smallskip
-    \item Say, we use cubic smoothing splines. The penalized RSS (PRSS) can be specified as:
+    \item Say, we use cubic smoothing splines for all regressors. The penalized RSS (PRSS) can be specified as:
     \small{$$\textnormal{PRSS}(\alpha,f_1,\dots,f_p,\bm{\lambda}) = \sum_{i=1}^n \left[y_i - \alpha - \sum_{j=1}^p f_j(x_{ij}) \right]^2 + \sum_{j=1}^p \lambda_j \int f_j''(t_j)^2 \textit{dt}_j\,,$$}
     where $\lambda_j \geq 0$ and PRSS is used for estimaton (described next).
 \end{itemize}
@@ -1556,7 +1556,8 @@ $$ y_i = \alpha + f_1(x_{i1}) + f_2(x_{i2}) + \cdots + f_p(x_{ip}) + u_i$$
 %---------------------------------------------
 \begin{frame}{GAM estimation (backfitting)}
 \vspace{-0.3cm}
-$$ y_i = \alpha + f_1(x_{i1}) + f_2(x_{i2}) + \cdots + f_p(x_{ip}) + u_i$$
+$$ y_i = \alpha + f_1(x_{i1}) + f_2(x_{i2}) + \cdots + f_p(x_{ip}) + u_i$$\\
+\bigskip
 \textbf{Backfitting algorithm for GAMs}\\ \medskip
 \begin{enumerate}
     \item Initialize: $\hat{\alpha}=\frac{1}{n} \sum_{i=1}^n y_i~~\textnormal{and}~~\hat{f}_j \equiv 0,~~\forall i,j.$
@@ -1576,11 +1577,11 @@ $$ y_i = \alpha + f_1(x_{i1}) + f_2(x_{i2}) + \cdots + f_p(x_{ip}) + u_i$$
 \begin{frame}{GAM estimation (backfitting)}
 \textbf{Backfitting algorithm for GAMs}\\ \medskip
 \begin{itemize}
-    \item Each of the $f_j$ functions is a cubic spline (as per our example).
+    \item Each of the $f_j$ functions is a cubic spline (with knots at each unique value of $x_j$ and $\textit{df}_{\lambda}$).
     \smallskip
     \item Without further restrictions, solution is non-unique -- constant $\alpha$ is non-identifiable as we can add/subtract any constant to each of the $f_j$ functions.
     \smallskip
-    \item This is solved by Step 1 (i.e. by setting $\hat{\alpha} = \textnormal{mean}(y_i)$. Note that this setting does not change troughout the backfitting estimation.
+    \item This is solved in Step 1 (i.e. by setting $\hat{\alpha} = \textnormal{mean}(y_i)$ and $\hat{f}_j \equiv 0 $). Note that this setting does not change troughout the backfitting estimation.
     \smallskip
     \item Step 2 (a) applies a cubic smoothing spline $\mathcal{S}_j$ to the $X_j$ regressor while fixing all other $\hat{f}_k$ at their current estimates when computing the $\left\lbrace y_i - \hat{\alpha} - \sum_{k \neq j} \hat{f}_k (x_{ik}) \right\rbrace_1^n$ term.
     \smallskip
