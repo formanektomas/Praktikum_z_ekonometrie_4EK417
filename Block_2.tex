@@ -1546,7 +1546,7 @@ $$ y_i = \alpha + f_1(x_{i1}) + f_2(x_{i2}) + \cdots + f_p(x_{ip}) + u_i$$
     \smallskip
     \item With smoothing splines, we do not use an expansion of basis functions for estimation (i.e. constituent elements used in some matrix of regressors $\bm{X}$).
     \smallskip
-    \item Instead, we fit all $p$ functions ``simultaneously'', using a scatterplot smoother (e.g. smoothing spline, natural spline, polynomial function, etc.) , using a \textbf{backfitting algorithm}.
+    \item Instead, we fit all $p$ functions ``simultaneously'', using a scatterplot smoother (e.g. smoothing spline, local regression, etc.) along with a \textbf{backfitting algorithm}.
     \smallskip
     \item Say, we use cubic smoothing splines for all regressors. The penalized RSS (PRSS) can be specified as:
     \small{$$\textnormal{PRSS}(\alpha,f_1,\dots,f_p,\bm{\lambda}) = \sum_{i=1}^n \left[y_i - \alpha - \sum_{j=1}^p f_j(x_{ij}) \right]^2 + \sum_{j=1}^p \lambda_j \int f_j''(t_j)^2 \textit{dt}_j\,,$$}

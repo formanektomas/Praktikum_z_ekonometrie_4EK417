@@ -162,13 +162,13 @@ With mean substitution & 69 & .54 &  310.747 & 59.12 \\
 \textbf{Mean substitution, contnd.} \\
 \medskip
 \begin{itemize}
-    \item Mean imputation can be valid especially when data \\are missing as MCAR.
+    \item Mean imputation can be usefull for multiple linear regression models, especially when data are missing as MCAR.
     \smallskip
     \item It is fast, simple, easy to implement, and no cases are excluded.
-    \smallskip
+    \bigskip
     \item But even under MCAR, this method still leads to underestimation of the population variance. 
     \smallskip
-    \item Bias (in variance estimation) is proportional to \\
+    \item Bias in variance estimation is proportional to \\
     $( \textnormal{nobs} - 1)/( \textnormal{nobs} + \textnormal{nmis} - 1)$. \\Smaller standard errors increase the possibility of Type I errors.
 \end{itemize}
 \end{frame}
@@ -178,8 +178,9 @@ With mean substitution & 69 & .54 &  310.747 & 59.12 \\
 \textbf{Regression substitution}
   \begin{itemize}
   \item Uses linear regression (auxiliary LRM) to predict what the missing values of regressors should be -- on the basis of other variables that are present.
-  \item For SLRMs, the same problem of error variance as in mean substitution remains. We do not add more information but we increase the sample size and (spuriously) reduce the standard error.
   \item May be useful for MLRMs.
+  \item For SLRMs, this approach would be equivalent to mean substitution. We do not add more information but we increase the sample size and (spuriously) reduce the standard error.
+
    \end{itemize}
   \vspace{0.2cm}
 \textbf{Stochastic regression substitution}
@@ -239,8 +240,8 @@ $\left\lbrace \texttt{mice}  \right\rbrace$ object--types used for MI.
     \item Imputation model choice (univariate, multivariate, data type).
     \item Choice of predictors for MI.
     \item Should we impute variables that are functions of incomplete variables (e.g. interaction terms)?
-    \item Choice of order of imputation (can affect results).
-    \item MI is (generally) based on a numerical algorithm: we need to choose starting setup and control (limit) the number of iterations.
+    \item Ordering variables for imputation can affect results.
+    \item MI is based on a numerical algorithm (say, \texttt{pmm}): we need to choose starting setup and control the number of iterations.
     \item We need to choose $m$ -- the number of imputed datasets.
 \end{enumerate}
 \smallskip
@@ -303,7 +304,7 @@ $$
     \medskip
     \item[5] From among the close cases for each missing $x_i$, randomly choose one $x_j$ and use its observed value to substitute for the missing value.
     \medskip
-    \item[6] In MI algorithm, repeat steps 2 through 5 for each of the $m$ imputed datasets.  
+    \item[6] In MI algorithm, repeat steps 2 through 5 $m$-times to produce $m$ imputed datasets.  
 \end{enumerate}
 \end{frame}
 %------------------------------------------------
@@ -337,9 +338,9 @@ $$
 \scriptsize{\url{https://www.uvm.edu/~dhowell/StatPages/Missing_Data/Missing-Part-Two.html}}
 \end{frame}
 %------------------------------------------------
-\subsection{Multiple imputation for TS data}
+\subsection{Imputation for TS data}
 \begin{frame}
-\frametitle{Multiple imputation for TS data}
+\frametitle{Imputation for TS data}
 \begin{itemize}
     \item Univariate TS imputation
     \medskip
@@ -369,7 +370,7 @@ $$
 
 \begin{itemize}
   \item If we can assume that data are missing completely at random \textit{(MCAR)}, we will lose power because of smaller sample sizes, but we will not have problems with biased estimates.
-  \item If data are missing not at random \textit{(MNAR)}, the \textbf{only way to obtain an unbiased estimate of parameters is to model missingness}. In other words we need to use a model that accounts for the missing data.
+  \item If data are missing not at random \textit{(MNAR)}, the \textbf{only way to obtain an unbiased estimate of parameters is to model missingness}. In other words, we need to use a model that accounts for the missing data.
   \item Broadly speaking, such models are:
   \begin{itemize}
     \item Censored Regression Models (e.g. duration analysis) 
