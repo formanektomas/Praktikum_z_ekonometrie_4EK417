@@ -163,14 +163,21 @@ $$ \textit{MSE}_{\textnormal{Te}} = \frac{1}{m}
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Variance vs. Bias trade-off - repetition}
-$\textnormal{E}(\textit{MSE}_0)
+\vspace{-0.5cm}
+$$\textnormal{E}(\textit{MSE}_0)
    = \textit{var}(\hat{f}(\bm{x}_0))
    + [\textit{Bias\,}(\hat{f}(\bm{x}_0))]^2
-   + \textnormal{var}(\varepsilon_0),$\\
+   + \textnormal{var}(\varepsilon_0)$$\\
 \begin{figure}
-\includegraphics[angle=0,scale=0.35]{IMG/biasvariance.png}
+\includegraphics[angle=0,scale=0.30]{IMG/biasvariance.png}
 \end{figure}
-\small{This is an illustration, $\textnormal{var}(\varepsilon_0)$ not shown explicitly. \\(lies at the /asymptotic/ minima of Variance and $\textnormal{Bias}^2$)}
+\small{This is an illustration, $\textnormal{var}(\varepsilon_0)$ not shown explicitly. \\(lies at the /asymptotic/ minima of Variance and $\textnormal{Bias}^2$)}\\
+\small{
+\begin{itemize}
+    \item Variance refers to the amount by which $\hat{f}(\bm{x}_0)$ would change if we estimate it using different training data sets.   
+    \item Bias is introduced by approximating real-life DGP by simple model.
+    \item Derivation of the formula is complex, see eg. \textcolor{blue}{\underline{\href{https://stats.stackexchange.com/questions/204115/understanding-bias-variance-tradeoff-derivation}{information here}}}
+\end{itemize}}
 \end{frame}
 %------------------------------------------------
 \begin{frame}{$k$-Fold Cross Validation - repetition}
@@ -192,7 +199,7 @@ Repeatedly fit a model of interest to samples formed from the training set \& ma
   \item The cross-validation process is then repeated $k$ times (the $k$ folds), with each of the $k$ subsamples used exactly once as the test sample. 
   \item The $k$ results from the folds can then be averaged to produce a single estimation -- the cross-validated error. 
   \item $k = 5$ or $k=10$ is commonly used.
-  \item Sometimes, $k$FCV process is repeated ($R$-times -- say, 1.0000) to get distribution of the cross-validated error term.
+  \item Sometimes, $k$FCV process is repeated ($R$-times -- say, 100) to get distribution of the cross-validated error term.
 \end{itemize}  
 \end{frame}
 %------------------------------------------------
@@ -474,20 +481,12 @@ similarly large negative coefficient on the correlated regressor(s).
 %------------------------------------------------
 \begin{frame}{Ridge regression}
 \begin{itemize}
-\item The standard OLS coefficient estimates are scale
-equivariant: multiplying $x_j$ by a constant $c$ simply leads to
-a scaling of the least squares coefficient estimates by a
-factor of $1/c$.\\ 
+\item The standard OLS coefficient estimates are scale equivariant: multiplying $x_j$ by a constant $c$ simply leads to a scaling of the least squares coefficient estimates by a factor of $1/c$.\\ 
 \medskip Regardless of predictor scaling, $ ( \hat{\beta}_j x_{ij} )$ will remain the same.
 \medskip
-\item In contrast, the ridge regression coefficient estimates can
-change substantially when multiplying a given predictor by
-a constant, due to the sum of squared coefficients term in
-the penalty part of the ridge regression objective function.
+\item In contrast, the ridge regression coefficient estimates can change substantially when multiplying a given predictor (or other predictors!) by a constant, due to the sum of squared coefficients term in the penalty part of the ridge regression objective function.
 \medskip
-\item Therefore, it is best to apply ridge regression after
-standardizing the predictors, using the formula:
-
+\item Therefore, it is best to apply ridge regression after standardizing the predictors, using the formula:
 $$ \widetilde{x}_{ij} = \frac{x_{ij}}{
    \sqrt[]{\frac{1}{n} \sum_{i=1}^n (x_{ij} - \overline{x}_j)^2 \,}}
    \quad \textnormal{hence} \quad
@@ -578,8 +577,7 @@ effect of forcing some of the coefficient estimates to be
 exactly equal to zero when the tuning parameter $\lambda$ is
 sufficiently large (see \textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR textbook}}}).
 \medskip
-\item Much like best subset selection, the lasso regression performs
-variable selection.
+\item Much like stepwise model selection, the lasso regression performs variable selection.
 \medskip
 \item Lasso yields sparse models - that is, models that involve only \\a subset of the variables.
 \medskip
