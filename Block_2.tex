@@ -697,11 +697,12 @@ transformed variables:
 \begin{frame}{Principal component analysis (PCA)}
 \begin{itemize}
 \item PCA produces a low-dimensional representation of a dataset. It finds a sequence of linear combinations of the variables that have maximal variance and are mutually uncorrelated.
-\bigskip
+\medskip
 \item Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization.
 \medskip
 \item Suppose we have a $(n \! \times \! p)$ dataset $\bm{X}$. Since we are mainly interested in variance here, we can assume that each of the variables in $\bm{X}$ has been \textbf{centered} to have mean zero \\(all column-means of $\bm{X}$ are zero). If necessary, the transformation (centering of $\bm{X}$) is straight-forward.
-
+\medskip
+\item Typically, empirical analyses (in \texttt{R} and elsewhere) would involve variable standardizing/scaling to $\textnormal{var}(\bm{x}_j)=1$.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -985,7 +986,7 @@ Potential solutions to the problem:
 \begin{itemize}
 \item Much like with the PCR method, in PLS we also search for convenient (aggregating) linear combinations of regressors in matrix $\bm{X}$.\\
 \medskip
-\item PLS is not scale-invariant, so we assume each $\bm{x}_j$ regressor is standardized -- the same way as in PCR.\\
+\item PLS is not scale-invariant, so we assume each $\bm{x}_j$ regressor is standardized -- much the same way as in PCR.\\
 \medskip
 \item PLS, unlike PCR, uses \textit{supervised} identification of the components: both $\bm{X}$ and $\bm{y}$ are used when searching for linear combinations of regressors.\\
 \medskip
