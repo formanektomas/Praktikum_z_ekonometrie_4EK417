@@ -862,7 +862,7 @@ $$\textit{KMO} = \frac{\sum_j \sum_{i\neq j} r_{ij}^2}
                    ;\hspace{0.5cm} \textit{KMO} \in \langle 0,1 \rangle $$\\
 
 where:\\
-$\{r_{ij} \} = \bm{R}$, which is a correlation matrix,\\
+$\{r_{ij} \} = \bm{R}$, which is a correlation matrix (here, $i$, $j$ denote variables),\\
 $\{a_{ij} \} = \bm{A}$, which is a partial correlation matrix (partial correlations represent the direct interactions between two variables, with the indirect effects of all remaining variables removed)\\
 $a_{ij} = - \frac{v_{ij}}{\sqrt[]{v_{ii} \cdot v_{jj}\,}}$ where $\{ v_{ij} \} = \bm{V} = \bm{R}^{-1}$
 \end{frame}
@@ -1002,7 +1002,7 @@ z_{i1}^{\textnormal{PLS}} \sum_{j=1}^p \psi_{j1} x_{ij}$$
 \medskip
 and coefficients $\psi_{j1}$ are calculated in two steps:
 \begin{enumerate}
-\item Use OLS to estimate slope-coefficients $\psi_{j1}$ of the ``simple'' \\linear regressions $\bm{y} \leftarrow \bm{x}_j$.\\
+\item Use OLS to estimate slope-coefficients $\psi_{j1}$ of the ``simple'' \\linear regressions $\bm{y} \leftarrow \bm{x}_j$.\\ \smallskip Here, $j=1,\dots,p$ separate SLRM are estimated and corresponding $\psi$ slope-coefficients are recorded.
 \medskip
 \item Standardize the $\psi_{j1}$ coefficients so that $\sum_{j=1}^p \psi_{j1}^2=1$.
 \end{enumerate}
