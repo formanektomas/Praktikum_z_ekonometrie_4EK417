@@ -25,6 +25,7 @@
 \usepackage{amsmath}
 \usepackage{color}
 %\usepackage[czech]{babel}
+\usepackage{smartdiagram}
 \usepackage{lmodern}  
 \usepackage{rotating}
 \usepackage{scrextend}
@@ -69,13 +70,34 @@
 \end{figure}
 \end{frame}
 %---------------------------------------------------------------------
+\begin{frame}{Spatial analysis}
+\begin{center}
+    \smartdiagramset{planet color=orange!60, distance planet-satellite = 2.2cm}
+    \smartdiagram[connected constellation diagram]{Spatial \\analysis,
+      Theory, Data , Software \\ \texttt{R}, Spatial info}
+\end{center}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial analysis}
+\begin{center}
+    \smartdiagram[descriptive diagram]{
+    {Theory, {Spatial statistics, \\spatial econometrics, \\assumptions \& models.}},
+    {Data, {Macro/micro economics, \\socio-demographics, \\ecology, \& other fields.}},
+    {\texttt{R}, {Syntax, libraries, data handling, plotting, model estimation}.},
+    {Spatial info, {Maps, spatial polygons, spatial coordinates, \\(specific type of data)}.},
+}
+\end{center}
+\end{frame}
+%---------------------------------------------------------------------
 \begin{frame}{Introduction - spatial analysis}
 Methods of quantitative spatial analysis:\\
 \bigskip
 \begin{itemize}
     \item Visualization \\Maps, graphical display
     \bigskip
-    \item Data exploration \& descriptive methods \\Tools to broadly look at spatial patterns
+    \item Data exploration \& descriptive methods \\Tools to broadly look at spatial patterns\\
+    Spatial statistics (semivariogram)\\
+    Interpolation (inverse distance weights, krigging)
     \bigskip
     \item Econometric modeling \\Fitting models, testing hypotheses, formalizing spatial dependence, discerning spatial effects from other factor (e.g. macroeconomic)
 \end{itemize}
