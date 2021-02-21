@@ -163,13 +163,14 @@ With mean substitution & 69 & .54 &  310.747 & 59.12 \\
 \medskip
 \begin{itemize}
     \item Mean imputation can be usefull for multiple linear regression models, especially when data are missing as MCAR.
-    \smallskip
+    \medskip
     \item It is fast, simple, easy to implement, and no cases are excluded.
-    \bigskip
-    \item But even under MCAR, this method still leads to underestimation of the population variance. 
-    \smallskip
+    \medskip
+    \item Even under MCAR, this method still leads to underestimation of coefficient variance. 
+    \medskip
     \item Bias in variance estimation is proportional to \\
-    $( \textnormal{nobs} - 1)/( \textnormal{nobs} + \textnormal{nmis} - 1)$. \\Smaller standard errors increase the possibility of Type I errors.
+    $( \textnormal{nobs} - 1)/( \textnormal{nobs} + \textnormal{nmis} - 1)$. \\ \medskip
+    Smaller standard errors increase the possibility of Type I error \\(rejecting true null hypothesis).
 \end{itemize}
 \end{frame}
 %------------------------------------------------
@@ -179,25 +180,32 @@ With mean substitution & 69 & .54 &  310.747 & 59.12 \\
   \begin{itemize}
   \item Uses linear regression (auxiliary LRM) to predict what the missing values of regressors should be -- on the basis of other variables that are present.
   \item May be useful for MLRMs.
-  \item For SLRMs, this approach would be equivalent to mean substitution. We do not add more information but we increase the sample size and (spuriously) reduce the standard error.
+  \item For SLRMs, this approach would be equivalent to mean substitution. We do not add more information but we increase the sample size and (spuriously) reduce standard errors.
 
    \end{itemize}
   \vspace{0.2cm}
 \textbf{Stochastic regression substitution}
   \begin{itemize}
-  \item This approach adds a randomly sampled residual term from the normal (or other) distribution to each value estimated by regression substitution. Adding a bit of random error to each substitution reduces, but does not eliminate, the problem of spurious reduction of the standard errors.
+  \item Build on regression substitution: this approach adds a randomly sampled residual term from the normal (or other) distribution to each value estimated by regression substitution. Adding a bit of random error to each substitution reduces, but does not eliminate, the problem of spurious reduction of the standard errors.
    \end{itemize}
 \end{frame}
 %------------------------------------------------
 \begin{frame}
 \frametitle{More advanced treatment of missing data}
 
-\textbf{Maximum Likelihood Expectation-Maximization}
+\textbf{Maximum Likelihood Expectation-Maximization}\\
+\bigskip
   \begin{itemize}
-  \item Computationally complex, maximum likelihood approach to the estimation of missing values Many approaches exist (e.g. the Expectation-Maximization algorithm)
+  \item Maximum likelihood approach -- alternative to OLS -- for the estimation of missing values. \\ \medskip 
+  Many approaches exist (e.g. the Expectation-Maximization algorithm)
   \item[] \scriptsize{\url{https://www.uvm.edu/~dhowell/StatPages/Missing_Data/Missing-Part-Two.html}}
    \end{itemize}
- 
+\bigskip   
+ \textbf{Predictive mean matching (PMM)}\\
+\begin{itemize}
+     \item Discussed within the Multiple imputation section (next)
+ \end{itemize}
+
 \end{frame}
 
 %------------------------------------------------
@@ -211,11 +219,11 @@ With mean substitution & 69 & .54 &  310.747 & 59.12 \\
 MI motivation and algorithm\\
   \vspace{0.2cm}
   \begin{itemize}
-  \item Create several (say, 5) imputed values (versions) for each missing item -- regressor $x_{ij}$.
+  \item Use PMM to create several  (say, 5) -- imputed values for each missing item -- regressor $x_{ij}$.
   \medskip
-  \item Each of the (5) versions of imputed data is used for estimation \\(using OLS, ML or other adequate approach)
+  \item Each version of imputed data is organized into a separate data set and used for estimation (OLS, ML or other adequate approach).
   \medskip
-  \item Information obtained from all (e.g. 5) estimates is conveniently summarized.
+  \item Information obtained from all estimates is conveniently summarized.
  \end{itemize}
  \end{frame}
 %------------------------------------------------
@@ -240,14 +248,14 @@ $\left\lbrace \texttt{mice}  \right\rbrace$ object--types used for MI.
     \item Imputation model choice (univariate, multivariate, data type).
     \item Choice of predictors for MI.
     \item Should we impute variables that are functions of incomplete variables (e.g. interaction terms)?
-    \item Ordering variables for imputation can affect results.
-    \item MI is based on a numerical algorithm (say, \texttt{pmm}): we need to choose starting setup and control the number of iterations.
+    \item If data is missing in more than one variable, ordering for imputation can affect results.
+    \item MI is based on a numerical algorithm (say, PMM): we need to choose starting setup (``proximity'' conditions and possibly other hyper-parameters, say number of iterations).
     \item We need to choose $m$ -- the number of imputed datasets.
 \end{enumerate}
 \smallskip
 In \texttt{R} ($\{ \textnormal{mice} \}$), most of the choices have generally valid default setting.\\
 \smallskip
-However -- all the choices are always made in MI and they affect the resulting imputations.
+However, the choices are made \& affect the resulting imputations.
 \end{frame}
 %------------------------------------------------
 \begin{frame}
@@ -273,16 +281,16 @@ However -- all the choices are always made in MI and they affect the resulting i
 \medskip
 Suppose there is a single variable $x$ that has some cases with missing data, and a set of relevant variables $\bm{z}$ with no missing data:
 $$
-\{ x_i, \bm{z}_i\};~i = 1, \dots , n
+\{ x_i, z_{i1}, \dots, z_{iL}\};~i = 1, \dots , n
 $$
 \vspace{-0.5cm}
 \begin{enumerate}
-    \item[1] For cases with no missing data, estimate LRM $x_i \leftarrow \bm{z}_i$, \\producing $\hat{\bm{\beta}}$ and $\textnormal{var}(\hat{\bm{\beta}})$ estimates.
+    \item[1] For cases with no missing $x_i$ data, estimate LRM $x_i \leftarrow \bm{z}_i$, \\producing $\hat{\bm{\beta}}$ and $\textnormal{var}(\hat{\bm{\beta}})$ estimates.
     \medskip
     \item[2] Make a random draw from the ``posterior predictive distribution'' of $\hat{\bm{\beta}}$, producing a new set of coefficients $\hat{\bm{\beta}}^{\ast}$.\\
     \medskip
     \begin{itemize}
-        \item Typically, this would be a random draw from a multivariate normal distribution with mean $\hat{\bm{\beta}}$ and cov. matrix $\textnormal{var}(\hat{\bm{\beta}})$. \\
+        \item Random draw from a multivariate normal distribution with mean $\hat{\bm{\beta}}$ and cov. matrix $\textnormal{var}(\hat{\bm{\beta}})$. \\ \smallskip Other distributions can be used, upon data and model used.
     \medskip 
     \item This step is necessary to produce sufficient variability in the imputed values, and is common to all ``proper'' methods of MI.
     \end{itemize}
@@ -296,15 +304,15 @@ $$
 \begin{enumerate}
     \item[3] Using ~$(\bm{z}_i \hat{\bm{\beta}}^{\ast})$~, generate predicted values $\hat{x}_i$ for \textbf{all cases}, \\both with data missing on $x_i$ and with data observations present.
     \medskip
-    \item[4] For each case with missing $x_i$, identify a set of cases with observed $x_j$ values whose \textbf{predicted} $\hat{x}_j$ values are ``close'' to the predicted $\hat{x}_i$ values (missing data cases).
+    \item[4] For each case with missing $x_i$, take the fitted $\hat{x}_i$ and search for a set of similar ``closely matching'' $\hat{x}_j$ predictions (we are only interested in $j$ cases where $x_j$ is observed).
     \medskip
     \begin{itemize}
         \item For ``close'' values, proximity rules are defined separately.
     \end{itemize}
     \medskip
-    \item[5] From among the close cases for each missing $x_i$, randomly choose one $x_j$ and use its observed value to substitute for the missing value.
+    \item[5] From each missing $x_i$, randomly choose one $x_j$ (observation) from the set of ``close'' observations and use its observed value to substitute for the missing value ($x_j$ observation is imputed, NOT the $\hat{x}_j$ value).
     \medskip
-    \item[6] In MI algorithm, repeat steps 2 through 5 $m$-times to produce $m$ imputed datasets.  
+    \item[6] For MI, repeat steps 2 through 5 $m$-times to produce $m$ imputed datasets.  
 \end{enumerate}
 \end{frame}
 %------------------------------------------------
@@ -313,7 +321,7 @@ $$
 \textbf{Predictive mean matching (\texttt{pmm}) in \texttt{R}} -- recap.\\
 \medskip
 \begin{itemize}
-    \item Compared with regression-based methods, \texttt{pmm} produces imputed values that are much more like real values. 
+    \item Compared with regression-based methods, PMM produces imputed values that are much more like real values. 
     \smallskip
     \begin{itemize}
         \item If the original variable is skewed, imputed values will also be skewed.
@@ -323,9 +331,9 @@ $$
         \item If the real values are discrete (say, number of children), imputed values will also be discrete. 
     \end{itemize} 
     \smallskip
-    \item Generally speaking,  there’s no mathematical proof/theory to justify \texttt{pmm}.
+    \item Generally speaking,  there’s no mathematical proof/theory to ``justify'' PMM (efficiency).
     \smallskip
-    \item \texttt{pmm} efficiency can be demonstrated by Monte Carlo simulations.
+    \item PMM efficiency can be demonstrated by Monte Carlo simulations.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
