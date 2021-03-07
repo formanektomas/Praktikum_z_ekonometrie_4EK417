@@ -457,7 +457,7 @@ $$\underset{\bm{\beta}}{\textnormal{min:~}}
 $$
 \begin{itemize}
 \item With many correlated variables in a LRM (i.e. under multicollinearity),
-corresponding coefficients can become poorly determined and exhibit high variance.
+OLS-estimated coefficients can become poorly determined and exhibit high variance.
 \begin{itemize}
     \item A wildly large positive coefficient on one variable can be canceled by a
 similarly large negative coefficient on the correlated regressor(s).
@@ -475,7 +475,7 @@ similarly large negative coefficient on the correlated regressor(s).
 \includegraphics[scale=0.30]{IMG/Ridge.jpg}
 \end{figure}
 \vspace{-0.5cm}
-\centering Coefficient estimates are plotted as a function of $\lambda$.
+\centering Ridge regression example output: \\coefficient estimates are plotted as a function of $\lambda$.
 \end{frame}
 
 %------------------------------------------------
@@ -537,10 +537,10 @@ This was the main motivation for ridge regression when it was first introduced i
 %------------------------------------------------
 \begin{frame}{Lasso regression}
 \begin{itemize}
-\item Ridge regression does have one obvious disadvantage:
+\item Ridge regression has one empirical disadvantage:
 unlike subset selection, which will generally select models
 that involve just a subset of the variables, ridge regression
-will include all $p$ predictors in the final model.
+will include all $p$ predictors in the final model (with potentially small but nonzero values).
 \medskip
 \item The Lasso is a relatively recent alternative to ridge
 regression that overcomes this disadvantage. The lasso
@@ -564,12 +564,15 @@ $\| \beta \|_1 = \sum | \beta |$.
 \includegraphics[scale=0.30]{IMG/Lasso.jpg}
 \end{figure}
 \vspace{-0.5cm}
-\centering Coefficient estimates are plotted as a function of $\lambda$.
+\centering Lasso regression example output: \\coefficient estimates are plotted as a function of $\lambda$.
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Lasso regression}
+
 \begin{itemize}
-\item As with ridge regression, the lasso shrinks the coefficient
+\item LASSO: Least Absolute Shrinkage and Selection Operator
+\medskip
+\item As with ridge regression, lasso shrinks the coefficient
 estimates towards zero.
 \medskip
 \item In the case of the lasso, the $\ell_1$ penalty has the
