@@ -628,6 +628,7 @@ $$\min \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0
          \! + \lambda \sum_{j=1}^p 
          \left( \alpha |\beta_j| + (1-\alpha) \hat{\beta}_j^2 \right) \right]
 $$
+\small
 \begin{itemize}
 \item \textbf{Lasso penalty} encourages sparse solutions (in terms of coefficients), yet it is somewhat indifferent to the choice among a set of strong but correlated regressors.
 \smallskip
@@ -635,6 +636,7 @@ $$
 \smallskip
 \item \textbf{Elastic net penalty} is a compromise (combined method). The second term of the penalization element encourages highly correlated features to be averaged, while
 the first term encourages a sparse solution in the coefficients of these averaged features.
+\item Minimizer follows from Zou and Hastie, (2005). Other penalty specifications are possible (e.g. general $\lambda_1$ and $\lambda_2$ can be applied).
 \end{itemize}
 \end{frame}
 %------------------------------------------------
