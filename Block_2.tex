@@ -687,7 +687,7 @@ The following discussion uses PCA-based approach.
 \begin{itemize}
 \item Stepwise regression, ridge and lasso involve fitting linear regression models (by OLS or by parameter shrinkage) using the original predictors: $x_1, x_2, \dots , x_p$.
 \medskip
-\item \textbf{Dimension reduction methods} transform the
+\item \textbf{Dimension reduction methods}\\ \medskip Transform the
 predictors and then fit a least squares model using the
 transformed variables:
 \begin{enumerate}
@@ -712,12 +712,34 @@ transformed variables:
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{PCA motivation \& example}
+\begin{itemize}
+    \item Consider a linear regression model:
+    $$
+    \textnormal{Sales} \leftarrow f(\textnormal{Ad Spending, Population})
+    $$
+    \vspace{-0.5cm}
+    \begin{itemize}
+        \item Say, Ad Spending and Population observations across CS units (cities) are highly correlated.
+        \item Using a ``composite'' regressor can improve prediction properties, if the composite is chosen well.
+    \end{itemize}
+    \medskip
+    \item Principal components are convenient linear combinations of regressors (conserve variance and are mutually orthogonal).
+    \begin{itemize}
+        \item With matrix $\bm{X}$ consisting of two variables, we can produce two principal components.
+        \item Total variance in $\bm{X}$ equals total variance in principal components. 
+        \item Ideally, most of the variance would be concentrated in the first principal component and we would be able to ignore the second component with minimum loss to predictive properties.
+        \item This can generate benefit in terms of the Variance vs. Bias trade-off. 
+    \end{itemize}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{PCA motivation \& example}
 \vspace{-0.3cm}
 \begin{figure}
 \includegraphics[scale=0.30]{IMG/PCAexample.jpg}
 \end{figure}
 \vspace{-0.3cm}
-\centering Sample dataset with 2 variables. Green line indicates the first principal component, $Z_1$. Along $Z_1$, data varies the most (out of all directions possible -- in 2D). Blue dashed line indicates $Z_2$ (most variability orthogonal to $Z_1$).
+\centering Sample dataset with 2 variables: Green line (NOT an OLS line) indicates the first principal component, $Z_1$. Along $Z_1$, data varies the most (out of all directions possible). Blue dashed line indicates $Z_2$ (most variability orthogonal to $Z_1$).
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{PCA motivation \& example}
@@ -726,7 +748,7 @@ transformed variables:
 \includegraphics[scale=0.42]{IMG/PCAexample2.jpg}
 \end{figure}
 \vspace{-0.1cm}
-\centering Sample dataset with 2 variables.  \\$Z_1$ minimizes the squared perpendicular distances to observed data. Data vary most along $Z_1$ (data most spread-out along $Z_1$). \\Values of $z_{i1} \in Z_1$ and $z_{i2} \in Z_2$ are shown as distances from ``zero'' (blue dot). Right panel/plot is rotated for readability.
+\centering Sample dataset with 2 variables:  \\$Z_1$ minimizes the squared perpendicular distances to observed data. Data vary most along $Z_1$ (data most spread-out along $Z_1$). \\Values of $z_{i1} \in Z_1$ and $z_{i2} \in Z_2$ are shown as distances from ``zero'' (blue dot). Right panel/plot: rotation of the left panel.
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{PCA motivation \& example}
@@ -735,7 +757,7 @@ transformed variables:
 \includegraphics[scale=0.40]{IMG/PCAExample3.pdf}
 \end{figure}
 \vspace{-2cm}
-\centering Sample dataset with 2 variables. First principal component is shown (on the $x$-axis) against \texttt{Population} and \texttt{Ad Spending} variables. \\Strong correlation is apparent in both plots, $ \rightarrow ~Z_1$ summarizes both series well and can be used as a single composite predictor for \texttt{Sales} \\(instead of the two observed regressors).
+\centering Sample dataset with 2 variables: First principal component is shown (on the $x$-axis) against \texttt{Population} and \texttt{Ad Spending} variables. \\Strong correlation is apparent in both plots, $ \rightarrow ~Z_1$ summarizes both series well and can be used as a single composite predictor for \texttt{Sales} \\(instead of the two observed regressors).
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{PCA motivation \& example}
@@ -744,7 +766,7 @@ transformed variables:
 \includegraphics[scale=0.40]{IMG/PCAExample4.pdf}
 \end{figure}
 \vspace{-2cm}
-\centering Sample dataset with 2 variables. Second principal component is shown (on the $x$-axis) against \texttt{Population} and \texttt{Ad Spending} variables. \\There is little relationship between $Z_2$ and the two regressors. \\Hence, $Z_1$ apparently summarizes both (strongly correlated) regressors well enough. 
+\centering Sample dataset with 2 variables: Second principal component is shown (on the $x$-axis) against \texttt{Population} and \texttt{Ad Spending} variables. \\There is little relationship between $Z_2$ and the two regressors. \\Hence, $Z_1$ apparently summarizes both (strongly correlated) regressors well enough. 
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Principal component analysis (PCA)}
@@ -892,13 +914,13 @@ $\textit{KMO}$-based variable selection:
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Principal component regression (PCR)}
-\textbf{PCR motivation:}\\
 \bigskip
 If we have many correlated original variables as regressors in a LRM, we can replace them with a small set of principal components that capture their joint variation.
 \medskip
 \begin{itemize}
-\item Variance-Bias tradeoff benefits
-\item Models unsuitable for LRM-like parameter interpretation
+\item[\ding{51}] Variance-Bias tradeoff benefits
+\medskip
+\item[\ding{55}] PCR-based models unsuitable for parameter interpretation\\ (no reasonable scale on the $\bm{z}_m$ vectors).
 \end{itemize}
 \end{frame}
 %------------------------------------------------
@@ -920,7 +942,7 @@ outperform OLS regression in terms of CV errors, etc.
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Principal component regression (PCR)}
-From equation/definition \eqref{PCR1}, we can write
+Note: from equation/definition \eqref{PCR1}, we can write
 $$ \sum_{m=1}^M \theta_m z_{im} 
 = \sum_{m=1}^M \theta_m \sum_{j=1}^p \phi_{jm} x_{ij} 
 = \sum_{j=1}^p \sum_{m=1}^M \theta_m \phi_{jm} x_{ij} 
@@ -953,8 +975,8 @@ subject to being uncorrelated with the first.
 \item And so on. 
 \end{itemize}
 \medskip
-\item The dependent variable is then regressed on few principal components, rather than many original regressors.\\ \medskip
-The optimal number of principal components can be assessed using cross validation.
+\item Dependent variable is then regressed on few principal components, rather than many original regressors.\\ \medskip
+\item The optimum number of principal components can be assessed using cross validation.
 \end{itemize}
 \bigskip
 \end{frame}
@@ -969,7 +991,7 @@ The optimal number of principal components can be assessed using cross validatio
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Principal component regression (PCR)}
-\textbf{PCR: final discussion}
+\textbf{PCR: potential problems}
 \medskip
 \begin{itemize}
 \item PCA identifies linear combinations (directions) that best
@@ -1021,7 +1043,7 @@ Note that with PLS, highest weights are on variables ($\bm{x}_j$) that are most 
 \includegraphics[scale=0.50]{IMG/PCAExample5.pdf}
 \end{figure}
 \vspace{-0.6cm}
-\centering Sample dataset with 2 variables. The first PLS direction (component) -- solid line -- is shown. Compare to the PCA/PCR first direction (component) -- dotted line (shown previously).
+\centering Sample dataset with 2 variables: The first PLS direction (component) -- solid line -- is shown. Compare to the PCA first component -- dotted line (follows from previous example).
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Partial least squares (PLS)}
@@ -1139,14 +1161,14 @@ Standard way to apply LRMs in situations where the relationship between a regres
 %---------------------------------------------
 \begin{frame}{Polynomial regression}
 \begin{itemize}
-    \item Mostly, we are not interested in exact values of coeffcients.\\
+    \item Often, we are not interested in exact values of coeffcients.\\
     Usually, we seek to obtain ``good'' fitted values for some $x_0$: \\ \smallskip 
     $\hat{f}(x_0) = \hat{\beta}_0 + \hat{\beta}_1 x_0 + \hat{\beta}_2 x_0^2 + \dots + \hat{\beta}_d x_0^d $\\ \smallskip 
     and we study the general  prediction properties (variance, bias) \\of  $\hat{f}(x_0)$.
     \smallskip
-    \item Either fix the $d$ at some low value (4 at most), or use cross-validation to choose $d$.
+    \item Choice of $d$: fix the $d$ at some low value (4 at most), \\or use cross-validation to choose $d$.
     \smallskip
-    \item Caveat: polynomials have notorious tail behavior -- bad for extrapolation.
+    \item Potential problem with predictions based on polynomial regressors: notoriously bad tail behavior -- not suitable for extrapolation.
     \smallskip 
     \item We can use polynomials for several separate regressors in a LRM: we just stack the variables into one $\bm{X}$ matrix (see GAMs next).
     
@@ -1212,7 +1234,9 @@ y_i =
 \medskip
 \begin{itemize}
     \item Here, we fit two different polynomials to the data.
-    \item For $K$ knots (cutpoints), we fit $K+1$ different polynomials.\\(i.e. with one knot, twice as much parameters are estimated) 
+    \smallskip
+    \item For $K$ knots (cutpoints), we fit $K+1$ different polynomials.
+    \smallskip
     \item Different $d$ are possible: $d=1~\rightarrow~$ piecewise linear function.
 \end{itemize}
 \end{frame}
@@ -1238,7 +1262,17 @@ Example: piecewise cubic polynomial with one knot:\\
 \subsection{Regression splines and smoothing splines}
 \begin{frame}{Regression splines - motivation}
 \centering
+\vspace{-0.2cm}
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.75\textwidth]{IMG/ISLR73.pdf}
+\end{figure}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Regression splines -- motivation}
+\centering
 Piecewise linear regression with one knot at $c_1$:\\
+(fitted values: the line is not continuous at $c_1$)\\
 \vspace{-0.2cm}
 \begin{figure}
   \centering
@@ -1267,8 +1301,9 @@ Piecewise linear ``continuous'' regression with one knot at $c_1$:\\
 $$ y_i = \beta_0 + \beta_1x_i + \beta_2\{1[x_i > c_1](x_i-c_1)\} + u_i$$
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Regression splines (linear spline)}
-\textbf{Linear spline:} fit regression line in each region of the predictor space, requiring continuity in each knot. Regression model with $K$ knots $\xi_k, k=1,\dots, K$ can be represented using \textcolor{blue}{basis functions} as follows:
+\begin{frame}{Regression splines -- linear splines}
+%\small 
+\textbf{Linear spline:} generalize previous example to multiple knots.\\ Fit regression line in each region of the predictor space, requiring ``continuity'' in each knot. Regression model with $K$ knots $\xi_k, k=1,\dots, K$ can be represented using \textcolor{blue}{basis functions} as follows:
 $$y_i = \beta_0 + \beta_1 \, b_1 (x_i) + \beta_2 \, b_2 (x_i) + \cdots  + \beta_{K+1} \, b_{K+1} (x_i) + u_i  $$
 where $b_k$ are the basis functions:\\
 \smallskip
@@ -1285,7 +1320,7 @@ where $b_k$ are the basis functions:\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Regression splines (cubic spline)}
+\begin{frame}{Regression splines -- cubic splines}
 \textbf{Cubic spline} with knots $\xi_k,~k=1,\dots, K$ is a piecewise cubic polynomial with continuous derivatives up to order 2 at each knot.\\
 \medskip
 Again we can represent this model with truncated power basis functions:
@@ -1306,16 +1341,7 @@ where:\\
 \medskip
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Regression splines (cubic spline)}
-\centering
-\vspace{-0.2cm}
-\begin{figure}
-  \centering
-  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.75\textwidth]{IMG/ISLR73.pdf}
-\end{figure}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Regression splines (cubic spline)}
+\begin{frame}{Regression splines -- cubic splines}
 \begin{itemize}
     \item Cubic spline uses $4+K$ d.f.
     \smallskip
@@ -1328,7 +1354,7 @@ where:\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Regression splines (natural spline)}
+\begin{frame}{Regression splines -- natural splines}
 \textbf{Natural cubic spline:} a cubic regression spline with additional boundary constraints:\\
 \smallskip
 \begin{itemize}
@@ -1343,28 +1369,9 @@ where:\\
 \end{figure}
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Regression splines (natural spline)}
-Example: For $K\!=\!4$ and using the truncated power bases of cubic splines $(X-\xi_k)_{+}^3 \,$, we can write:
-$$y_i = \beta_0 \, N_1 (x_i)  + \beta_1 \, N_2 (x_i) + \beta_2 \, N_3 (x_i) + \beta_3 \, N_4 (x_i) + u_i  $$\\
-\vspace{-0.2cm}
-where:\\
-\smallskip
-\qquad $N_1 (x_i) = 1$\, \hspace{3.5cm} ~($\beta_0$ is the intercept),\\
-\smallskip
-\qquad $N_2 (x_i) = x_i$\,,\\
-\smallskip
-\qquad $N_3 (x_i) = d_1(X)-d_{3}(X)$ \qquad \qquad (note that $N_3=N_{k+2}$),\\
-\smallskip
-\qquad $N_4 (x_i) = d_2(X)-d_{3}(X)$\\
-\medskip
-\qquad and $d_k(X)=\frac{(X-\xi_k)_{+}^3 \,-\, (X-\xi_K)_{+}^3}{\xi_K \,-\, \xi_k}$.\\
-\bigskip
-For basis functions, we only use knots up to $K\!-\!2$ (i.e. $\xi_1, \xi_2$ for $K\!=\!4$).
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Regression splines (natural spline)}
+\begin{frame}{Regression splines -- natural splines}
 General notation for natural cubic splines with $K$ knots:
-$$y_i = \beta_0 \, N_1 (x_i)  + \beta_1 \, N_2 (x_i) + \beta_2 \, N_{k+2} (x_i) + \cdots + \beta_{K-3} \, N_{K-2} (x_i) + u_i  $$\\
+$$y_i = \beta_1 \, N_1 (x_i)  + \beta_2 \, N_2 (x_i) + \beta_3 \, N_{k+2} (x_i) + \cdots + \beta_{K-2} \, N_{K-2} (x_i) + u_i  $$\\
 \vspace{-0.2cm}
 ~\,where:\\
 \smallskip
@@ -1381,7 +1388,24 @@ $$y_i = \beta_0 \, N_1 (x_i)  + \beta_1 \, N_2 (x_i) + \beta_2 \, N_{k+2} (x_i) 
 All basis functions $N_1,N_2,N_{k+2},\dots,N_{K-2}$ have $2^{nd}$ and $3^{rd}$ derivatives \\equal to zero for $X < \xi_1$ and for $X \geq \xi_K$.
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Regression splines (knot selection)}
+\begin{frame}{Regression splines -- natural splines}
+Example: For $K\!=\!4$ and using the truncated power bases of cubic splines $(X-\xi_k)_{+}^3 \,$, we can write:
+$$y_i = \beta_1 \, N_1 (x_i)  + \beta_2 \, N_2 (x_i) + \beta_3 \, N_3 (x_i) + \beta_4 \, N_4 (x_i) + u_i  $$\\
+\vspace{-0.2cm}
+where:\\
+\smallskip
+\qquad $N_1 (x_i) = 1$\, \hspace{3.5cm} ~($\beta_1$ is the intercept),\\
+\smallskip
+\qquad $N_2 (x_i) = x_i$\,,\\
+\smallskip
+\qquad $N_3 (x_i) = d_1(X)-d_{3}(X)$,\\
+\smallskip
+\qquad $N_4 (x_i) = d_2(X)-d_{3}(X)$\\
+\medskip
+\qquad and $d_k(X)=\frac{(X-\xi_k)_{+}^3 \,-\, (X-\xi_K)_{+}^3}{\xi_K \,-\, \xi_k}$.\\
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Regression splines -- knot selection}
 Where should we place the knots?\\
 \bigskip
 \begin{itemize}
@@ -1405,9 +1429,10 @@ Where should we place the knots?\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Smoothing splines (quick overview)}
+\begin{frame}{Smoothing splines -- overview}
 \begin{itemize}
-    \item Smoothing splines -- alternative approach to splines.\\
+    \item Smoothing splines -- alternative to cubic \& natural splines.\\ \smallskip
+    Essentially, a penalized natural cubic spline with $N$ knots \\(i.e. knot at each observation of the regressor).
     \bigskip
     \item Search for a function $g(x)$ that minimizes RSS and is smooth.
 \end{itemize} \medskip
@@ -1421,7 +1446,7 @@ $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda 
 \end{itemize}
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Smoothing splines (quick overview)}
+\begin{frame}{Smoothing splines -- overview}
 $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda \int g''(t)^2 \textit{dt}$$
 \begin{itemize}
     \item $g'(t)$ is the first derivative, measures slope of $g(t)$ at $t$.\\
@@ -1438,20 +1463,20 @@ $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda 
 \end{itemize}
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Smoothing splines (quick overview)}
+\begin{frame}{Smoothing splines -- overview}
 $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda \int g''(t)^2 \textit{dt}$$
 \begin{itemize}
     \item While $g$ can be any function, it may be shown that $\textnormal{RSS}(g,\lambda)$ has an explicit \& unique minimizer: natural cubic spline with $N$ knots at the unique values of $x_i,~i=1,2,\dots,N$. \\(more precisely, a penalized natural cubic spline with $N$ knots)
     \medskip
     \item With a suitable $\lambda$ parameter, the model is not overparameterized: \textcolor{blue}{effective degrees of freedom} used for estimation $(df_{\lambda})$ decrease from $N$ to 2 as $\lambda$ increases from 0 to $\infty$.
     \medskip
-    \item Cross-validation can be used to find $\lambda$ with the lowest cross-validated RSS (LOOC is computationally very efficient here).
-    \vspace{-0.3cm}
+    \item Cross-validation can be used to find $\lambda$ with the lowest cross-validated RSS.
+    \medskip
     \item For technical discussion of smoothing splines, see (\textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{ESL, ch. 5.4}}}).
 \end{itemize}
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Smoothing splines (quick overview)}
+\begin{frame}{Smoothing splines -- overview}
 \vspace{-0.4cm}
 \begin{figure}
   \centering
@@ -1505,10 +1530,10 @@ Local regression at $X = x_0$\\
     \item Span $s$ controls flexibility of the fit (can choose using CV).
 \end{itemize}
 \bigskip
-\textbf{Local regression: notes}\\
+\textbf{Local regression --  discussion}\\
 \smallskip
 \begin{itemize}
-    \item Local regression can be generalized to models with multiple regressors: the model is global in some regressors and local in others (time). Such model adapts to the most recently gathered observations.
+    \item Local regression can be generalized to models with multiple regressors: the model is global in some regressors and local in others (say, time). Such model adapts to the most recently gathered observations.
     \smallskip
     \item Local regression can be generalized to neighborhoods of higher dimensions (say, over $X_1$ and $X_2$). However, this approach does not extend easily to higher dimensions (beyond 3 or 4).
 \end{itemize}
@@ -1517,12 +1542,12 @@ Local regression at $X = x_0$\\
 \subsection{Generalized Additive Models (GAM)}
 \begin{frame}{Generalized Additive Models (GAM)}
 So far, polynomial and step regression, splines and local regression have been discussed as univariate regression models with $y_i \leftarrow f(x_i)$.\\
-\medskip GAMs extend multivariate LRMs by allowing non-linear functions\\ \& smoothers in each variable, while maintaining additivity (and easy interpretation for each regressor).\\ \medskip
+\medskip GAMs extend multivariate LRMs by allowing non-linear functions\\ \& smoothers in each variable, while maintaining additivity (and ceteris paribus interpretation for each regressor).\\ \medskip
 Multiple-regressor LRM:
 $$ y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip} + u_i~~~~~~~~~~~~~~~~~$$
 can be generalized to a GAM:
 $$ y_i = \alpha + \, f_1(x_{i1}) + \, f_2(x_{i2}) + \cdots + \, f_p(x_{ip}) + u_i$$ 
-where each $f_j(x_{ij})$ represents any convenient function of $x$: piecewise constant, linear, polynomial, spline, etc.
+where each $f_j(x_{ij})$ is representing some convenient function of $x$: piecewise constant, linear, polynomial, spline, etc.
 \end{frame}
 %---------------------------------------------
 \begin{frame}{GAM example}
