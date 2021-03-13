@@ -37,7 +37,7 @@
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
 
-\title[Spatial models]{Praktikum z ekonometrie} % The short title appears at the bottom of every slide, the full title is only on the title page
+\title[Block 3]{Praktikum z ekonometrie} % The short title appears at the bottom of every slide, the full title is only on the title page
 
 \author{VŠE Praha} % Your name
 \institute[4EK417] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
@@ -55,7 +55,7 @@
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}
-\frametitle{Outline} % Table of contents slide, comment this block out to remove it
+\frametitle{Spatial analysis \& spatial models -- Outline} % Table of contents slide, comment this block out to remove it
 \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
 \end{frame}
 %	PRESENTATION SLIDES
@@ -171,7 +171,7 @@ Spatial data: measurements and measurement scales
     \item \textbf{Generally, data vary continuously over space, but are measured only at discrete locations.} 
     \begin{itemize}
         \item To characterize spatial variables, spatial aggregation is necessary.
-        \item Aggregation of spatial variables may be just another source of bias and potential data mis-manipulation\\ 
+        \item Aggregation of spatial variables may be just another source of bias and potential data miss-manipulation\\ 
         Summary values are influenced by shape and scale of spatial units.\\
         Shape (administrative boundaries) may change over time.
     \end{itemize}
@@ -182,7 +182,7 @@ when collecting and analyzing spatial data
 Spatio-temporal data:
 \begin{itemize}
     \item Data that are location specific and repeated in time.
-    \item Each variable-observation has a location, time and value.
+    \item For each variable, observations have location, time and value.
     \item Similar methods for analysis, with an added time dimension \\(choice of sampling frequency, spatial panel data analysis)
 \end{itemize}
 \end{frame}
@@ -545,7 +545,8 @@ $$c_{ij}=
 		\item row/column 2: unit 2 is neigbor to units 1,3 (not 4)
 	\end{itemize}
 	\smallskip
-    \item Matrix $\bm{C}$ is symmetric (for $k$NN, transformations are available).
+    \item Matrix $\bm{C}$ can be symmetric (distance-based neighbors)\\
+    or asymmetric ($k$NN, observed labor-force flows, etc.).
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -570,7 +571,7 @@ $$
 	\item Usually, $\bm{W}$ is row-standadrized (to unity): 
 	$w_{ij} = \frac{c_{ij}}{\sum^N_{j=1} c_{ij}}$.
 	\smallskip
-	\item Binary (connectivity) indicators $c_{ij}$ may be generalized prior to standardization. Hence, instead of binary $c_{ij}$, we may use inverse distances (linear, squared, \dots) -- given assumed decay in spatial dependency over distance. \\ \medskip Validity of any such prior information (decay pattern) will influence subsequent analysis (spatial dependency tests, spatial regression models).
+	\item Connectivity indicators $c_{ij}$ may be generalized prior to standardization. Hence, instead of binary $c_{ij}$, we may use inverse distances: linear, squared, \dots depending on the assumed decay in spatial dependency over distance. \\ \medskip Validity of any such prior information (decay pattern) will influence subsequent analysis (spatial dependency tests, spatial regression models).
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -586,7 +587,7 @@ $$
 \end{bmatrix}
 $$
 \begin{itemize}
-	\item Each row of $\bm{W}$ ``provides'' weights for an expected value of an observed spatial variable $y_i$ -- weighted averages (fitted values) can be calculated as $\hat{\bm{y}} = \bm{Wy}$. For example:
+	\item Each row of $\bm{W}$ ``provides'' weights for an expected value of an observed spatial variable $y_i$ -- weighted averages (fitted values) can be calculated as $\hat{\bm{y}} = \bm{W \! y}$. For example:
 	\begin{align*}
 	\hat{y}_1 & =  \tfrac{1}{3} y_2 + \tfrac{1}{3} y_3 + \tfrac{1}{3} y_4 \\
 	&\dots \\
@@ -594,7 +595,7 @@ $$
 	\end{align*}
 	\item Observed values of variables can be used to predict corresponding values for neighboring spatial units.
 	\smallskip
-	\item In this context, $\hat{y}_i$ is often called \textit{spatial lag} of $y_i$.
+	\item In this context, $\hat{y}_i$ is often called \textbf{spatial lag} of $y_i$.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -610,7 +611,7 @@ $$
 \begin{itemize}
     \item Spatially autocorrelated processes are defined in terms of individual units and their interactions with neighbors. 
     \smallskip
-    \item Clearly, we can only assess the impact of neighboring units if such units are part of our sample. Hence, in spatial econometrics, we usually do not draw limited samples from a particular area.
+    \item Clearly, we can only assess (``use'') the impact of neighboring units if such units are part of our sample. Hence, in spatial econometrics, we usually do not draw limited samples from a particular area.
     \smallskip
     \item Instead, we work with data from adjacent units located in unbroken (``complete'') study areas.  
     \smallskip
@@ -768,33 +769,32 @@ Getis' $G^{\ast}$: spatial clusters and hotspot analysis\\
 \begin{columns}[T] % align columns
 \begin{column}{.48\textwidth}
 \vspace{-0.1cm}
-$\blacksquare~~$Parametric models \\
+$\blacksquare~~$ Parametric models \\
 \vspace{-0.1cm}
         \begin{itemize}
         \item Spatial dependency \\is estimated (different functional forms exist).
         \end{itemize}
         \smallskip
-$\blacksquare~~$Getis' filter (``nonparametric'')\\
+$\blacksquare~~$ Getis' filter (``nonparametric'')\\
 \vspace{-0.1cm}
         \begin{itemize}
-        \item Spatial dependency is removed from observed variabled (like s.a. in TS).
+        \item Spatial dependency is removed from observed variables (like s.a. in TS).
         \end{itemize}
         \smallskip
-$\blacksquare~~$Semiparametric approach \\
+$\blacksquare~~$ Semiparametric approach \\
 \vspace{-0.1cm}
         \begin{itemize}
         \item Observed variables are not transformed, spatial dependency is modelled separately, using map patterns/processes.
         \end{itemize}
 
 \end{column}%
-\hfill%
 \begin{column}{.48\textwidth}
 \vspace{-0.1cm}
 \begin{figure}
   \centering
   \includegraphics[trim=0cm 3cm 1cm 2cm, clip=true, width=1\textwidth]{IMG/sp_GDP_Choropleth.pdf}\vspace{-0.4cm}\tiny{{\caption{Relative GDP per capita \\ (100 = EU avg.), 2016, NUTS 2. Source: Eurostat (\texttt{nama\_10r\_lfu3rt})}}}
 \end{figure}
-\end{column}%
+\end{column}
 \end{columns}
 \end{frame}
 %---------------------------------------------------------------------
