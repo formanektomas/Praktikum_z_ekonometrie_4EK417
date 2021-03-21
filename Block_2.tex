@@ -1370,8 +1370,8 @@ where:\\
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Regression splines -- natural splines}
-General notation for natural cubic splines with $K$ knots:
-$$y_i = \beta_1 \, N_1 (x_i)  + \beta_2 \, N_2 (x_i) + \beta_3 \, N_{k+2} (x_i) + \cdots + \beta_{K-2} \, N_{K-2} (x_i) + u_i  $$\\
+A natural cubic spline with $K$ knots is represented by $K$ basis functions. General notation for natural cubic splines with with knots $\xi_k,~k=1,\dots, K$:
+$$y_i = \beta_1 \, N_1 (x_i)  + \beta_2 \, N_2 (x_i) + \beta_3 \, N_{2+k} (x_i) + \cdots + \beta_{K} \, N_{2+K-2} (x_i) + u_i  $$\\
 \vspace{-0.2cm}
 ~\,where:\\
 \smallskip
@@ -1379,9 +1379,9 @@ $$y_i = \beta_1 \, N_1 (x_i)  + \beta_2 \, N_2 (x_i) + \beta_3 \, N_{k+2} (x_i) 
 \smallskip
 \qquad $N_2 (x_i) = x_i$\,,\\
 \smallskip
-\qquad $N_{k+2} (x_i) = d_k(X)-d_{K-1}(X)\,$,\\
+\qquad $N_{2+k} (x_i) = d_k(X)-d_{K-1}(X)\,$,\\
 \qquad $\cdots$\\
-\qquad $N_{K-2} (x_i) = d_{K-2}(X)-d_{K-1}(X)\,$,\\
+\qquad $N_{K} (x_i) = d_{K-2}(X)-d_{K-1}(X)\,$,\qquad (note that $K=2+K-2$),\\
 \bigskip
 \qquad and $d_k(X)=\frac{(X-\xi_k)_{+}^3 - \, (X-\xi_K)_{+}^3}{\xi_K \,-\, \xi_k}$.\\
 \bigskip
