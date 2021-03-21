@@ -1343,7 +1343,7 @@ where:\\
 %---------------------------------------------
 \begin{frame}{Regression splines -- cubic splines}
 \begin{itemize}
-    \item Cubic spline use $4+K$ d.f.
+    \item Cubic splines use $4+K$ d.f.
     \smallskip
     \item Cubic spline has continuous derivatives up to order 2 at each knot.\\
     $d$-spline (degree-$d$ spline) has continuous derivatives up to degree $d-1$ at each knot.
@@ -1383,7 +1383,7 @@ $$y_i = \beta_1 \, N_1 (x_i)  + \beta_2 \, N_2 (x_i) + \beta_3 \, N_{2+[k=1]} (x
 \qquad $N_{2+k} (x_i) = d_k(X)-d_{K-1}(X)\,$,\qquad ~~applies to all $k=1,\dots,K\!-\!2$.\\
 \qquad $\vdots$\\
 \smallskip
-\qquad $N_{K} (x_i) = d_{K-2}(X)-d_{K-1}(X)\,$,\qquad (note that $K=2+K-2$),\\
+\qquad $N_{K} (x_i) = d_{K-2}(X)-d_{K-1}(X)\,$,\qquad (note that $N_K=N_{2+[k=K-2]}$),\\
 \bigskip
 \qquad where $d_k(X)=\frac{(X-\xi_k)_{+}^3 - \, (X-\xi_K)_{+}^3}{\xi_K \,-\, \xi_k}$.\\
 \bigskip
@@ -1433,8 +1433,7 @@ Where should we place the knots?\\
 %---------------------------------------------
 \begin{frame}{Smoothing splines -- overview}
 \begin{itemize}
-    \item Smoothing splines -- alternative to cubic \& natural splines.\\ \smallskip
-    Essentially, a penalized natural cubic spline with $N$ knots \\(i.e. knot at each observation of the regressor).
+    \item Smoothing splines -- alternative to cubic \& natural splines. \\Essentially, a penalized natural cubic spline with (up to) $N$ knots (knot is placed at each unique observation of regressor.)
     \bigskip
     \item Search for a function $g(x)$ that minimizes RSS and is smooth.
 \end{itemize} \medskip
@@ -1468,7 +1467,7 @@ $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda 
 \begin{frame}{Smoothing splines -- overview}
 $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda \int g''(t)^2 \textit{dt}$$
 \begin{itemize}
-    \item While $g$ can be any function, it may be shown that $\textnormal{RSS}(g,\lambda)$ has an explicit \& unique minimizer: natural cubic spline with $N$ knots at the unique values of $x_i,~i=1,2,\dots,N$. \\(more precisely, a penalized natural cubic spline with $N$ knots)
+    \item While $g$ can be any function, it may be shown that $\textnormal{RSS}(g,\lambda)$ has an explicit \& unique minimizer: natural cubic spline with $N$ knots at unique values of $x_i,~i=1,2,\dots,N$. \\(more precisely, a penalized natural cubic spline with $N$ knots)
     \medskip
     \item With a suitable $\lambda$ parameter, the model is not overparameterized: \textcolor{blue}{effective degrees of freedom} used for estimation $(df_{\lambda})$ decrease from $N$ to 2 as $\lambda$ increases from 0 to $\infty$.
     \medskip
@@ -1519,6 +1518,8 @@ Local regression at $X = x_0$\\
     $$\min : ~~~ \sum_{i=1}^n K_{i0} (y_i - \beta_0 - \beta_1 x_i)^2 \,.$$
     \item Fitted value at $x_0$ is given by $\hat{f}(x_0) = \hat{\beta}_0 + \hat{\beta}_1 x_0\,$.
 \end{enumerate}
+\bigskip
+$\Rightarrow$ repeat for all $x \in X$ observations in the dataset.
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Local regression}
