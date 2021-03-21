@@ -1333,17 +1333,17 @@ where:\\
 \smallskip
 \qquad $h_3 (x_i) = x_i^3$\,,\\
 \smallskip
-\qquad $h_4 (x_i) = (x_i-\xi_1)_{+}^3 \,$ \qquad (note that $h_4 = h_{k+3}$)\,,\\
+\qquad $h_4 (x_i) = (x_i-\xi_1)_{+}^3 \,$, \qquad \qquad / note: $h_4 = h_{[k=1]+3}$,\\
 \smallskip
-\qquad $h_5 (x_i) = (x_i-\xi_2)_{+}^3 \,$ ,\\
-\qquad $\cdots$ \\
+\qquad $h_5 (x_i) = (x_i-\xi_2)_{+}^3 \,$, \qquad \qquad / generally: $h_{k+3}$ for $k=1,\dots,K$,\\
+\qquad $~~\vdots$ \\
 \qquad $h_{K+3} (x_i) = (x_i-\xi_K)_{+}^3 \,$.\\
 \medskip
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Regression splines -- cubic splines}
 \begin{itemize}
-    \item Cubic spline uses $4+K$ d.f.
+    \item Cubic spline use $4+K$ d.f.
     \smallskip
     \item Cubic spline has continuous derivatives up to order 2 at each knot.\\
     $d$-spline (degree-$d$ spline) has continuous derivatives up to degree $d-1$ at each knot.
