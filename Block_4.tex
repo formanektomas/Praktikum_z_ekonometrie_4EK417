@@ -41,7 +41,7 @@
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
-\title[LME]{Praktikum z ekonometrie - Týden 7 \\Mixed effect models} % The short title appears at the bottom of every slide, the full title is only on the title page
+\title[Block 4]{Praktikum z ekonometrie} % The short title appears at the bottom of every slide, the full title is only on the title page
 \author{VŠE Praha} % Your name
 \institute[4EK417] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
 {
@@ -57,7 +57,8 @@
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}
-\frametitle{Content} % Table of contents slide, comment this block out to remove it
+\frametitle{Block 4 – Linear mixed models – Outline
+} % Table of contents slide, comment this block out to remove it
 \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
 \end{frame}
 
@@ -66,59 +67,39 @@
 %---------------------------------------------------------------------
 \section{Introduction}
 \begin{frame}{Introduction}
-\textbf{Linear mixed model (LME)} is a generalization of linear model
+\small 
+\textbf{Linear mixed model (LME)} is a generalization of linear (panel) model
 \medskip
 \begin{itemize}
-\item Standard linear model looks like:\\
-\medskip
-$y_i = \beta_0 + \beta_1 x_{i1} + \dots + \beta_k x_{ik} + \varepsilon_i$\\
-\smallskip
-where $ 1 \leq i \leq n$.
-\medskip
-\item In a mixed model, we often use a nesting (hierarchical) \\structure: there are multiple groups (or panels or individuals) of observations. For example:\\ \medskip
-$y_{ij}$ - observation for $i$-th individual within $j$-th group. \\ \smallskip
-\medskip
-Also, we can group the observations at multiple levels:\\
-\medskip
-$y_{tij}$ - time period $t$, country $i$, region $j$ (group of countries).\\ 
+\item LMEs \& longitudinal data: repeated measurements are performed on each individual. Several individuals are sampled. Number of observations may differ across individuals (for longitudinal \& hierarchical data).\\ \smallskip
+\quad $y_{ti}$ - observation at time $t$ for $i$-th individual. \\  
+\quad $y_{ij}$ - $i$th observation of $j$th individual (if time aspect secondary). \\ 
 \bigskip
-\item Please note that indices are ordered (left to right) from individual to highest level of aggregation. (alternative notations/orderings exist in literature).
+\item Nesting (hierarchical) data structure: CS data with multiple groups of observations (individuals, panels, etc.). \\ \smallskip
+\quad $y_{ij}$ - observation for $i$-th company within $j$-th region. \\ 
+\quad $y_{ij}$ - observation for $i$-th student within $j$-th school. \\ 
+\medskip
+We can group observations at multiple levels:\\
+\smallskip
+\quad $y_{tij}$ - time period $t$, region/county $i$, state $j$.\\ 
+\bigskip
+\item Please note that indices are ordered (left to right) from individual to highest level of aggregation. (alternative orderings exist in literature).
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Introduction}
-\textbf{Linear mixed model (LME)} is a generalization of linear model
+\textbf{Linear mixed model (LME)} 
 \medskip
 \begin{itemize}
-\item $y_{ij}$ - e.g. observation for $i$-th individual within $j$-th group. \\ \smallskip
-\medskip
-$y_{ij} =  \bm{x}_{ij}\bm{\beta} + \varepsilon_{ij}$\\
-\medskip
-where $ 1 \leq i \leq n_j$ and the number of individuals may differ across groups $j$.\\ \bigskip
-\item One or more $\beta$-coefficients can vary across groups.
-\bigskip
 \item Nested/hierarchical structure of the LME model:
 \medskip
 \begin{itemize}
     \item Individuals $i$ (Level 1) are nested
     \medskip
-    \item within $j$ groups (Level 2).
+    \item within $j$ groups (Level 2) with group-specific observation sizes $n_j$.
 \end{itemize}
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Introduction}
-\textbf{Longitudinal data and LME models}
 \medskip
-\begin{itemize}
-\item Longitudinal data: series of measurements are performed on each individual (say, over time). Several individuals are sampled. \\ \medskip
-
-$y_{ij}$ - $i$-th observation of the $j$-th individual. \\ \smallskip
-\medskip
-$y_{ij} =  \bm{x}_{ij}\bm{\beta} + \varepsilon_{ij}$\\
-\medskip
-where $ 1 \leq i \leq n_j$: the number of observations $i$ can differ across individuals $j$.\\ \bigskip
-\item One or more $\beta$-coefficients can vary across individuals.
+\item One or more $\beta$-coefficients can vary across groups.
 \bigskip
 \item The same nesting/hierarchical framework applies to longitudinal data and their LME-based analysis:
 \medskip
@@ -136,18 +117,23 @@ where $ 1 \leq i \leq n_j$: the number of observations $i$ can differ across ind
 \begin{itemize}
 \item Mixed models are called ``mixed'', because the $\beta$-coefficients are \\a mix of fixed parameters and random variables
 \smallskip 
+\item Terms ``fixed'' and ``random'' have specific meaning for LMEs:\\ \smallskip
 \begin{itemize}
-\item The terms ``fixed'' and ``random'' are being used in the statistics-biostatistics sense.
-\item A fixed coefficient is an unknown constant to be estimated.
-\item A random coefficient is one which varies from group to group \\(longitudinal data: by individuals\dots at Level 2).
+\item A fixed coefficient is an unknown constant to be estimated. \smallskip
+\item A random coefficient varies from ``group'' to ``group''. \\By ``group'', we mean Level 2 aggregation, if data have 2 levels. \\ - coefficients vary among schools (Level 2), not within school.\\
+- coeffs. vary across individuals (Level 2), not over time (Level 1).
 \end{itemize}
 \smallskip
 \item  LME models can have some added complexity:
 \smallskip
 \begin{itemize}
-\item Correlations between different random coefficients.
-\smallskip
 \item Multiple levels of nesting
+\smallskip
+\item Crossed random effects
+\smallskip
+\item Correlations between different random coefficients.
+
+
 \end{itemize}
 \smallskip
 \item Random  coefficients are not estimated, but they can be predicted.
@@ -158,34 +144,36 @@ where $ 1 \leq i \leq n_j$: the number of observations $i$ can differ across ind
 \begin{frame}{LME model example}
 \begin{itemize}
 \item Data: \\London Education Authority Junior School Project
-dataset, \\48 different schools ($j$) and 887 different students ($i$). \\We predict 5th-year math scores.
+dataset, \\- we have 887 students ($i$) in 48 different schools ($j$),\\- we want to predict 5th-year math scores.
 \medskip
-\item We may start by simply ignoring the school grouping \\(\textit{single-mean} model):
-$$ y_{ij} = \beta_0~+~\varepsilon_{ij}, \quad i=1,\dots,n_j,  \quad j=1,\dots, M,  \quad \varepsilon_{ij} \sim N(0,\sigma^2_{\varepsilon}) $$
+\item We may start by ignoring the school grouping and any possible regressors -- we have a trivial model (\textit{single-mean} model):
+$$ \texttt{math5}_{ij} = \beta_0~+~\varepsilon_{ij}, \quad i=1,\dots,n_j,  \quad j=1,\dots, M,  \quad \varepsilon_{ij} \sim N(0,\sigma^2_{\varepsilon}) $$
 
-where $y_{ij}$ is the observed $\texttt{math5}_{ij}$ score of $i$-th student at school $j$,\\
-$\beta_0$ is the mean math score across our population (being sampled).\\
+where $M=48$ and $n_j$ differ among schools, $\texttt{math5}_{ij}$ is the observed  math score of $i$-th student at school $j$,
+$\beta_0$ is the mean math score across our population (being sampled) and
 $\varepsilon_{ij}$ is the individual deviation from overall mean.\\
 \medskip
-In our sample, $M=48$ and $n_j$ may differ among schools.\\ 
-\medskip
-Population mean math score \& the variance of $\varepsilon$ are estimated by taking their sample counterparts.
+Population mean math score \& the variance of $\varepsilon$ are estimated by taking their sample counterparts. Any ``school effect'' is ignored.\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{LME model example - continued}
 \begin{itemize}
 \item The school effect (differences among schools) may be incorporated in the model by allowing the mean of each school to be represented by a separate parameter (\textit{fixed effect})
-$$ y_{ij} = \beta_{0j}~+~\varepsilon_{ij}, \quad i=1,\dots,n_j,  \quad j=1,\dots, M,  \quad \varepsilon_{ij} \sim N(0,\sigma^2_{\varepsilon}) $$
+$$ \texttt{math5}_{ij} = \beta_{0j}~+~\varepsilon_{ij}, \quad i=1,\dots,n_j,  \quad j=1,\dots, M,  \quad \varepsilon_{ij} \sim N(0,\sigma^2_{\varepsilon}) $$
 
-where $\beta_{0j}$ is the school-specific mean math score.\\
+where $\beta_{0j}$ is the school-specific mean math score and
 $\varepsilon_{ij}$ is the individual deviation from the school-specific mean.\\
 \smallskip
 \begin{itemize}
-\item \Rko syntax: \texttt{lm(math5 $\sim$ School-1, data=...)}
-\item $M=48$ school-specific intercepts are estimated,
-\item \textbf{Estimated intercepts only model the specific sample}  of schools, while -usually- the main interest is in the population from which the sample was drawn.
-\item Regression does not provide an estimate of the between-school variability, which is also of central interest.
+\item \Rko syntax: \texttt{lm(math5 $\sim$ School-1, data=...)}\\
+$\Rightarrow~M=48$ school-specific intercepts are estimated.\\
+\medskip
+\item Using the terminology of LME, $\beta_{0j}$ are fixed. Hence:\\
+\begin{itemize}
+    \item \textbf{Estimated intercepts only model (refer to) the specific sample}  of schools, while -usually- the main interest is in the population from which the sample was drawn. \smallskip
+    \item Regression does not provide an estimate of the between-school variability, which is also of central interest.
+\end{itemize}
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -200,15 +188,15 @@ $\varepsilon_{ij}$ is the individual deviation from the school-specific mean.\\
 \smallskip
 $y_{ij} = \textcolor{orange}{\beta_0} + ( \beta_{0j} \textcolor{orange}{-\beta_0}) + \varepsilon_{ij}$,\\
 \medskip
-now, the \textit{random effect} $u_{0j}$ can replace the the \textit{fixed effect} $\beta_{0j}\,$:\\
+now, the \textit{random effect} $u_{0j} = \beta_{0j} - \beta_0$ can be used to replace the the \textit{fixed effect} $\beta_{0j}\,$:\\
 \medskip
-$\beta_{0j} = \beta_0 + u_{0j} ~~~ \Rightarrow ~~~ u_{0j} = \beta_{0j} - \beta_0.$ Hence:\\  \smallskip
+$u_{0j} = \beta_{0j} - \beta_0 ~~~ \Rightarrow ~~~ \beta_{0j} = \beta_0 + u_{0j}.$ Hence:\\  \smallskip
 \textcolor{blue}{$ y_{ij} = \beta_{0} + u_{0j} + \varepsilon_{ij}.$}\\
 \medskip
 \item $u_{0j}$ is the school-specific deviation from overall mean $\beta_0$. \\
 $u_{0j}$ is a random variable, specific for the $j$-th school, with zero
 mean and unknown variance $\sigma^2_u$. \\ 
-$u_{0j}$ is a \textit{random effect}, because it is associated with the particular sample units (schools are selected at random from the population).\\ 
+$u_{0j}$ is a \textit{random effect}, associated with the particular sample units (schools are selected at random from the population).\\ 
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -219,13 +207,13 @@ $$ y_{ij} = \beta_{0} + u_{0j} + \varepsilon_{ij}, \qquad u_{0j} \sim N(0,\sigma
 and we assume $u_{0j}$ are $iid$ and independent from $\varepsilon_{ij}$.\\
 \smallskip
 \begin{itemize}
-\item Observations in the same school share the same random effect $u_{0j}$,\\ hence they are (positively) correlated with \textit{corr} = $\sigma^2_u \, / (\sigma^2_u + \sigma^2_{\varepsilon})$.
-\smallskip 
+\item Observations within the same school share the same random effect $u_{0j}$, hence are (positively) correlated with \textit{corr} = $\sigma^2_u \, / (\sigma^2_u + \sigma^2_{\varepsilon})$ \\ (see ICC on next slide).
+\medskip
 \item This \textit{random effects} model has three parameters: $\beta_{0},~ \sigma^2_u$ and $\sigma^2_{\varepsilon}$. (regardless of $M$, the number of schools).
-\smallskip 
-\item Note that the \textit{random effect} $u_{0j}$ ``looks like'' a parameter, but we are interested in estimating $\sigma^2_u$.
-\smallskip 
-\item However, upon observed data (and estimated model), we do make predictions for $\hat{u}_j$.
+\medskip
+\item Note that the \textit{random effect} $u_{0j}$ ``looks like'' a coefficient, but we are interested in estimating $\sigma^2_u$.
+\medskip
+\item However, upon observed data (and estimated model), we do make predictions using fitted values of $\hat{u}_j$.
 \end{itemize}
 \end{itemize}
 \end{frame}
