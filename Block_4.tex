@@ -217,23 +217,6 @@ and we assume $u_{0j}$ are $iid$ and independent from $\varepsilon_{ij}$.\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{LME model: ICC}
-\begin{itemize}
-\item \textbf{ICC:} Intra class correlation in a LME regression model: \qquad
-$$ \textnormal{ICC}=\frac{\sigma^2_u}{\sigma^2_u + \sigma^2_{\varepsilon}} $$
-\begin{itemize}
-    \item Describes how strongly units in the same group are ``correlated''.
-    \item While interpreted as a type of correlation, ICC operates on groups, rather than paired observations.
-    \item See \textcolor{blue}{\underline{\href{https://en.wikipedia.org/wiki/Intraclass_correlation}{https://en.wikipedia.org/wiki/Intraclass\_correlation}}} for formal definition \& relation between ICC and actual correlation.
-\end{itemize}
-\medskip
-\item Example \\ \medskip
-$\texttt{math5}_{ij} = \beta_{0} + \beta_1 \, \texttt{math3}_{ij} + u_{0j} + \varepsilon_{ij},$\\ \medskip
-where $\sigma^2_u = \textnormal{var}(u_{0j})$ and $\sigma^2_{\varepsilon} = \textnormal{var}(\varepsilon_{ij})$.\\ \smallskip
-Here, $\textnormal{ICC}$  measures ``correlation'' between \texttt{math5}  observations (randomly chosen) within a given school.
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
 \begin{frame}{LME model with random intercept and fixed slope}
 \begin{itemize}
 \item Exogenous regressors can be used in LMEs (like in LRMs).\\
@@ -251,6 +234,23 @@ $ \texttt{math5}_{ij} = \beta_{0} + \beta_1 \, \texttt{math3}_{ij} + u_{0j} + \v
 \item Slope of the regression line for each school is fixed at $\beta_1$.\\
 \dots \texttt{math3} has a \textit{fixed effect}.
 \end{itemize}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LME model: ICC}
+\small
+\begin{itemize}
+\item \textbf{ICC:} Intra class correlation in a LME regression model: \qquad
+$$ \textnormal{ICC}=\frac{\sigma^2_u}{\sigma^2_u + \sigma^2_{\varepsilon}} $$
+\begin{itemize}
+    \item Describes how strongly units in the same group are ``correlated''.
+    \item While interpreted as a type of correlation, ICC operates on groups, rather than paired observations. See \textcolor{blue}{\underline{\href{https://en.wikipedia.org/wiki/Intraclass_correlation}{Wikipedia}}} for formal definition \& relation between ICC and actual correlation.
+\end{itemize}
+\medskip
+\item Example: \qquad $\texttt{math5}_{ij} = \beta_{0} + \beta_1 \, \texttt{math3}_{ij} + u_{0j} + \varepsilon_{ij},$\\ \medskip
+\qquad \qquad \qquad ~where $\sigma^2_u = \textnormal{var}(u_{0j})$ and $\sigma^2_{\varepsilon} = \textnormal{var}(\varepsilon_{ij})$.\\ \smallskip
+\medskip
+\item Here, $\textnormal{ICC}$  measures ``correlation'' between \texttt{math5}  observations (randomly chosen) within a given school.\\ \smallskip \textbf{Note:} ICC has another useful interpretation. Say, ICC = 0.6 in our $\texttt{math5}_{ij}$ example. Hence, differences between schools explain 60\% of variance ``left over'' after the variance explained by fixed effects \\(i.e. by $\texttt{math3}_{ij}$).
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
