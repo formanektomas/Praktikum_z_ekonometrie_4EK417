@@ -10,32 +10,29 @@
 % CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%----------------------------------------------------------------------------------------
-%	PACKAGES AND THEMES
-%----------------------------------------------------------------------------------------
-
 \documentclass{beamer}
+
 \mode<presentation> {
 \usetheme{Madrid}
 \usefonttheme{serif} 
-\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all}
+\setbeamertemplate{navigation symbols}{} 
 }
+%\usepackage{caption}
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{color}
-\usepackage[czech]{babel}
+%\usepackage[czech]{babel}
+\usepackage{smartdiagram}
 \usepackage{lmodern}  
 \usepackage{rotating}
 \usepackage{scrextend}
 \usepackage{pifont}
 \usepackage{hyperref}
-\usepackage{pifont}
 \usepackage{bm}
-
+\newcommand{\Ms}[2]{\bm{#1}_{#2}}
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -56,1612 +53,1700 @@
 \begin{frame}
 \titlepage % Print the title page as the first slide
 \end{frame}
-
+%---------------------------------------------------------------------
 \begin{frame}
-\frametitle{Block 2 -- Model selection -- Outline} % Table of contents slide, comment this block out to remove it
+\frametitle{Block 2: Spatial analysis \& spatial models -- Outline} % Table of contents slide, comment this block out to remove it
 \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
 \end{frame}
-
-%---------------------------------------------
-\section{Model selection}
-\begin{frame}{Theoretical basis for model selection algorithms}
-
+%	PRESENTATION SLIDES
+%---------------------------------------------------------------------
+\section{Introduction}
+\begin{frame}{Introduction}
 \end{frame}
-%---------------------------------------------
-\subsection{Theoretical approach: specific-to-general, general-to-specific}
-\begin{frame}{Alternative approaches to econometric modeling}
-Simple-to-general approach\\
-\vspace{0.3cm}
-\begin{itemize}
-\item Traditional approach to econometric modeling
-\vspace{0.3cm}
-\item Starts with formulation of the simplest model consistent with the relevant economic theory.
-\vspace{0.3cm}
-\item If this initial model proves unsatisfactory, it is improved in some way – adding or changing variables, using different estimators etc.
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Alternative approaches to econometric modeling}
- Criticism  of the simple-to-general approach\\
-\begin{itemize}
-\vspace{0.3cm}
-\item Revisions to the simple model are carried out arbitrarily and simply reflect investigator's prior beliefs: danger of always finding what you want to find.
-\vspace{0.3cm}
-\item It is open to accusation of data mining: researchers usually presents just the final model (true significance level is problematic).
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Alternative approaches to econometric modeling}
-General-to-specific approach\\
-\medskip
-\begin{itemize}
-\item Professor Hendry, London School of Economics \\started this approach in the 80ies.
-\medskip
-\item It starts with formulation of a very general and maybe quite complicated model.
-\medskip
-\item Starting model contains a series of simpler models, nested within it as special cases. 
-\medskip
-\item These simpler models should represent all the alternative economic hypotheses that require consideration.
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Alternative approaches to econometric modeling}
-General-to-specific approach\\
-\vspace{0.3cm}
-\begin{itemize}
-\item General model must be able to explain existing data and be able to satisfy various tests of misspecification.
-\vspace{0.3cm}
-\item What follows is simplification search (testing-down procedure). Through parameter restrictions, we test nested models against the containing model. If the nested model does not pass the tests, we can reject the whole branch of sub-nested models.
-\vspace{0.3cm}
-\item If we find more non-nested models satisfying tests, we can compare those (using information criteria, etc.).
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Alternative approaches to econometric modeling}
-Advantages of the general-to-specific approach\\
-\vspace{0.3cm}
-\begin{itemize}
-\item ``Data mining''  present in this approach is transparent (for all to see) and it is carried out in a systematic manner that avoids worst data mining problems. 
-\vspace{0.3cm}
-\item Researcher usually reports both the initial general model and all steps involved so it is possible to get some idea about the true significance levels.
-\vspace{0.3cm}
-\item Supporters of this approach stress the importance of both testing final models against new data and the ability of the model to provide adequate out-of-sample forecasts.
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Model selection basics - repetition from previous courses}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Variance vs. Bias trade-off - repetition}
-Population equation example: $~y = \textnormal{sin}(x)+u$
-\vspace{-1cm}
+%---------------------------------------------------------------------
+\begin{frame}{Introduction - spatial analysis}
 \begin{figure}
-\includegraphics[angle=270,scale=0.35]{IMG/VarBias.pdf}
+	\includegraphics[width=.9\textwidth]{IMG/sp_auto2.PNG}
 \end{figure}
 \end{frame}
-%---------------------------------------------
-\begin{frame}{Train sample \& Test sample - repetition}
-
-Suppose we fit a model $\hat{f}(\bm{x})$ to some training data $\textnormal{Tr}=\left\lbrace y_i, \bm{x}_i \right\rbrace _1 ^n$ and we wish to see how well it performs.
-
-\begin{itemize}
-\item We could compute $\textit{MSE}$ over $\textnormal{Tr}$:
-$$ \textit{MSE}_{\textnormal{Tr}} = \frac{1}{n}
-   \sum_{i \in \textnormal{Tr}}
-   \left[y_i - \hat{f}(\bm{x}_i) \right]^2 $$
-\end{itemize}
-
-When searching for the ``best'' model by minimizing $ \textit{MSE}$, the above statistic would lead to over-fit models.
-\vspace{0.3cm}
-\begin{itemize}
-\item Instead, we should (if possible) compute the $ \textit{MSE}$ using fresh test
-data $\textnormal{Te}=\left\lbrace y_i, \bm{x}_i \right\rbrace _1 ^m$:
-$$ \textit{MSE}_{\textnormal{Te}} = \frac{1}{m}
-    \sum_{i \in \textnormal{Te}}
-   \left[y_i - \hat{f}(\bm{x}_i) \right]^2 $$
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Variance vs. Bias trade-off - repetition}
-\vspace{-0.5cm}
-$$\textnormal{E}(\textit{MSE}_0)
-   = \textit{var}(\hat{f}(\bm{x}_0))
-   + [\textit{Bias\,}(\hat{f}(\bm{x}_0))]^2
-   + \textnormal{var}(\varepsilon_0)$$\\
-\begin{figure}
-\includegraphics[angle=0,scale=0.30]{IMG/biasvariance.png}
-\end{figure}
-\small{This is an illustration, $\textnormal{var}(\varepsilon_0)$ not shown explicitly. \\(lies at the /asymptotic/ minima of Variance and $\textnormal{Bias}^2$)}\\
-\small{
-\begin{itemize}
-    \item Variance refers to the amount by which $\hat{f}(\bm{x}_0)$ would change if we estimate it using different training data sets.   
-    \item Bias is introduced by approximating real-life DGP by simple model.
-    \item Derivation of the formula is complex, see eg. \textcolor{blue}{\underline{\href{https://stats.stackexchange.com/questions/204115/understanding-bias-variance-tradeoff-derivation}{information here}}}
-\end{itemize}}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{$k$-Fold Cross Validation - repetition}
-\begin{itemize}
-\item Training error ($\textit{MSE}_{\textnormal{Tr}}$) can be calculated easily. 
-\item However, $\textit{MSE}_{\textnormal{Tr}}$ is not a good approximation for the $\textit{MSE}_{\textnormal{Te}}$ (out-of sample predictive properties of the model).
-\item Usually, $\textit{MSE}_{\textnormal{Tr}}$ dramatically underestimates $\textit{MSE}_{\textnormal{Te}}$.
-\end{itemize}
-\bigskip
-Cross-validation is based on re-sampling (similar to bootstrap).\\
-\medskip
-Repeatedly fit a model of interest to samples formed from the training set \& make ``test sample'' predictions, in order to obtain additional information about predictive properties of the model.\\
-\end{frame}
-%---------------------------------------------
-\begin{frame}{$k$-Fold Cross Validation - repetition}
-\begin{itemize}
-  \item In $k$-Fold Cross-Validation ($k$FCV), the original sample is randomly partitioned into $k$ roughly equal subsamples (divisibility). 
-  \item Of the $k$ subsamples, a single subsample is retained as the test sample, and the remaining $(k-1)$ subsamples are used as training data. 
-  \item The cross-validation process is then repeated $k$ times (the $k$ folds), with each of the $k$ subsamples used exactly once as the test sample. 
-  \item The $k$ results from the folds can then be averaged to produce a single estimation -- the cross-validated error. 
-  \item $k = 5$ or $k=10$ is commonly used.
-  \item Sometimes, $k$FCV process is repeated ($R$-times -- say, 100) to get distribution of the cross-validated error term.
-\end{itemize}  
-\end{frame}
-%------------------------------------------------
-\begin{frame}{$k$-Fold Cross Validation - repetition}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial analysis}
 \begin{center}
-$k$FCV example for CS data \& $k=5$: \\
-(random sampling, no replacement)
-\begin{figure}
-\includegraphics[width=0.7\linewidth]{IMG/kFCV2.pdf}
-\end{figure}
-\vspace{-1cm}
-In TS, a similar ``Walk forward'' test procedure may be applied.
+    \smartdiagramset{planet color=orange!60, distance planet-satellite = 2.2cm}
+    \smartdiagram[connected constellation diagram]{Spatial \\analysis,
+      Theory, Data , Software \\ \texttt{R}, Spatial info}
 \end{center}
 \end{frame}
-%------------------------------------------------
-\begin{frame}{$k$-Fold Cross Validation - repetition}
-$ \textit{CV}_{(k)}= \frac{1}{k}\displaystyle\sum_{s=1}^{k} \textit{MSE}_s \,,$
-\vspace{0.3cm}
-\\where:
-\begin{itemize}
-\item [~~] $\textit{CV}_{(k)}$ is the $k$-fold \textit{CV} estimate,
-\item [~~] $k$ is the number of folds used (e.g. 5 or 10),
-\item [~~] $\textit{MSE}_s = \frac{1}{m_s} \sum_{i \in C_s}^{}(y_i - \widehat{y}_i)^2 $ 
-\item [~~] $m_s$ and $C_s$ refer to test sample  observations for each \\of the $k$FCV steps.
-\end{itemize}
-\vspace{0.3cm}
-As we evaluate predictions from two or more models, 
-\\we look for the lowest $\textit{CV}_{(k)}$. 
+%---------------------------------------------------------------------
+\begin{frame}{Spatial analysis}
+\begin{center}
+    \smartdiagram[descriptive diagram]{
+    {Theory, {Spatial statistics, \\spatial econometrics, \\assumptions \& models.}},
+    {Data, {Macro/micro economics, \\socio-demographics, \\ecology, \& other fields.}},
+    {\texttt{R}, {Syntax, libraries, data handling, plotting, model estimation}.},
+    {Spatial info, {Maps, spatial polygons, spatial coordinates, \\(specific type of data)}.},
+}
+\end{center}
 \end{frame}
-%---------------------------------------------
-\begin{frame}{Comparison of estimation methods / models}
-\textbf{Comparison of models/methods (besides \textbf{\textit{k}FCV methods} ):} 
-\begin{equation} \notag
+%---------------------------------------------------------------------
+\begin{frame}{Introduction - spatial analysis}
+Methods of quantitative spatial analysis:\\
+\bigskip
+\begin{itemize}
+    \item Visualization \\Maps, graphical display
+    \bigskip
+    \item Data exploration \& descriptive methods \\Tools to broadly look at spatial patterns\\
+    Spatial statistics (semivariogram)\\
+    Interpolation (inverse distance weights, krigging)
+    \bigskip
+    \item Econometric modeling \\Fitting models, testing hypotheses, formalizing spatial dependence, discerning spatial effects from other factor (e.g. macroeconomic)
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Introduction - spatial analysis}
+ What are spatial data?\\
+\bigskip
+\begin{itemize}
+    \item Data that are location speciffic and that vary in space.
+    \medskip
+    \item Referenced by a spatial location $\bm{s}$ (usually 2D),  \\$\bm{s} = (x; y)$; $x$ is longitude (easting) and $y$ is latitude (northing). \\ \medskip
+    May also be referenced by a zip code, county or state ID.
+    \medskip
+    \item Data that are close together in space (time) are often more alike than those that are far apart.
+    \medskip
+    \item Tobler's first law of geography: \\ ``Everything is related to everything else, but near things are more related than distant things.''
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{History of spatial analysis: 1854 -- London -- cholera}
+\vspace{-0.5cm}
+\begin{figure}
+	\includegraphics[width=.65\textwidth]{IMG/sp_cholera.eps}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{History of spatial analysis: 1854 -- London -- cholera}
+ Dr. John Snow: Early spatial analysis\\
+\medskip
+\begin{itemize}
+    \item In August 1854, there was a major Cholera outbreak in the Soho neighbourhood of London, UK. There were 127 cholera related deaths around the area.
+    \smallskip
+    \item At the time, germ theory (microorganisms causing disease) was not generally accepted. Dr. J. Snow was a MD, pioneer of germ theory and a statistician.
+    \smallskip
+    \item Dr. John Snow spoke to local residents and mapped where cholera cases occurred. As a result of his map, he was able to pinpoint the public water pump on Broad Street as the source of contaminated water causing the cholera outbreak.
+    \smallskip
+    \item Dr. Snow used statistics to find a relationship between water sources and cholera cases and subsequently found out that the waterworks company supplying water to Broad Street pump was taking water from a sewage polluted area of the Thames river.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{History of spatial analysis: 1935 -- field experiments}
+\vspace{-0.5cm}
+\begin{figure}
+	\includegraphics[width=.8\textwidth]{IMG/sp_Fisher.jpg}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{History of spatial analysis: 1935 -- field experiments}
+ R.A. Fisher: Early spatial analysis\\
+\medskip
+\begin{itemize}
+    \item R.A. Fisher was probably the first to recognize implications of spatial dependency for statistical analysis.
+    \smallskip
+    \item In his work on design of experiments in agricultural science, he wrote (Fisher, 1935, p. 66):\\
+    ``After choosing the area we usually have no guidance beyond the widely verified fact that patches in close proximity are commonly more alike, as judged by the yield of crops, than those which are further apart.''
+    \smallskip
+    \item Observed spatial variability, i.e. field-to-field variability, was largely due to physical properties of the soil and environmental properties of the field. He avoided the confounding of treatment effects with plot effect with the introduction of randomization.
+    \smallskip
+    \item Fisher's solution was to eliminate spatial dependency bias by localizing the crops under scrutiny into randomly assigned blocks.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\section{Spatial stochastic processes}
+\begin{frame}{Spatial stochastic processes}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Measuring spatial variables}
+Spatial data: measurements and measurement scales
+\begin{itemize}
+    \item \textbf{Generally, data vary continuously over space, but are measured only at discrete locations.} 
+    \begin{itemize}
+        \item To characterize spatial variables, spatial aggregation is necessary.
+        \item Aggregation of spatial variables may be just another source of bias and potential data miss-manipulation\\ 
+        Summary values are influenced by shape and scale of spatial units.\\
+        Shape (administrative boundaries) may change over time.
+    \end{itemize}
+    \item Scale, consistency and relevance should be carefully considered
+when collecting and analyzing spatial data
+\end{itemize}
+\medskip
+Spatio-temporal data:
+\begin{itemize}
+    \item Data that are location specific and repeated in time.
+    \item For each variable, observations have location, time and value.
+    \item Similar methods for analysis, with an added time dimension \\(choice of sampling frequency, spatial panel data analysis)
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Measuring spatial distances}
+Distances ($d$) can be defined in a variety of ways, yet the following technical conditions should always apply (invariant to spatial translation, i.e. ``shift''):\\
+\medskip
+\begin{enumerate} 
+\item[1] $d(\bm{s}_i, \bm{s}_j) = d(\bm{s}_j, \bm{s}_i)$ \\ \smallskip (symmetry) 
+\medskip
+\item[2] $d(\bm{s}_i, \bm{s}_i) = 0$  \\ \smallskip (dist. between a point and itself is zero) 
+\medskip
+\item[3] $d(\bm{s}_i, \bm{s}_j) \leq d(\bm{s}_i) + d(\bm{s}_j)$  \\ \smallskip (triangle inequality; 
+$d(\bm{s}_i)$ is the distance from origin) 
+\end{enumerate}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Measuring spatial distances}
+\small{\textbf{Euclidean distances}, measured between two point in the ``ordinary'' Euclidean space. In 2D, the Euclidean distance ($L_2$ norm) is defined as 
+$$
+d(\bm{s}_i, \bm{s}_j) = \sqrt[]{(s_{ix}-s_{jx})^2+(s_{iy}-s_{jy})^2}\,,
+$$
+where the $x$ and $y$ subscripts handle planar coordinates. For smaller distances, the computational simplicity is attractive.\\
+\medskip
+\textbf{Great circle distances} - for larger distances, planar projection accumulates non-negligible errors. The shortest path between two points on a sphere (given their longitudes and latitudes): 
+$$
+d(\bm{s}_i, \bm{s}_j) = 2r \, \arcsin \,
+ \sqrt{ \sin^2 \left( \frac{\phi_j-\phi_i}{2} \right)
+       + \cos(\phi_i) \cos(\phi_j)
+       \sin^2 \left( \frac{l_j-l_i}{2} \right) }\,,
+$$
+where $r$ is the radius of the sphere, $\phi_1$ and $\phi_2$ are the latitudes of $\bm{s}_i$ and $\bm{s}_j$ in radians, $l_i$ and $l_j$ are the longitudes (in radians). Its only an approximation when applied to the Earth, which is not a perfect sphere (correct within a 0.5\%; alternative: Vicenty's formulae).\\
+\medskip
+\textbf{Manhatan distances} - $L_1$ norm, a function on a fixed grid.
+}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+For a generic location $\bm{s}$ given by a vector of $d$ coordinates in a $d$-dimensional Euclidean space, spatial stochastic process \\(``random field'') is often denoted as
+$$ Z(\bm{s}): \bm{s} \in D \subseteq \mathbb{R}^d \, .$$
+\vspace{-0.5cm}
+\begin{itemize}
+    \item Typically, $d=2$ for most economic and econometric applications, $d=3$ is often used in fields such as geology or astronomy. 
+    \smallskip
+    \item $D$ is a fixed finite set of $N$ spatial locations $\bm{s}_1, \bm{s}_2, \dots, \bm{s}_N$. 
+    \smallskip
+    \item Individual $\bm{s}_i$ units are points in space (say, with GPS-based latitude and longitude coordinates). Sometimes, such points can be associated with non-zero surface area elements.
+    \item Much like in time-series analysis, the individual realizations of a spatial stochastic process -- random field -- are often denoted \\$z(\bm{s}_i)$ or, simply, $z_i$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+Stationarity is a common assumption: a spatial process under scrutiny repeats itself over the domain $D$. If we translate the entire set of coordinates by $\bm{h}$ -- a specific distance in a specified direction, the stochastic process and its features remain unchanged.\\
+\medskip
+\textbf{Strong stationarity} of a random filed: We start with a finite-dimensional distribution: 
+$$F_{\bm{s}_1, \dots,\bm{s}_m }(z_1,\dots, z_m) = P[Z(\bm{s}_1) \leq z_1, Z(\bm{s}_2) \leq z_2, \dots, Z(\bm{s}_m) \leq z_m] \, .$$  
+Strong stationarity $\leftrightarrow$~$F$ is invariant under spatial translation $\bm{h}$. Unlike $d_{ij}$ (Euclidean distance between two spatial units $\bm{s}_i$ and $\bm{s}_j$), \\$\bm{h}$ is an orientated distance ``shift'' (spatial translation) vector. \\For strong stationarity:
+\begin{equation*}
 \begin{aligned}
- \textnormal{Mallow's} \hspace{0.2cm}
- \textit{C}_{p} &=\frac{1}{n}(\textit{RSS}+2d\widehat{\sigma}^2), \\
- \smallskip
- \textit{AIC} &=\frac{1}{n\widehat{\sigma}^2}(\textit{RSS}+2d\widehat{\sigma}^2), \\
- \smallskip
- \textit{BIC} &=\frac{1}{n}(\textit{RSS}+\log(n)d\widehat{\sigma}^2),
- \end{aligned}
-\end{equation}
-
-\begin{itemize}
-\item where $d$ is the number of regressors and $n$ is the sample size.
-\item Model selection: find a model where a statistic is minimized.
-\item $\log(n)>2$ $(n\!>\!7)$ $\Rightarrow$ generally, $\textit{BIC}$ penalizes complexity more.
-\item When comparing models, $\textit{AIC} \propto C_p$;~~ \\$\textit{AIC}$ and $\textit{BIC}$ may contradict 
-\item If $\widehat{\sigma}^2$ is an unbiased estimate of ${\sigma}^2$, then $C_p$ is an unbiased estimate of test $\textit{MSE}$ (training error is adjusted by a factor proportional to the number of basis functions used).
-\item Sometimes, models are selected using $C_p$ (\textit{AIC}) instead $k$FCV.
-\end{itemize}
+& P \left[Z(\bm{s}_1) \leq z_1, Z(\bm{s}_2) \leq z_2, \dots, Z(\bm{s}_m) \leq z_m \right] \\
+& = P \left[Z(\bm{s}_1+\bm{h}) \leq z_1, Z(\bm{s}_2+\bm{h}) \leq z_2, \dots, Z(\bm{s}_m+\bm{h}) \leq z_m \right] \, .
+\end{aligned} 
+\end{equation*}
 \end{frame}
-%------------------------------------------------
-\begin{frame}{Model selection algorithms}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+\vspace{-0.2cm}
+\textbf{Weak  stationarity} (also called second order stationarity) assumes that the first two moments exist, are invariant (and finite) and covariance only depends on spatial translation (orientated distance) $\bm{h}$:
+\begin{equation*}
+\begin{aligned}  
+E[Z(\bm{s})] &= \mu \,, \\
+\textnormal{var}[Z(\bm{s})] & = \sigma^2 \,, \\
+\textnormal{cov} [Z(\bm{s}+\bm{h}),Z(\bm{s})] = C(\bm{s}+\bm{h}, \bm{s}) & = C(\bm{h}) \,.
+\end{aligned} 
+\end{equation*}
+As autocovariance is a function of $\bm{h}$ only (under weak st.), \\for any spatial points $\bm{s}_i$ and $\bm{s}_j$ such that $\bm{s}_i -\bm{s}_j = \bm{h}$, we can write: 
+\begin{equation*}
+\textnormal{cov} \left[ Z(\bm{s}_i), Z(\bm{s}_j) \right] = C(\bm{s}_i - \bm{s}_j) = C(\bm{h}) \,.  
+\end{equation*}
+Covariogram $C(\bm{h})$ is the covariance between two spatial units, separated by $\bm{h}$. For $\bm{h} = \bm{0}$, it simply describes variance: 
+$$\textnormal{cov}\,[Z(\bm{s}+\bm{0}),Z(\bm{s})] =  C(\bm{0}) = \textnormal{var}\,[Z(\bm{s})]\,.$$
+Under weak dependency, covariance disappears with growing distance: 
+$$C(\bm{h}) \rightarrow 0~\textnormal{as}~||\bm{h}|| \rightarrow \bm{\infty}$$.
 \end{frame}
-%---------------------------------------------
-\begin{frame}{Model selection algorithms - Introduction}
-\begin{itemize}
-\item \textbf{Subset Selection:} We identify a subset of the $p$ predictors
-that we believe to be related to the response. We then fit a
-model using least squares on the reduced set of variables.
-\medskip
-\item \textbf{Shrinkage:} We fit a model involving all $p$ predictors, but
-the estimated coefficients are shrunken towards zero
-relative to the least squares estimates. This shrinkage (also
-known as regularization) has the effect of reducing variance
-and can also perform variable selection.
-\medskip
-\item \textbf{Dimension Reduction:} We project the $p$ predictors into a
-$M$-dimensional subspace, where $M < p$. This is achieved by
-computing $M$ different linear combinations, or projections,
-of the variables. Then these $M$ projections are used as
-predictors to fit \\a linear regression model by least squares.
-
-\end{itemize}
-
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+\textbf{Intrinsic stationarity} is less restrictive than weak (second order) stationarity and it is defined in terms of first differences. \\
+\smallskip
+A spatial process is intrinsically stationary if the difference between two observed spatial points is weakly stationary: 
+\begin{equation*} 
+\begin{aligned}  
+E[Z(\bm{s}+\bm{h})-Z(\bm{s})] &= 0 \,, \\
+\textnormal{var}[Z(\bm{s}+\bm{h})-Z(\bm{s})] & = 2\gamma(\bm{h}) \,,
+\end{aligned} 
+\end{equation*}
+where $2\gamma(\bm{h}) \geq 0$ is the variogram. Generally, $2\gamma(\bm{h})$ increases with growing oriented distance $\bm{h}$. \\
+\smallskip
+The two types of relaxed stationarity are related: weak stationarity implies intrinsic stationarity but not vice versa. For weakly stationary spatial processes (where $E(Z(\bm{s}+\bm{h}))=E(Z(\bm{s}))=\mu$) the variogram simplifies to: 
+\begin{equation*}
+2\gamma(\bm{h}) = E \left[ \left( Z(\bm{s}+\bm{h}) - Z(\bm{s})  \right)^2 \right],
+\end{equation*}
+i.e. to the expected squared difference between two observed realizations of a spatial stochastic process. 
 \end{frame}
-%------------------------------------------------
-\begin{frame}
-\frametitle{Model selection algorithms - Subset selection}
-
-\begin{enumerate}
-  \item Best subset selection
-  \medskip
-  \item Forward stepwise selection
-  \medskip
-  \item Backward stepwise selection
-  \medskip
-  \item Algorithms combining Forward and Backward stepwise selection\\
-  \medskip
-  \item Comparison \& computational complexity of methods
-\end{enumerate}
-
-
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+\textbf{Semivariogram} is denoted as $\gamma(\bm{h})$ and it equals to half the variogram. \\ \smallskip Since  $2\gamma(\bm{h})$ is calculated as expectation of a square, $\gamma(\bm{h}) \geq 0$ for both weakly and intrinsically stationary random fields. \\ \smallskip Also, at $\bm{h}=\bm{0}$, $\gamma(\bm{0}) = 0$ because 
+$$ E \left[ \left( Z(\bm{s}_i) - Z(\bm{s}_i)  \right)^2 \right]=0 \textnormal{~for~} \forall \, i\,.$$
+Variogram (semivariogram) is a generalization of the covariogram $C(\bm{h})$ and under weak stationarity, the two functions are related by: 
+\begin{equation*}
+    \gamma(\bm{h}) = C(\bm{0}) - C(\bm{h})\,.
+\end{equation*}
+If a stationary stochastic process has no spatial dependency at all \\(i.e. $C(\bm{h})=0$ for $\bm{h}\not =\bm{0}$), the semivariogram is constant: $\gamma(\bm{h}) = \textnormal{var}[Z(\bm{s})]$ everywhere, except for $\bm{h}=\bm{0}$, where $\gamma(\bm{0})=0$. 
 \end{frame}
-
-%------------------------------------------------
-\subsection{Stepwise model selection}
-\begin{frame}
-\frametitle{Best subset selection}
-
-\begin{enumerate}
-  \item Let $\mathcal{M}_0$ denote the \textit{null model}, which contains no predictors.
-  \\Say, $y_i=\beta_0+u_i$
-  \\ This model simply predicts the sample mean for $y$.
-  \item For $k= 1,2, \dots ,p$:
-  \begin{enumerate}[{(a)}]
-  \item Fit all $\binom{p}{k}$ models that contain exactly $k$ predictors.
-  \item Choose the best among these $\binom{p}{k}$ models and call it $\mathcal{M}_{k}$.
-        \\Here, best is defined as having smallest $\textit{RSS}$ or highest $R^2$.
-\end{enumerate}
-  \item Select a single best model from among $\mathcal{M}_0, \dots, \mathcal{M}_{p}$, using crossvalidated prediction error, $C_p$, $\textit{AIC}, \textit{BIC}$ or adj. $R^2$.
-
-\vspace{0.8cm}
-
-\item[] Note: $\binom{p}{k}=\frac{p!}{k!(p-k)!}$ \hspace{0.5cm}; \hspace{0.5cm} $\sum_{k=1}^p \binom{p}{k} = 2^p$
-
-\end{enumerate}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+\textbf{Isotropic spatial process} may be defined through a semivariogram:\\  $$\gamma(\bm{h})=\gamma(||\bm{h}||)=\gamma(d).$$ 
+Isotropy means that the semivariogram depends only on the distance $d$ between two points and not on direction.\\ \medskip The lack of isotropy -- anisotropy -- means the semivariogram depends on direction as well as distance. \\ \medskip To assess and test anisotropy, we can estimate and plot directional semivariograms (shown next).
 \end{frame}
-
-
-%------------------------------------------------
-\begin{frame}
-\frametitle{Forward stepwise selection}
-
-\begin{enumerate}
-  \item Let $\mathcal{M}_0$ denote the \textit{null model}, which contains no predictors.
-  \\Say, $y_i=\beta_0+u_i$
-  \item For $k=0,1, \dots , \left(p-1\right)$:
-\begin{enumerate}[{(a)}]
-  \item Consider all $(p-k)$ models that augment the predictors in $\mathcal{M}_k$ with one additional predictor.
-  \item Choose the best among these $(p-k)$ models, and call it $\mathcal{M}_{k+1}$.
-        \\Here, best is defined as having smallest $\textit{RSS}$ or highest $R^2$.
-\end{enumerate}
-  \item Select a single best model from among $\mathcal{M}_0, \dots, \mathcal{M}_{p}$, using crossvalidated
-prediction error, $C_p$, $\textit{AIC}, \textit{BIC}$ or adj. $R^2$.
-\end{enumerate}
-
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+\textbf{Empirical semivariogram} \\
+To perform empirical analysis of distance-based data correlations, we construct the so called empirical semivariogram. First, we divide the distances observed over the domain $D$ into $K$ conveniently chosen intervals: 
+$$I_1 = (0, d_1 ], \, I_2 = (d_1, d_2 ], \, \dots \, , \, I_K = (d_{K-1}, d_K ] \, .$$
+Here, $d_1$ is the maximum distance within the $I_1$ interval and $d_K$ is the maximum distance observed over the field of data. \\ \smallskip The intervals can be proportional in terms of distance or in terms of sets of observation pairs allocated to each interval (to adjust for unevenly spaced observations). \\ \smallskip Note that distances are determined by $d$ (distance magnitudes) only -- here, we do not use the orientated distances $\bm{h}$.
 \end{frame}
-
-%------------------------------------------------
-\begin{frame}
-\frametitle{Backward stepwise selection}
-
-\begin{enumerate}
-  \item Let $\mathcal{M}_p$ denote the \textit{full model}, which contains all $p$ predictors.
-  \\Say, $y_i=\beta_0+ \beta_1x_{i1} + \dots + \beta_px_{ip} + u_i$
-  \item For $k=p, (p-1), \dots , 1$:
-\begin{enumerate}[{(a)}]
-  \item Consider all $k$ models that contain all but one of the predictors
-in $\mathcal{M}_k$, for a total of $(k-1)$ predictors.
-  \item Choose the best among these $k$ models, and call it $\mathcal{M}_{k-1}$.
-        \\Here, best is defined as having smallest $\textit{RSS}$ or highest $R^2$.
-\end{enumerate}
-  \item Select a single best model from among $\mathcal{M}_0, \dots, \mathcal{M}_{p}$, using crossvalidated
-prediction error, $C_p$, $\textit{AIC}, \textit{BIC}$ or adj. $R^2$.
-\end{enumerate}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}
-\frametitle{Computational complexity of methods}
-
-\textbf{Computational complexity:} 
+%---------------------------------------------------------------------
+\begin{frame}{Spatial stochastic processes}
+\textbf{Empirical semivariogram} is calculated using the following formula:
+\begin{equation*}
+\hat{\gamma}(d_k) = 
+\frac{1}{2N(d_k)} \sum_{N(d_k)}[Z(\bm{s}_i)-Z(\bm{s}_j)]^2 \,,
+\end{equation*}
+where $N(d_k)$ is the number of distinct observation pairs in the interval $I_k$ and $\hat{\gamma}(d_k)$ is the semivariogram estimate for its corresponding group (interval) of distances. \\
 \bigskip
-\begin{itemize}
-  \item Forward stepwise and Backward stepwise selection:
-        \\ Greedy algorithms.
-        \\$[1+p(p+1)/2] \approx p^2$ models need to be estimated and evaluated.
-        \\Computationally feasible even for high $p$ values (large sets of potential regressors).
-        \vspace{0.5cm}
-  \item Best subset selection
-        \\ $2^p$ models to be estimated and evaluated.
-        \\ For large $p$, enormous search space can lead to over-fitting and high variance of the coefficient estimates.
-\end{itemize}
+Usually, we fit a convenient parametric function (exponential, spherical, Gaussian, etc.) to the estimated $\hat{\gamma}(d_k)$ values (shown next). \\ 
 \bigskip
-Forward \& Backward stepwise [and their hybrid combinations] tends to do well in practice (are efficient algorithms), yet they do not guarantee finding the best possible model out of all $2^p$ possible models.
+The main goal of empirical semivariogram construction is to estimate and visualize the spatial autocorrelation structure of the observed stochastic process.
 \end{frame}
-
-%------------------------------------------------
-\section{Model selection \& regularization}
-\begin{frame}{Parameter shrinkage methods}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Parameter shrinkage methods}
-
-\textbf{Subset selection:} 
-\begin{itemize}
-\item Subset of predictors is retained, the rest is discarded.
-\item Generates interpretable models. 
-\item Selection is a discrete process: variables are either retained or discarded. \item Predictions based on models with different regressor-sets often exhibits high variance. Shrinkage
-methods are more continuous, and don’t suffer as much from high
-variability.
-\end{itemize}
-\medskip
-\textbf{Shrinkage methods} 
-\begin{itemize}
-    \item More continuous -- do not suffer as much from high variability.
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\subsection{Penalized regression}
-\begin{frame}{Parameter shrinkage methods}
-\textbf{Ridge regression and lasso regression}
-\medskip
-\begin{itemize}
-\item As an alternative to stepwise selection, we can fit a model containing all $p$ predictors using a shrinkage method that constrains or regularizes the coefficient estimates and/or that shrinks the coefficient estimates towards zero.
-\medskip
-\item It may not be immediately obvious why such constraints or shrinkage
-should improve the fit -- details discussed next.
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Ridge regression}
-Consider a LRM: $y = f( x_1, x_2, \dots , x_p)$
-
-\begin{itemize}
-\item \textbf{OLS} can be used to estimate $\bm{\hat{\beta}}=(\hat{\beta}_0, \hat{\beta}_1, \dots , \hat{\beta}_p)^{\prime}$ by minimizing the RSS:
-$$\underset{\bm{\beta}}{\textnormal{min:~}} RSS = \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
-         - \sum_{j=1}^p  \hat{\beta}_j x_{ij}      \right)^2 $$
-\bigskip
-\item \textbf{Ridge regression} $\bm{\hat{\beta}}$ estimates 
-are the values that minimize:
-$$\underset{\bm{\beta}}{\textnormal{min:~}} \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0  - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
-\! + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right]
-\, = \, \left( RSS + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right)$$
-where $\lambda > 0$ is a tuning parameter, determined separately.
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Ridge regression}
-$$\underset{\bm{\beta}}{\textnormal{min:~}}
-\left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
-- \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
-\! + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right]
-$$
-\begin{itemize}
-\item Seeks $\beta_j$ estimates that fit the data well, by making the RSS small.
-\smallskip
-\item Shrinks regression coefficients by imposing penalty on their size. \\The ridge coefficients minimize a penalized RSS
-\smallskip
-\item $\lambda \geq 0$ is a complexity parameter -- controls the amount of shrinkage:
-larger value of $\lambda$ $~\rightarrow~$ greater amount of shrinkage.
-\smallskip
-\item $(\lambda \sum_{j=1}^p  \hat{\beta}_j^2)$ is a shrinkage penalty.\\It is small when $\hat{\beta}_1, \dots, \hat{\beta}_p$ are close to zero and/or $\lambda$ is small. \\High $\lambda$ shrinks $\hat{\beta}_j$ towards zero and towards each other.
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Ridge regression}
-$$\underset{\bm{\beta}}{\textnormal{min:~}} 
-\left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
-- \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
-\! + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right]
-$$
-\begin{itemize}
-\item With many correlated variables in a LRM (i.e. under multicollinearity),
-OLS-estimated coefficients can become poorly determined and exhibit high variance.
-\begin{itemize}
-    \item A wildly large positive coefficient on one variable can be canceled by a
-similarly large negative coefficient on the correlated regressor(s).
-    \item Even with small sampling changes, such coefficients may change dramatically (even in sign).
-\end{itemize}
-\item By imposing a ridge penalty (size constraint on the coefficients), this problem is alleviated.
-\smallskip
-\item For predictive properties, selecting a good value for $\lambda$ is critical; cross-validation is used.
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Ridge regression - example}
-\vspace{-1cm}
+%---------------------------------------------------------------------
+\begin{frame}{Empirical semivariogram}
 \begin{figure}
-\includegraphics[scale=0.30]{IMG/Ridge.jpg}
+	\includegraphics[width=.9\textwidth]{IMG/sp_svgm.jpg}
 \end{figure}
-\vspace{-0.5cm}
-\centering Ridge regression example output: \\coefficient estimates are plotted as a function of $\lambda$.
 \end{frame}
-
-%------------------------------------------------
-\begin{frame}{Ridge regression}
+%---------------------------------------------------------------------
+\begin{frame}{Empirical semivariogram}
+Three main features of an estimated empirical semivariogram: 
 \begin{itemize}
-\item The standard OLS coefficient estimates are scale equivariant: multiplying $x_j$ by a constant $c$ simply leads to a scaling of the least squares coefficient estimates by a factor of $1/c$.\\ 
-\medskip Regardless of predictor scaling, $ ( \hat{\beta}_j x_{ij} )$ will remain the same.
-\medskip
-\item In contrast, the ridge regression coefficient estimates can change substantially when multiplying a given predictor (or other predictors!) by a constant, due to the sum of squared coefficients term in the penalty part of the ridge regression objective function.
-\medskip
-\item Therefore, it is best to apply ridge regression after standardizing the predictors, using the formula:
-$$ \widetilde{x}_{ij} = \frac{x_{ij}}{
-   \sqrt[]{\frac{1}{n} \sum_{i=1}^n (x_{ij} - \overline{x}_j)^2 \,}}
-   \quad \textnormal{hence} \quad
-   \textnormal{s.d.}(\widetilde{x}_{j}) = 1\, ; \, j=1,2,\dots$$
- 
+\item \textit{Nugget} (nugget effect) describes the micro-scale variations or measurement errors in data. Theoretically, at zero distance, $\gamma(0)=0$. However, two factors play a role here: First, $\gamma(d_1)$ is estimated over the $N(d_1)$ set of pairs, i.e. for the first interval where $ d_{ij} \in (0, d_1 ]$. Second, fitting the empirical semivariogram curve to observed values often causes the non-zero nugget.
+\smallskip
+\item \textit{Sill} amounts to $\lim_{d \to \infty} \gamma(d)$. The sill corresponds to variance of the stochastic field at distances where spatial dependency (which reduces $\gamma(d)$) no longer applies. $\lim_{d \to \infty} \gamma(d) = C(\bm{0}) = \textit{var}[Z(\bm{s})]$.
+\smallskip
+\item \textit{Range} is the spatial distance (if any) beyond which the data are not autocorrelated. In a way, range describes the strength of spatial structure -- based on where the semivariogram ``reaches'' its asymptote (sill).
 \end{itemize}
 \end{frame}
-%------------------------------------------------
-\begin{frame}{Ridge regression - final remarks}
-$$\underset{\bm{\beta}}{\textnormal{min:~}} 
-\left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
-- \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
-\! + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right]
-$$
-\begin{itemize}
-\item Ridge solutions are not equivariant under scaling of the inputs, 
-\\so we standardize the inputs before estimation \\(this just recaps previous page).
-\medskip
-\item The intercept $\beta_0$ has been left out of the penalty term. Penalization of the intercept would make the procedure depend \\on the origin chosen for $y$.
-\medskip
-\item Ridge penalty shrinks coefficients towards zero (except $\hat{\beta}_0$). \\Coefficients of correlated variables are shrunk toward each other. \\ (See 
-\textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{chapter 3 of ESLII}}} for detailed technical discussion.)
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Ridge regression - final remarks}
-For LRM, RSS and OLS may be easily written in matrix form as:
-\begin{itemize}
-\item $\textit{RSS}(\textnormal{OLS}) = (\bm{y}-\bm{X\beta})^{\prime}(\bm{y}-\bm{X\beta})$
-\item ~~~~~~~$\hat{\bm{\beta}}_{\textnormal{OLS}} = (\bm{X}^{\prime}\bm{X})^{-1}\bm{X}^{\prime}\bm{y}$ 
-\end{itemize}
-For ridge regression, this may be re-written as
-\begin{itemize}
-\item $\textit{RSS}(\lambda) = (\bm{y}-\bm{X\beta})^{\prime}(\bm{y}-\bm{X\beta}) 
-+ \lambda \,\bm{\beta}^{\prime} \!\bm{\beta}$
-\item ~~$\,\hat{\bm{\beta}}_{\textnormal{ridge}} = (\bm{X}^{\prime}\bm{X} + \lambda \bm{I}_p )^{-1}\bm{X}^{\prime}\bm{y}$ 
-\end{itemize}
-
-With the choice of quadratic penalty $\bm{\beta}^{\prime} \!\bm{\beta}$, the ridge regression solution is again a linear function of $y$. 
-
-\medskip
-Ridge method adds a positive constant to the diagonal of $(\bm{X}^{\prime}\bm{X})$ before inversion. This makes the problem non-singular, even if $(\bm{X}^{\prime}\bm{X})$ is not of full rank (perfect multicollinearity, $p>n$, $p \gg n$).
-
-\medskip
-This was the main motivation for ridge regression when it was first introduced in statistics (Hoerl and Kennard, 1970)
-
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Lasso regression}
-\begin{itemize}
-\item Ridge regression has one empirical disadvantage:
-unlike subset selection, which will generally select models
-that involve just a subset of the variables, ridge regression
-will include all $p$ predictors in the final model (with potentially small but nonzero values).
-\medskip
-\item The Lasso is a relatively recent alternative to ridge
-regression that overcomes this disadvantage. The lasso
-coefficients,  $\bm{\hat{\beta}}_{\!L}$ estimates 
-are the values that minimize the penalized RSS:
-$$
-\underset{\bm{\beta}}{\textnormal{min:~}} 
-\left[
-\sum_{i=1}^n \left(y_i - \hat{\beta}_0 
-- \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
-\! + \lambda \sum_{j=1}^p  | \hat{\beta}_j | \right]$$
-again, $\lambda > 0$ is a tuning parameter, determined separately ($k$FCV).
-\item In statistical parlance, the lasso uses an $\ell_1$ (pronounced ``ell 1'') penalty instead of an $\ell_2$ penalty. The $\ell_1$ norm of a coefficient vector  is given by 
-$\| \beta \|_1 = \sum | \beta |$.
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Lasso regression - example}
-\vspace{-1cm}
+%---------------------------------------------------------------------
+\begin{frame}{Empirical semivariogram (fitting)}
+\vspace{-0.25cm}
 \begin{figure}
-\includegraphics[scale=0.30]{IMG/Lasso.jpg}
+	\includegraphics[width=.4\textwidth]{IMG/sp_svgm2.jpg}
 \end{figure}
-\vspace{-0.5cm}
-\centering Lasso regression example output: \\coefficient estimates are plotted as a function of $\lambda$.
 \end{frame}
-%------------------------------------------------
-\begin{frame}{Lasso regression}
-
-\begin{itemize}
-\item LASSO: Least Absolute Shrinkage and Selection Operator
-\medskip
-\item As with ridge regression, lasso shrinks the coefficient
-estimates towards zero.
-\medskip
-\item In the case of the lasso, the $\ell_1$ penalty has the
-effect of forcing some of the coefficient estimates to be
-exactly equal to zero when the tuning parameter $\lambda$ is
-sufficiently large (see \textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR textbook}}}).
-\medskip
-\item Much like stepwise model selection, the lasso regression performs variable selection.
-\medskip
-\item Lasso yields sparse models - that is, models that involve only \\a subset of the variables.
-\medskip
-\item As in ridge regression, selecting a good value of $\lambda$ for the
-lasso is critical; cross-validation is used.
-\end{itemize}
+%---------------------------------------------------------------------
+\begin{frame}{Empirical semivariogram (directional semivariogram)}
+\begin{figure}
+	\includegraphics[width=.8\textwidth]{IMG/sp_svgm3.jpg}
+\end{figure}
 \end{frame}
-%------------------------------------------------
-\begin{frame}{Ridge \& Lasso - discussion}
-\begin{itemize}
-\item Neither ridge regression nor the lasso will universally dominate the other.
-\medskip
-\item In general, one might expect the lasso to perform better
-when the response is a function of only a relatively small
-number of predictors.
-\medskip
-\item However, the number of predictors that is related to the
-response is never known a priori for real data sets.
-\medskip
-\item CV can be used in order to determine which approach is better on a particular data set.
-\end{itemize}
+%---------------------------------------------------------------------
+\begin{frame}{Spatio-temporal stochastic processes}
+The above discussion can be generalized to accommodate processes that are observed repeatedly over time. \\ \medskip 
+Such observations usually exhibit both spatial and temporal dependency and variability.\\ \medskip  
+Given the frequency and density limitations of empirical measurements in continuous space and time, we model our observations as realizations of a spatio-temporal random function (random field)
+\begin{equation*} 
+Z(\bm{s},t), \hspace{1cm} \textnormal{where~} (\bm{s},t) \in \, \mathbb{R}^d \! \times \mathbb{R} \,,
+\end{equation*}
+the spatio-temporal domain is indexed in space by $\bm{s} \in \mathbb{R}^d$ and in time by $t \in \mathbb{R}$. \\ \medskip 
+The separation between spatial and time dimensions is substantial, which is reflected in the notation.
 \end{frame}
-%------------------------------------------------
-\begin{frame}{Ridge \& Lasso - $\lambda$ selection}
-Cross-validation is used to determine $\lambda$, as follows:
-\bigskip
-\begin{enumerate}
-\item We choose a grid of $\lambda$ values and compute the
-cross-validation error rate for each value of $\lambda$.
-\medskip
-\item We select the tuning parameter $\lambda$, for which the
-cross-validation error is smallest.
-\medskip
-\item Finally, the model is re-fit using all of the available
-observations and the selected value of the tuning
-parameter $\lambda$.
-\end{enumerate}
-\bigskip
-The above steps 1 and 2 can be performed for both ridge and lasso.\\
-~~\dots cross-validation errors are compared to select ``best'' $\lambda$ \\
-~~\dots and to choose between ridge and lasso.
-
+%---------------------------------------------------------------------
+\begin{frame}{Spatio-temporal stochastic processes}
+Weak and intrinsic stationarity concepts can be easily expanded from spatial to spatio-temporal data. \\ \medskip
+For an intrinsically stationary process $Z(\bm{s},t)$, spatio-temporal semivariograms (STSV) is:
+\begin{equation*} 
+\gamma(\bm{h};t) = \frac{1}{2} \textnormal{var} \left[ Z(\bm{s}_0+\bm{h} \, ; \> t_0 + t) - Z(\bm{s}_0;t_0) \right],
+\hspace{1cm} (\bm{h},t) \in \, \mathbb{R}^d \! \times \mathbb{R}.
+\end{equation*}
+STSV does not depend on the selection of origin $(\bm{s}_0, t_0) \in \mathbb{R}^d \! \times \mathbb{R}$ (under intrinsic stationarity). \\ \medskip Also, for intrinsically stationary random fields $Z(\bm{s},t)$, the STSV $\gamma(\bm{h};t)$ is non-negative and $\gamma(\bm{0};0) = 0$.
 \end{frame}
-%------------------------------------------------
-\begin{frame}{Elastic net regression (penalty)}
-$$\min \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
-         - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
-         \! + \lambda \sum_{j=1}^p 
-         \left( \alpha |\beta_j| + (1-\alpha) \hat{\beta}_j^2 \right) \right]
-$$
+%---------------------------------------------------------------------
+\begin{frame}{Empirical STSV (EU's Unemp., NUTS0, 2002---2016)}
+\begin{figure}
+	\includegraphics[width=.7\textwidth]{IMG/sp_STV.eps}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\section{Data exploration \& descriptive methods}
+\begin{frame}{Data exploration \& descriptive methods}
+\end{frame}
+%---------------------------------------------------------------------
+\subsection{Interpolation and Krigging}
+\begin{frame}{Interpolation}
 \small
+\textbf{Inverse distance weighting (IDW):} a deterministic method of interpolation with a known scattered set of points. \\ \smallskip Assigned values to unknown points are calculated with a weighted average of the values available at the known points.
+\\ \smallskip 
+To find an interpolated value $x_0$ at a given point $\bm{s}_0$ based on samples $x_i=x(\bm{s}_i)$ with $i=1,2,\dots,N$ we use a IDW interpolating function:
+$$
+x(\bm{s}_0) = 
+\begin{cases}
+    \frac{\sum_{i=1}^N w_i(\bm{s_0})x_i}{\sum_{i=1}^N w_i(\bm{s_0})}, & 
+    \textnormal{if~} d(\bm{s}_0,\bm{s}_i) \neq 0 \textnormal{~for all~}i\\
+    x_i & \textnormal{if~} d(\bm{s}_0,\bm{s}_i)=0 \textnormal{~for some~}i \, 
+\end{cases} 
+$$
+where $w_i(\bm{s}_0)=\frac{1}{d(\bm{s}_0,\bm{s}_i)^p}\,$, with $\bm{s}_0, \bm{s}_i$ being points on a map, $d$ is their corresponding distance, and $p$ is a positive \textit{real} number (power parameter). \\ \medskip
+Weight decreases as distance increases from the interpolated points. \\High $p$ assigns greater influence to closest values -- with sufficiently high $p$, IDW result may turn into a mosaic of tiles (a Voronoi diagram). 
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{IDW interpolation -- illustration}
+\begin{figure}
+	\includegraphics[width=.7\textwidth]{IMG/sp_idw.png}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Krigging}
 \begin{itemize}
-\item \textbf{Lasso penalty} encourages sparse solutions (in terms of coefficients), yet it is somewhat indifferent to the choice among a set of strong but correlated regressors.
-\smallskip
-\item \textbf{Ridge penalty} shrinks coefficients of correlated variables toward each other, no spare solution effect.
-\smallskip
-\item \textbf{Elastic net penalty} is a compromise (combined method). The second term of the penalization element encourages highly correlated features to be averaged, while
-the first term encourages a sparse solution in the coefficients of these averaged features.
-\item Minimizer follows from Zou and Hastie, (2005). Other penalty specifications are possible (e.g. general $\lambda_1$ and $\lambda_2$ can be applied).
+    \item developed by Daniel G. Krige (1919-2013) \\(originally called ``weighted moving averages'' method) 
+    \smallskip
+    \item Also known as BLUP (best linear unbiased prediction) in spatial analysis and closely related to OLS estimation.
+    \smallskip
+    \item Interpolates values using the intensity and shape of the empirical (semi)variogram. Results depend on the choice of fitting model \\(Gaussian, spherical, exponential, etc.).
+    \smallskip
+    \item Returns observed values at sampling locations.
+    \smallskip
+    \item Uses neighborhood and/or distance search radius.
+    \smallskip
+    \item Provides standard errors of interpolated values.
+    \smallskip
+    \item Multiple approaches and generalizations exist (block krigging). \\
+    \url{http://desktop.arcgis.com/en/arcmap/10.3/tools/3d-analyst-toolbox/how-kriging-works.htm}
 \end{itemize}
 \end{frame}
-%------------------------------------------------
-\begin{frame}{Elastic net regression (penalty)}
-$$\min \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
-         - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
-         \! + \lambda \sum_{j=1}^p 
-         \left( \alpha |\beta_j| + (1-\alpha) \hat{\beta}_j^2 \right) \right]
+%---------------------------------------------------------------------
+\begin{frame}{Krigging}
+\textbf{Kriging}\\ \medskip
+\begin{itemize}
+    \item $x(\bm{s}_0)= \sum_{i=1}^N \lambda_i \, x(\bm{s}_i)$ ~~s.t.~~ $\sum_{i=1}^N \lambda_i = 1$. 
+    \bigskip
+    \item In IDW, $\lambda_i$ depend only on distance to the prediction location.\\
+    \bigskip
+    \item  With krigging, $\lambda_i$ depend on a fitted model to the measured points, the distance to the prediction location, and the spatial relationships among the measured values around the prediction location. \\ \medskip Basically, krigging weights follow from the estimated empirical semivariogram -- see illustration on the next page (note how ordering of the predicted/krigged values may influence results).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Krigging -- illustration}
+\begin{figure}
+	\includegraphics[width=.8\textwidth]{IMG/sp_Krigg.pdf}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Krigging}
+\textbf{Ordinary kriging} assumes constant (yet unknown) mean over the neighborhood of $\bm{s}_{0}$. \\ \medskip
+\begin{itemize}
+    \item Matrix form: $x(\bm{s}_0)= \bm{\lambda}^{\prime} \, \bm{x}$ ~~s.t.~~ $\bm{\lambda}^{\prime} \bm{1} = 1$. \\
+    where $\bm{\lambda}^{\prime} = (\lambda_1,\dots,\lambda_N)$ and $\bm{1}$ is a vector of ones.
+    \medskip
+    \item With krigging, we solve:~~~~ $\min E[x(\bm{s}_0 - \bm{\lambda}^{\prime} \, \bm{x})^2]$ s.t. $\bm{\lambda}^{\prime} \bm{1} = 1$.\\
+    \medskip
+    \item  Minimum variance of $x(\bm{s}_0)$: $~\sigma^2= \sum_{i=1}^N \lambda_i \gamma (\bm{s}_i,\,\bm{s}_0)~+~m \,$
+    \medskip
+    \item is obtained when $\sum_{i=1}^N \lambda_i \gamma (\bm{s}_i,\,\bm{s}_j)~+~m = \gamma (\bm{s}_j,\,\bm{s}_0)$ for all $j$. \\
+    \medskip
+    Here, $\gamma$ is the semivarogram, $m$ is an additional LM parameter (mean estimate) that ensures unbiasedness of the estimate. \\For additional discussion and alternative estimation methods \\(simple, universal krigging, etc.), see\\
+    \url{https://en.wikipedia.org/wiki/Kriging}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\subsection{Definition of neighbors}
+\begin{frame}{Definition of neighbors}
+\begin{itemize}
+    \item Fotheringham et al (2002): ``Spatial dependency is the extent to which the value of an attribute in one location depends on the values of the attribute in nearby locations.''
+    \medskip
+    \item Different definitions of spatial dependency are possible.
+    \medskip
+    \item To discuss spatial dependency, spatial autocorrelation, corresponding tests and spatial econometric models, we need to formalize the concept of \textbf{nearby locations -- neighbors}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Definition of neighbors}
+\begin{itemize}
+	\item \textbf{Distance-based approach} defines two units as neighbors if their distance does not exceed some ad-hoc predefined threshold: $\tau$. \\
+	\medskip
+	\begin{itemize}
+		\item Can generate ``islands'' (units with zero neighbors), if $\tau$ is low compared to minimum distances among unit pairs.
+		\smallskip
+		\item Less suited for analysis of areas with uneven geographic density (of measurements). 
+	\end{itemize}
+	\medskip
+	\item \textbf{Centroids} are used for measuring distances between units with non-zero areas (e.g. regions)\\
+	\medskip
+	\begin{itemize}
+		\item Centroids can be purely geographical, ``main'' city locations, population-weighted, transportation-weighted (highway/railway), etc.
+	\end{itemize}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Definition of neighbors}
+\begin{figure}
+	\includegraphics[width=.7\textwidth]{IMG/sp_neigb.PNG}
+	\caption[]{Plot for distance-based neighbors (NUTS2), maximum neighbor distance threshold at 250 km}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Definition of neighbors}
+\begin{itemize}
+\item \textbf{Contiguity-based approach} spatial units (regions) are neighbors if they share a common border (at least one point).
+\bigskip 
+\item \textbf{Generalized contiguity approach} is based on the premise that a ``second order'' neighbor is the neighbor of a first order neighbor (the actual contiguous neighbor). \\ \smallskip With this type of approach, we can define a maximum neighborhood lag (order) to control for the highest accepted number
+of neighbors traversed (not permitting cycles).	
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Definition of neighbors}
+\textbf{$\bm{k}$ Nearest neighbors ($\bm{k}$NN)} \\
+\medskip
+For each spatial unit, we search for a preset number of $k$ nearest units that we define as its neighbors. 
+\medskip
+\begin{itemize}
+	\item Solves for differences in areal densities ($k$ neighbors are ensured for each unit).
+	\smallskip
+	\item Usually leads to asymmetric spatial connectivity matrices. Useful for some empirical applications, potentially flawed neighborhood interpretation for others. 
+	\smallskip
+	\item Illustration for $k = 3$   (neighbors only shown for 2 units to illustrate asymmetry):
+	\begin{figure}
+		\includegraphics[width=.2\textwidth]{IMG/sp_neigb2.PNG}
+	\end{figure}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+%\subsection{Spatial connectivity and weights matrices}
+\begin{frame}{Spatial connectivity matrix ($\bm{C}$)}
+Regardless of the algorithm used for neighbor vs non-neighbor categorization, any spatial structure may be formalized using \\a connectivity matrix $\bm{C}$:
+$$
+~~\bm{C} = \begin{bmatrix}
+0 & 1 & 1 & 1 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 1 \\
+1 & 0 & 1 & 0
+\end{bmatrix}\quad \text{~~a 4-unit example (symmetric)}$$
+$$c_{ij}=
+	\begin{cases}
+	1 & \text{if $i$ and $j$ are neighbors,}\\
+	0 & \text{if $i$ and $j$ are not neighbors.~~~~~~~~~~~~~~~~~~}
+	\end{cases}$$
+\begin{itemize}
+	\item Zeros on the diagonal -- units are not neighbors to themselves.
+	\smallskip
+	\item Spatial connectivity matrix interpretation: 
+	\smallskip
+	\begin{itemize}
+		\item row/column 1: unit 1 is neigbor to units 2,3,4
+		\item row/column 2: unit 2 is neigbor to units 1,3 (not 4)
+	\end{itemize}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial weights matrix ($\bm{W}$)}
+\vspace{-0.5cm}
+$$
+\bm{C} = \begin{bmatrix}
+0 & 1 & 1 & 1 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 1 \\
+1 & 0 & 1 & 0
+\end{bmatrix} \quad \rightarrow \quad
+\bm{W}=
+\begin{bmatrix}
+0 & \tfrac{1}{3} & \tfrac{1}{3} & \tfrac{1}{3} \\[2pt]
+\tfrac{1}{2} & 0 & \tfrac{1}{2} & 0 \\[2pt]
+\tfrac{1}{3} & \tfrac{1}{3} & 0 & \tfrac{1}{3} \\[2pt]
+\tfrac{1}{2} & 0 & \tfrac{1}{2} & 0
+\end{bmatrix}
 $$
 \begin{itemize}
-\item The elastic net penalty can be used with any linear model \\(LM, GLM), in particular for regression or classification.\\
-Logit (GLM/MLE) example of elastic net penalty generalization:\\
-\footnotesize{$\underset{\bm{\beta}}{\textnormal{max}}\!
-\left[
-\sum_{i=1}^n \!\left( y_i \log [G(\bm{x}_i\bm{\beta})] \!+\! 
-(1\!-\!y_i) \log [1\!-\!G(\bm{x}_i\bm{\beta})]
-\right)
-- \lambda \sum_{j=1}^p \!\left( \alpha |\beta_j|\!+\!(1\!-\!\alpha) \hat{\beta}_j^2 \right)
-\right]$}
-\smallskip
-\normalsize{
-\item Parameter $\alpha$ determines the relative mix of ridge and lasso penalties. It is set prior to model estimation.
-\medskip
-\item CV can be used to chose $\alpha$ and $\lambda$.}
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\subsection{Dimension reduction: PCR \& PLS}
-\begin{frame}{High dimensionality \& dimension reduction methods}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Principal component vs. Factor analysis}
-\textbf{PCA vs FA -- quick overview:}\\
-\medskip
-\begin{itemize}
-\item \textbf{Principal component analysis} involves extracting linear composites of observed variables. We use PCA to reduce \\a dataset of correlated observed variables to a smaller set of important independent composite variables.
-\bigskip
-\item \textbf{Factor analysis} is based on a formal model predicting observed variables from theoretical latent factors. We use FA for testing/estimating a theoretical model of latent factors causing observed variables.
-\end{itemize}
-\bigskip
-The following discussion uses PCA-based approach.
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Dimension reduction methods}
-\begin{itemize}
-\item Stepwise regression, ridge and lasso involve fitting linear regression models (by OLS or by parameter shrinkage) using the original predictors: $x_1, x_2, \dots , x_p$.
-\medskip
-\item \textbf{Dimension reduction methods}\\ \medskip Transform the
-predictors and then fit a least squares model using the
-transformed variables:
-\begin{enumerate}
-\bigskip
-\item \textbf{Principal components analysis (PCA)}: data (pre)processing, \textcolor{blue}{\textbf{feature extraction -- dimension reduction with minimized information loss.}} PCA output can be used in supervised methods of analysis (OLS).
-\bigskip
-\item \textbf{Principal component regression (PCR)}:  In the LRM, the potentially many correlated original variables are replaced with a small set of principal components that capture their joint variation.
-\end{enumerate}
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Principal component analysis (PCA)}
-\begin{itemize}
-\item PCA produces a low-dimensional representation of a dataset. It finds a sequence of linear combinations of the variables that have maximal variance and are mutually uncorrelated.
-\medskip
-\item Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization.
-\medskip
-\item Suppose we have a $(n \! \times \! p)$ dataset $\bm{X}$. Since we are mainly interested in variance here, we can assume that each of the variables in $\bm{X}$ has been \textbf{centered} to have mean zero \\(all column-means of $\bm{X}$ are zero). If necessary, the transformation (centering of $\bm{X}$) is straight-forward.
-\medskip
-\item Typically, empirical analyses (in \texttt{R} and elsewhere) would involve variable standardizing/scaling to $\textnormal{var}(\bm{x}_j)=1$.
+	\item Usually, $\bm{W}$ is row-standadrized (to unity): 
+	$w_{ij} = \frac{c_{ij}}{\sum^N_{j=1} c_{ij}}$.
+	\medskip
+	\item Connectivity indicators $c_{ij}$ may be generalized prior to standardization. Hence, instead of binary $c_{ij}$, we may use inverse distances: linear, squared, \dots depending on the assumed decay in spatial dependency over distance.
+	\medskip 
+	\item Validity of spatial prior information (neighborhood definitions, decay patterns) will influence the outcome of subsequent analyses (spatial dependency tests, spatial regression models).
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{PCA motivation \& example}
+\begin{frame}{Spatial weights matrix ($\bm{W}$)}
+\vspace{-0.2cm}
+$$
+\bm{W}=
+\begin{bmatrix}
+0 & \tfrac{1}{3} & \tfrac{1}{3} & \tfrac{1}{3} \\[2pt]
+\tfrac{1}{2} & 0 & \tfrac{1}{2} & 0 \\[2pt]
+\tfrac{1}{3} & \tfrac{1}{3} & 0 & \tfrac{1}{3} \\[2pt]
+\tfrac{1}{2} & 0 & \tfrac{1}{2} & 0
+\end{bmatrix}
+$$
 \begin{itemize}
-    \item Consider a linear regression model:
-    $$
-    \textnormal{Sales} \leftarrow f(\textnormal{Ad Spending, Population})
-    $$
-    \vspace{-0.5cm}
-    \begin{itemize}
-        \item Say, Ad Spending and Population observations across CS units (cities) are highly correlated.
-        \item Using a ``composite'' regressor can improve prediction properties, if the composite is chosen well.
-    \end{itemize}
+	\item Each row of $\bm{W}$ ``provides'' weights for an expected value of an observed spatial variable $y_i$ -- weighted averages (fitted values) can be calculated as $\hat{\bm{y}} = \bm{W \! y}$. For example:
+	\begin{align*}
+	\hat{y}_1 & =  \tfrac{1}{3} y_2 + \tfrac{1}{3} y_3 + \tfrac{1}{3} y_4 \\
+	&\dots \\
+	\hat{y}_4 & = \tfrac{1}{2} y_1  + \tfrac{1}{3} y_3 
+	\end{align*}
+	\item Observed values of variables can be used to predict corresponding values for neighboring spatial units.
+	\smallskip
+	\item In this context, $\hat{y}_i$ is often called \textbf{spatial lag} of $y_i$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Definition of neighbors}
+\vspace{-0.3cm}
+\begin{figure}
+	\includegraphics[width=.7\textwidth]{IMG/sp_MoranPlot.eps}
+	\caption[]{Moran plot for unemployment rate, 2014, NUTS2 (AT, CZ, DE, HU, PL, SK): observed values vs. spatial lags.}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Sample selection in spatial data analysis}
+\begin{itemize}
+    \item Spatially autocorrelated processes are defined in terms of individual units and their interactions with neighbors. 
+    \smallskip
+    \item Clearly, we can only assess (``use'') the impact of neighboring units if such units are part of our sample. Hence, in spatial econometrics, we usually do not draw limited samples from a particular area.
+    \smallskip
+    \item Instead, we work with data from adjacent units located in unbroken (``complete'') study areas.  
+    \smallskip
+    \item Otherwise, $\bm{C}$ and $\bm{W}$ matrices would be misleading and we could not consistently estimate spatial interactions and effects.
+    \smallskip    
+    \item Generally speaking, spatial analysis should include the whole geographically defined area/region instead of using random sampling (from a ``population'' of regions within the relevant area). 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\subsection{Spatial dependency tests}
+\begin{frame}{Spatial dependency}
+\begin{itemize}
+    \item Positive spatial autocorrelation occurs if high or low values \\of a variable cluster in space. \medskip
+    \item For negative spatial autocorrelation, spatial units tend to be surrounded by neighbors with very dissimilar observations. 
     \medskip
-    \item Principal components are convenient linear combinations of regressors (conserve variance and are mutually orthogonal).
-    \begin{itemize}
-        \item With matrix $\bm{X}$ consisting of two variables, we can produce two principal components.
-        \item Total variance in $\bm{X}$ equals total variance in principal components. 
-        \item Ideally, most of the variance would be concentrated in the first principal component and we would be able to ignore the second component with minimum loss to predictive properties.
-        \item This can generate benefit in terms of the Variance vs. Bias trade-off. 
-    \end{itemize}
+    \item Spatially random data lack any spatial pattern.
+    \medskip
+    \item Sometimes, spatial dependency patterns are easy to discern visually using choropleths. 
+    \medskip
+    \item However, a formal approach towards evaluation of spatial dependency is often required.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{PCA motivation \& example}
+\begin{frame}{Spatial dependency}
+Model $\bm{y} = \lambda \bm{W\!y} + \bm{\varepsilon}$ example: \\(simulated $\bm{y}$ data, different $\lambda$ values and \textit{iid} residuals $\bm{\varepsilon}$)
 \vspace{-0.3cm}
-\begin{figure}
-\includegraphics[scale=0.30]{IMG/PCAexample.jpg}
+\begin{figure}[htbp]
+  \centering
+\setkeys{Gin}{width=0.33\linewidth}
+  \includegraphics[trim=1cm 0cm 1cm 0cm, clip=true]{IMG/Plot3_Positive.eps}\,%
+  \includegraphics[trim=1cm 0cm 1cm 0cm, clip=true]{IMG/Plot2_noise.eps}\,%
+  \includegraphics[trim=1cm 0cm 1cm 0cm, clip=true]{IMG/Plot4_negative.eps}
 \end{figure}
-\vspace{-0.3cm}
-\centering Sample dataset with 2 variables: Green line (NOT an OLS line) indicates the first principal component, $Z_1$. Along $Z_1$, data varies the most (out of all directions possible). Blue dashed line indicates $Z_2$ (most variability orthogonal to $Z_1$).
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{PCA motivation \& example}
-\vspace{-1.0cm}
-\begin{figure}
-\includegraphics[scale=0.42]{IMG/PCAexample2.jpg}
-\end{figure}
-\vspace{-0.1cm}
-\centering Sample dataset with 2 variables:  \\$Z_1$ minimizes the squared perpendicular distances to observed data. Data vary most along $Z_1$ (data most spread-out along $Z_1$). \\Values of $z_{i1} \in Z_1$ and $z_{i2} \in Z_2$ are shown as distances from ``zero'' (blue dot). Right panel/plot: rotation of the left panel.
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{PCA motivation \& example}
-\vspace{-2.2cm}
-\begin{figure}
-\includegraphics[scale=0.40]{IMG/PCAExample3.pdf}
-\end{figure}
-\vspace{-2cm}
-\centering Sample dataset with 2 variables: First principal component is shown (on the $x$-axis) against \texttt{Population} and \texttt{Ad Spending} variables. \\Strong correlation is apparent in both plots, $ \rightarrow ~Z_1$ summarizes both series well and can be used as a single composite predictor for \texttt{Sales} \\(instead of the two observed regressors).
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{PCA motivation \& example}
-\vspace{-2.2cm}
-\begin{figure}
-\includegraphics[scale=0.40]{IMG/PCAExample4.pdf}
-\end{figure}
-\vspace{-2cm}
-\centering Sample dataset with 2 variables: Second principal component is shown (on the $x$-axis) against \texttt{Population} and \texttt{Ad Spending} variables. \\There is little relationship between $Z_2$ and the two regressors. \\Hence, $Z_1$ apparently summarizes both (strongly correlated) regressors well enough. 
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Principal component analysis (PCA)}
+\vspace{-0.5cm}
+\textcolor{blue}{~~~~~~~~~~~~~(a) \hfill (b) \hfill (c)~~~~~~~~~~~~~}
 \begin{itemize}
-\item $1^{\textnormal{st}}$ principal component vector $\bm{z}_1$ of a set of centered variables
-$\bm{x}_1, \bm{x}_2, \dots, \bm{x}_p$ (all $n\!\times\!1)$ is the normalized linear combination:
-\vspace{-0.1cm}
-$$ \bm{z}_1 = \phi_{11}\bm{x}_1 + \phi_{21}\bm{x}_2 + \dots + \phi_{p1}\bm{x}_p$$
-\vspace{-0.1cm}
-that has the largest variance. Hence, we solve:
-\begin{equation} \label{PCA1}
-\underset{\phi_{11},\dots,\phi_{p1}}{\textnormal{maximize}} \, 
-  \frac{1}{n} \sum_{i=1}^n \left( \sum_{j=1}^p  
-  \phi_{j1}x_{ij} \right)^{\!2} \,\,\,\,\,\, s.\,t. \,\,\,\,\,\,     
-  \sum_{j=1}^p \phi_{j1}^2=1 
-\end{equation}
-\item The $\phi_{j1}$ elements $\phi_{11}, \dots, \phi_{p1}$ are \textit{loadings} of the first principal component and they make up the first principal component loading vector, $\bm{\phi}_1 = (\phi_{11}, \phi_{21},\dots, \phi_{p1})^\prime$.
-\item $\sum_{j=1}^p \phi_{j1}^2 =1$ is the normalization condition: sum of squares of loadings is equal to one. Otherwise, setting $|\phi_{j1}|$ arbitrarily large leads to arbitrarily large variance.
-\item \eqref{PCA1} is solvable by linear algebra (singular-value decomposition)
+    \item[(a)] Strong positive spatial dependency in $\bm{y}$, with $\lambda \rightarrow 1$.
+    \item[(b)] Spatially random process: $\lambda = 0 \quad \rightarrow \quad \bm{y} =  \bm{\varepsilon}$.
+    \item[(c)] Strong negative spatial dependency, (``rook'' neighbors only).
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{Principal component analysis (PCA)}
-\begin{itemize}
-\item By solving \eqref{PCA1}, we obtain the linear combination of the sample variables of the form:
-$$z_{i1}= \phi_{11}x_{i1} + \phi_{21}x_{i2} + \dots + \phi_{p1}x_{ip} \,\,\,\,\,\,;\,\,\,\,\,\,            i=1,\dots,n.$$
-\item $\bm{z}_1 = (z_{11}, z_{21}, \dots, z_{n1})^{\prime}$ is the first principal component. 
-\medskip
-\item Since each of the $\bm{x}_j$ variables has mean zero, so does $\bm{z}_1$\\~\\
-Hence, the sample variance of $\bm{z}_1$ can be calculated as $\frac{1}{n} \sum_{i=1}^n z_{i1}^2$.
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Principal component analysis (PCA)}
-\begin{itemize}
-\item The loading vector $\bm{\phi}_1$ with elements $\phi_{11}, \phi_{21},\dots, \phi_{p1}$ defines a direction in variable space (column space of $\bm{X}$), along which the data vary the most.
-\medskip
-\item \textbf{The second principal component} is the linear combination
-of $\bm{x}_1, \dots , \bm{x}_p$ that maximizes variance among all linear combinations that are \textbf{uncorrelated} with $\bm{z}_1$. Hence, we add orthogonality condition to \eqref{PCA1} and repeat the optimization.
-\medskip
-\item The second principal component $\bm{z}_2$ and its elements $z_{12}, z_{22}, \dots z_{n2}$ take the form:
-$$z_{i2}= \phi_{12}x_{i1} + \phi_{22}x_{i2} + \dots + \phi_{p2}x_{ip} \,\,\,\,\,\,;\,\,\,\,\,\,            i=1,\dots,n.$$
-where $\bm{\phi}_2 = (\phi_{12}, \phi_{22},\dots, \phi_{p2})^\prime$ is the second principal component loading vector.
-\end{itemize}
-\end{frame}
-%----------------------------------------------------------------------
-\begin{frame}{Principal component analysis (PCA)}
-\begin{itemize}
-\item Constraining $\bm{z}_2$ to be uncorrelated with $\bm{z}_1$ is equivalent to constraining the direction $\bm{\phi}_2$ to be orthogonal (perpendicular) to the direction $\bm{\phi}_1$. 
-\medskip
-\item Subsequent principal components: \\ \medskip For a sequence of additional $\bm{z}_2, \bm{z}_3,\dots$ principal components, we solve \eqref{PCA1} while adding orthogonality condition with respect to all preceding principal components.
-\medskip
-\item Important geometrical interpretations to principal components apply (see \textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR textbook}}}).
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Principal component analysis (PCA)}
-\textbf{Proportion of variance explained by principal components}\\
-\begin{itemize}
-\item To understand the ``strength'' of each principal component, we calculate the proportion of variance explained by each component.
-\medskip
-\item \textbf{Total variance present in a data set} (assuming $\bm{X}$ matrix ($n\!\times\!p)$ of centered variables $\bm{x}_j$ with mean zero) is defined as:
-$$ \sum_{j=1}^p \textnormal{var}\,(\bm{x}_j) 
-   = \sum_{j=1}^p \frac{1}{n} \sum_{i=1}^n x_{ij}^2 $$
-\item \textbf{Variance explained} by the $m$-th principal component is:
-$$ \textnormal{var}\,(\bm{z}_m) 
-   = \frac{1}{n} \sum_{i=1}^n z_{im}^2 $$
-\item $\sum_{j=1}^p \textnormal{var}\,(\bm{x}_j) = \sum_{m=1}^M \textnormal{var}\,(\bm{z}_m), $  where $M = \min(n-1, p)$. \\i.e. if all PC are used, they explain 100 \% of variance in $\bm{X}$.
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Principal component analysis (PCA)}
-\textbf{Proportion of variance explained (PVE)}\\
-\bigskip
-\begin{itemize}
-\item PVE of the $m$-th principal component $\bm{z}_m$ lies between 0 and 1 and it is defined as:
-$$\textnormal{PVE}_m 
- = \frac{\sum_{i=1}^n z_{im}^2 }
- {\sum_{j=1}^p \sum_{i=1}^n x_{ij}^2}  \,.$$\\
-\bigskip
-\item Also, $$\sum_{m=1}^M \textnormal{PVE}_m = 1~,~~$$ \\~\\i.e. PVEs sum to 1 and we can display \& interpret cumulative PVEs.
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Principal component analysis (PCA)}
-\texttt{R} example:\\
-\smallskip
-\footnotesize{
-\texttt{pca1 = princomp(x, scores=TRUE, cor=TRUE) \# x has 7 columns\\
-summary(pca1)\\
-~\\
-\#\# Importance of components:\\
-\#\# ~~~~~~~~~~~~~~~~~~~~~~~~~~Comp.1~~~~~Comp.2~~~~~Comp.3~~~~~~Comp.4\\
-\#\# Standard deviation~~~~~1.9036937~ 1.0423367~ 0.81837919~ 0.75632747\\
-\#\# Proportion of Variance 0.5177214~ 0.1552094~ 0.09567779~ 0.08171875\\
-\#\# Cumulative Proportion~ 0.5177214~ 0.6729308~ 0.76860854~ 0.85032729\\
-\#\# ~~~~~~~~~~~~~~~~~~~~~~~~~~Comp.5~~~~~~Comp.6~~~~~~Comp.7\\
-\#\# Standard deviation~~~~~0.64958592~ 0.56978592~ 0.54871770\\
-\#\# Proportion of Variance 0.06028027~ 0.04637943~ 0.04301302\\
-\#\# Cumulative Proportion~ 0.91060756~ 0.95698698~ 1.00000000\\
-}
-\begin{itemize}
-\item The number of components is also the number of variables (if $n>p$).
-\item Proportion of variance: Eg. if $\textnormal{PVE}_1 = .52$, $\bm{z}_1$ explains 52\% of variance in $\bm{X}$.
-\item Cumulative Proportion: PVE by $\bm{z}_m$ and previous components.
-\item Standard deviation = eigenvalues
-\item How many components to use in PCR? Choose the components with eigenvalues equal or higher than 1. (or use cross-validation)
-\end{itemize}
-}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Kaiser-Meyer-Olkin (KMO) statistic}
-PCA can perform a compression of the available information (reduce dimension) only if we can ``reject''  independence (orthogonality) among variables $\bm{x}_j$ in $\bm{X}$.
-\bigskip
-Individual $\textit{KMO}$ (for $j$-th variable):
-$$\textit{KMO}_j = \frac{\sum_{i\neq j} r_{ij}^2}{\sum_{i\neq j} r_{ij}^2 + \sum_{i\neq j} a_{ij}^2}\,;\hspace{1,7cm} \textit{KMO}_j \in \langle 0,1 \rangle $$\\
-Overall $\textit{KMO}$:
-$$\textit{KMO} = \frac{\sum_j \sum_{i\neq j} r_{ij}^2}
-                   {\sum_j \sum_{i\neq j} r_{ij}^2 \,+\, \sum_j \sum_{i\neq j} a_{ij}^2}\,
-                   ;\hspace{0.5cm} \textit{KMO} \in \langle 0,1 \rangle $$\\
-
-where:\\
-$\{r_{ij} \} = \bm{R}$, which is a correlation matrix (here, $i$, $j$ denote variables),\\
-$\{a_{ij} \} = \bm{A}$, which is a partial correlation matrix (partial correlations represent the direct interactions between two variables, with the indirect effects of all remaining variables removed)\\
-$a_{ij} = - \frac{v_{ij}}{\sqrt[]{v_{ii} \cdot v_{jj}\,}}$ where $\{ v_{ij} \} = \bm{V} = \bm{R}^{-1}$
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Kaiser-Meyer-Olkin (KMO) statistic}
-$\textit{KMO}$ description 
-\begin{itemize}
-\item $\textit{KMO}$ compares  correlations between variables against their partial correlations. 
-\item If partial correlations $a_{ij}$ are near zero, PCA can perform efficiently, because the
-variables are highly related and $\textit{KMO} \approx 1$.
-\item If $\textit{KMO}$ is low (KMO $\approx 0$), PCA is not relevant.\\In empirical applications, PCA is gerally not usefull if $\textit{KMO} < 0.5$.
-\end{itemize}
-\bigskip
-$\textit{KMO}$-based variable selection:
-\smallskip
-\begin{itemize}
-\item Overall $\textit{KMO}$ should be .60 or higher (ideally over 0.90).
-\item If it is not, drop the variables with the lowest individual $\textit{KMO}_j$ values, until overall $\textit{KMO}$ rises above .60.
-\item This approach requires that we start with multiple variables/regressors in our dataset; at least $p > 5$ .
-\item Alternative: Bartlett’s test in \texttt{R}: cortest.bartlett() in \{psych\}.
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Principal component regression (PCR)}
-\bigskip
-If we have many correlated original variables as regressors in a LRM, we can replace them with a small set of principal components that capture their joint variation.
-\medskip
-\begin{itemize}
-\item[\ding{51}] Variance-Bias tradeoff benefits
-\medskip
-\item[\ding{55}] PCR-based models unsuitable for parameter interpretation\\ (no reasonable scale on the $\bm{z}_m$ vectors).
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Principal component regression (PCR)}
-\begin{itemize}
-\item Using PCA, we linearly transform our dataset of predictors $\bm{x}_1, \bm{x}_2, \dots, \bm{x}_p$ into $\bm{z}_1, \bm{z}_2, \dots, \bm{z}_M$ variables where $M < p$. \\The PCA transformation can be outlined as follows: 
-\begin{equation} \label{PCR1}
-\bm{z}_m = \bm{X\phi}_m \qquad \textnormal{where} \qquad z_{im} = \sum_{j=1}^p \phi_{jm\,} x_{ij},
-\end{equation}
-for some constant parameters $\phi_{m1}, \dots, \phi_{mp}$.
-\item Now, we can use OLS to fit a LRM:
-\begin{equation} \label{PCR2}
-y_i = \theta_0 + \sum_{j=1}^M \theta_m z_{im} + \varepsilon_i,
-\end{equation}
-\item Note that in model \eqref{PCR2}, the regression coefficients are given
-as $\theta_0, \dots, \theta_M$. If the constants $\phi_{1m}, \phi_{2m}, \dots , \phi_{pm}$ are chosen wisely (PCA), then such dimension reduction approaches can often
-outperform OLS regression in terms of CV errors, etc.
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Principal component regression (PCR)}
-Note: from equation/definition \eqref{PCR1}, we can write
-$$ \sum_{m=1}^M \theta_m z_{im} 
-= \sum_{m=1}^M \theta_m \sum_{j=1}^p \phi_{jm} x_{ij} 
-= \sum_{j=1}^p \sum_{m=1}^M \theta_m \phi_{jm} x_{ij} 
-= \sum_{j=1}^p \beta_j x_{ij} 
-$$ 
+\begin{frame}{Moran's $I$}
+Measure of global spatial autocorrelation, overall clustering of data:
+\begin{equation*}
+I = \frac{N}{W}\,\bm{z}'\bm{Wz}(\bm{z}'\bm{z})^{-1},
+\end{equation*}     
 where 
-\begin{equation} \label{PCR3}
-\beta_j = \sum_{m=1}^M \theta_m \phi_{jm}.
-\end{equation}
 \begin{itemize}
-\item Therefore, model \eqref{PCR2} can be thought of as a special case of the original linear regression model.
-\item Dimension reduction serves to constrain the estimated $\beta_j$ coefficients, since now they must take the form \eqref{PCR3}.
-\item This approach can have significant benefits in terms of bias-variance tradeoff.
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Principal component regression (PCR)}
-PCR: algorithm
-\begin{itemize}
-\medskip
-\item First, we apply principal components analysis (PCA) to find suitable linear combinations of predictors for use in our regression.
-\medskip
-\begin{itemize}
-    \item The first principal component is the (normalized) linear
-combination of the regressors that has the largest variance.
-\medskip 
-\item The second principal component has largest variance,
-subject to being uncorrelated with the first.
-\medskip
-\item And so on. 
-\end{itemize}
-\medskip
-\item Dependent variable is then regressed on few principal components, rather than many original regressors.\\ \medskip
-\item The optimum number of principal components can be assessed using cross validation.
-\end{itemize}
-\bigskip
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Principal component regression (PCR)}
-\vspace{-0.7cm}
-\begin{figure}
-\includegraphics[scale=0.30]{IMG/PCRcomponent.jpg}
-\end{figure}
-\vspace{-0.5cm}
-\centering Sample data, selection of the number of components. \\In this particular illustration, PCR would provide little improvement over OLS (this may happen often for $n\gg p$ datasets). 
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Principal component regression (PCR)}
-\textbf{PCR: potential problems}
-\medskip
-\begin{itemize}
-\item PCA identifies linear combinations (directions) that best
-represent the predictors $\bm{x}_1, \bm{x}_2, \dots , \bm{x}_p$.
-\item These directions are identified in an \textbf{unsupervised} way, since the response $y$ is not used to help determine the principal component directions. i.e. the response does not supervise the identification of the principal components.
-\item PCR suffers from a potentially serious drawback: there is no guarantee that the directions that best explain the predictors will also be the best directions to use for predicting the response.
-\end{itemize}
-\medskip
-Potential solutions to the problem:
-\begin{itemize}
-\item Partial least squares (\textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR, ch. 6.3.2}}})
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Partial least squares (PLS)}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Partial least squares (PLS)}
-\begin{itemize}
-\item Much like with the PCR method, in PLS we also search for convenient (aggregating) linear combinations of regressors in matrix $\bm{X}$.\\
-\medskip
-\item PLS is not scale-invariant, so we assume each $\bm{x}_j$ regressor is standardized -- much the same way as in PCR.\\
-\medskip
-\item PLS, unlike PCR, uses \textit{supervised} identification of the components: both $\bm{X}$ and $\bm{y}$ are used when searching for linear combinations of regressors.\\
-\medskip
-\item PLS-based linear combinations of $\bm{x}_j$ (``directions'') not only approximate the original (correlated) data in $\bm{X},$ but are also related to the response $\bm{y}$.
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Partial least squares (PLS)}
-First component for PLS:
-
-$$ \bm{z}_1^{\textnormal{PLS}} = \bm{X\psi}_1 \qquad \textnormal{where} \qquad 
-z_{i1}^{\textnormal{PLS}} \sum_{j=1}^p \psi_{j1} x_{ij}$$
-\medskip
-and coefficients $\psi_{j1}$ are calculated in two steps:
-\begin{enumerate}
-\item Use OLS to estimate slope-coefficients $\psi_{j1}$ of the ``simple'' \\linear regressions $\bm{y} \leftarrow \bm{x}_j$.\\ \smallskip Here, $j=1,\dots,p$ separate SLRM are estimated and corresponding $\psi$ slope-coefficients are recorded.
-\medskip
-\item Standardize the $\psi_{j1}$ coefficients so that $\sum_{j=1}^p \psi_{j1}^2=1$.
-\end{enumerate}
-\bigskip
-Note that with PLS, highest weights are on variables ($\bm{x}_j$) that are most related to the response. 
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Partial least squares (PLS) -- illustration}
-\vspace{-1.2cm}
-\begin{figure}
-\includegraphics[scale=0.50]{IMG/PCAExample5.pdf}
-\end{figure}
-\vspace{-0.6cm}
-\centering Sample dataset with 2 variables: The first PLS direction (component) -- solid line -- is shown. Compare to the PCA first component -- dotted line (follows from previous example).
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Partial least squares (PLS)}
-Second component for PLS:\\
-\medskip
-\begin{enumerate}
-    \item We regress each variable on $\bm{z}_1^{\textnormal{PLS}}$ and take residuals \\($\bm{x}_1 \leftarrow \bm{z}_1^{\textnormal{PLS}}$ and save OLS residuals $\ddot{\bm{x}}_1$; repeat for $\bm{x}_2$, etc.)\\~\\
-    Individual $\ddot{\bm{x}}_j$ residuals can be interpreted as the ``remaining'' information of $\bm{x}_j$ that is not explained by the first PLS direction (component).\\
-    \medskip
-    \item Compute $\bm{z}_2^{\textnormal{PLS}}$ using the orthogonalized data ($\ddot{\bm{X}}$), \\the same way as the first component.\\
-    (Run all $\bm{y} \leftarrow \ddot{\bm{x}}_j$ regressions and standardize coefficients).
-\end{enumerate}
-\bigskip
-By analogy, this procedure can be repeated for all subsequent components.
-\end{frame}
-%---------------------------------------------------------------------
-\begin{frame}{Partial least squares (PLS)}
-
-The supervised dimension reduction in PLS can reduce bias \\(compared to PCR). \\~\\However, it can also increase variance of predictions. Hence, the benefits of using PLS over PCR can be outweighted by drawbacks ($k$FCV may be used to compare the two methods).\\~\\
-
-PCR/PLS -- detailed technical description and estimation algorithm:
-\begin{itemize}
-\item (\textcolor{blue}{\underline{\href{https://cran.r-project.org/web/packages/pls/vignettes/pls-manual.pdf}{\{pls\} package manual}}})
-\item (\textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{The Elements of 
-Statistical Learning, ch. 3.5.1---3.5.2}}})
-\end{itemize}
-\end{frame}
-%---------------------------------------------------------------------
-\section{Moving beyond linearity}
-\begin{frame}{Moving beyond linearity}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Moving beyond linearity}
-Different approaches are discussed (from simple to more complex), QREG is included mostly for reference.\\
-\bigskip
-
-\begin{itemize}
-\item Quantile regression (quick repetition)
-\smallskip
-\item Polynomial and step (piecewise-constant) regression
-\smallskip
-\item Regression splines
-\smallskip
-\item Smoothing splines
-\smallskip
-\item Generalized Additive Models (GAM)
-\end{itemize}
-\end{frame}
-%-------------------------------------------------------------------
-\subsection{QREG - quick repetition}
-\begin{frame}{QREG - quick repetition}
-\begin{itemize}
-\item Quantile regression estimates the relationship between regressors and a specified quantile of dependent variable.
-\medskip
-\item One important special case of quantile regression is the least absolute deviations (LAD) estimator, which corresponds to fitting the conditional median of the response variable ($q=\frac{1}{2}$).
-\medskip
-\item QREG (LAD) estimator can be motivated as a robust  alternative to OLS (with respect to outliers).
-\medskip
-\item Linear programming can be used for finding QREG estimates (Koenkerr and Bassett (around 1980).
-\medskip
-\item QREG-based predictions: Conditional quantiles (expected values) can be produced.
-\medskip
-\item To optimize prediction properties, QREG may be combined with parameter-shrinkage methods (lasso, ridge).
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Quantile regression (QREG)}
-For LRMs, the $q$-th quantile regression estimator $\bm{\beta}_q$ minimizes:
-$$
-\underset{\bm{\hat{\beta}}_q}{\textnormal{min:}} \quad Q_n(\bm{\hat{\beta}}_q) =
-\! \! \sum^n_{i:\, e_i \, \geq \, 0} q|y_i - \bm{x}_i\bm{\hat{\beta}}_q| \,\, +
-\! \! \sum^n_{i:\, e_i\, < \, 0} (1-q)|y_i - \bm{x}_i\bm{\hat{\beta}}_q|,
-$$
-where $e_i = (y_i - \bm{x}_i\bm{\hat{\beta}}_q)$.
-
-\begin{itemize}
-    \item We use the notation $\bm{\hat{\beta}}_q$ to make clear that different choices of $q$ lead to different  $\bm{\hat{\beta}}$.
-    \item Slope of the loss function $Q_n$ is asymmetrical \\(around $e_i=0$).
-    \item The loss function is not differentiable (at $e_i=0$) \\$\rightarrow$ gradient methods are not applicable \\(linear programming can be used).
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Quantile regression example}
-Example 7.10 (Greene): Income Elasticity of Credit Cards Expenditure\\
-\medskip
-\texttt{CCexpend} $\leftarrow$ \texttt{log(INCOME) + AGE + \#DEPENDANTS}
-\centering
-\includegraphics[width=10cm, height=6.7cm]{IMG/QREG.pdf}
-\end{frame}
-%---------------------------------------------
-\subsection{Polynomial and step regression}
-\begin{frame}{Polynomial regression}
-Standard way to apply LRMs in situations where the relationship between a regressor and a dependent variable is non-linear.\\ \smallskip
-\begin{itemize}
-    \item Simple linear regression model $$y_i = \beta_0 + \beta_1 x_i + u_i,$$
-    \item is replaced by a polynomial function (linear in parameters): 
-    $$ y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \dots  + \beta_d x_i^d + u_i .$$
-    \item This approach extends easily to logistic regression models if $y_i$ is binary (applies to count and similar LDVs by analogy):
-    $$\textnormal{Pr}(y_i=1|x_i) 
-    = \frac{\exp(\beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \dots  + \beta_d x_i^d)}{1 + \exp(\beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \dots  + \beta_d x_i^d)} $$
-    
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Polynomial regression (LRM \& logit examples)}
-\centering
-\medskip
-\texttt{~~~~~~Wage} $\leftarrow$ \texttt{Age~~~~~~} \qquad \qquad \texttt{1[Wage>250]} $\leftarrow$ \texttt{Age}\\
-
-\begin{figure}
-  \centering
-  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.9\textwidth]{IMG/ISLR71.pdf}
-\end{figure}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Polynomial regression}
-\begin{itemize}
-    \item Often, we are not interested in exact values of coeffcients.\\
-    Usually, we seek to obtain ``good'' fitted values for some $x_0$: \\ \smallskip 
-    $\hat{f}(x_0) = \hat{\beta}_0 + \hat{\beta}_1 x_0 + \hat{\beta}_2 x_0^2 + \dots + \hat{\beta}_d x_0^d $\\ \smallskip 
-    and we study the general  prediction properties (variance, bias) \\of  $\hat{f}(x_0)$.
+    \item[] $N$ is the number of spatial observations (units) of the variable under scrutiny (say, $\bm{y}$),
     \smallskip
-    \item Choice of $d$: fix the $d$ at some low value (4 at most), \\or use cross-validation to choose $d$.
+    \item[] $\bm{z}$ is the centered form of $\bm{y}$: $z_i = y_i - \bar{y}$.\\
+    (Note a recast: $y_i = \beta_0 + z_i$. If SLRM is expanded by regressors, Moran's $I$ can be applied to regression residuals).
     \smallskip
-    \item Potential problem with predictions based on polynomial regressors: notoriously bad tail behavior -- not suitable for extrapolation.
-    \smallskip 
-    \item We can use polynomials for several separate regressors in a LRM: we just stack the variables into one $\bm{X}$ matrix (see GAMs next).
-    
+    \item[] The standardization factor $W = \sum_{i}\sum_{j}w_{ij}$ corresponds to the sum of all elements of the spatial weights matrix $\bm{W}$. \\For row-standardized $\bm{W}$ matrices, $\tfrac{N}{W}=1$. Moran's $I$ can be used with $\bm{C}$ matrices (binary, generalized) as well.
 \end{itemize}
 \end{frame}
-%---------------------------------------------
-\begin{frame}{Step (piecewise-constant) regression}
+%---------------------------------------------------------------------
+\begin{frame}{Moran's $I$}
+\vspace{-0.2cm}
+\begin{equation*}
+I = \frac{N}{W}\,\bm{z}'\bm{Wz}(\bm{z}'\bm{z})^{-1},
+\end{equation*}     
+In most empirical circumstances, $I \in [ -1,1 ]$. Under the null hypothesis of spatial randomness, Moran’s $I$ is asymptotically normally distributed with the following first two moments:
+\begin{equation*}
+E(I) = -\frac{1}{N-1} \hspace{0.5cm} 
+\textnormal{and} \hspace{0.5cm} 
+\textnormal{var}(I) = \frac{N^2W_1 - NW_2 +3W^2}{(N^2-1)W^2} \,,
+\end{equation*}  
+where $W_1 = \sum_i \sum_j (w_{ij}+w_{ji})^2$ and $W_2 = \sum_i (\sum_j w_{ij} + \sum_j w_{ji})^2$.\\
+\medskip
+Normality assumption $\rightarrow$ calculate a $z$-score 
+$$z=\frac{I-E(I)}{\sqrt{\textnormal{var}(I)}} $$\\
+and test for statistical significance of Moran's $I$: whether neighboring units are more similar $(I > E(I))$ or more dissimilar $(I < E(I))$ than they would be under the null hypothesis of spatial randomness.
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Local Moran's $I$}
 \begin{itemize}
-    \item Polynomial regression function imposes a \textit{global} structure on the non-linear function.
+    \item Moran's $I$ yields only one statistic that summarizes the nature of spatial dependency in the observed variable -- it assumes geographical homogeneity (stationarity) in the data. 
     \smallskip
-    \item Instead, we can use a step function where regressor $x$ is broken into different bins and we fit a different constant for each bin (our regressor is transformed into a ordered categorical variable).
+    \item If such assumption does not hold (spatial dependency varies over space), then Moran's $I$ test loses power and the ``global'' statistic is non-descriptive. 
     \smallskip
-    \item Alternatively, we select adequate (ad-hoc) cutpoints $c_1, c_2, \dots, c_K$ for a continuous regressor $x$ and construct $K+1$ dummy variables:
+    \item To address this problem, we can use Local Moran's $I$ statistic \\(for row-standardized $\bm{W}$):
     \begin{equation*}
-       \begin{aligned}
-       C_0(X) \quad &= \quad 1[X < c_1], \\
-       C_1(X) \quad &= \quad 1[c_1 \leq X < c_2], \\
-        &~ \vdots \\
-       C_{K-1}(X) \quad &= \quad 1[c_{K-1} \leq X < c_{K}], \\
-       C_K(X) \quad &= \quad 1[c_{K} \leq X] \\
-        \end{aligned}    
-        \end{equation*}
+    I_i = \frac{z_iN}{\bm{z}'\bm{z}}\bm{w}_{i}\bm{z} \, .
+    \end{equation*}    
+    \item The expected value of  Local Moran's $I$ under the null hypothesis of no spatial autocorrelation is: $E(I_i)=-w_i/(N-1)$. Here, $w_i$ is the sum of elements in the $i$-th row of $\bm{W}$.
 \end{itemize}
 \end{frame}
-%---------------------------------------------
-\begin{frame}{Step (piecewise-constant) regression}
+%---------------------------------------------------------------------
+\begin{frame}{Local Moran's $I$}
+    \begin{equation*}
+    I_i = \frac{z_iN}{\bm{z}'\bm{z}}\bm{w}_{i}\bm{z} \, .
+    \end{equation*}    
 \begin{itemize}
-    \item Next, we use $C_0(X), C_1(X), C_2(X), \dots, C_K(X)$ to fit LRM:
-    $$y_i = \beta_0 + \beta_1 C_1(x_i) + \beta_2 C_2(x_i) + \dots + \beta_K C_K(x_i) + u_i .$$
-    $C_0$ is excluded from the model to avoid perfect multicolinearity. Exclusion is arbitrary -- any of the dummies may be excluded. Alternatively, we may include all dummies and drop $\beta_0$.
+    \item Values of $I_i > E(I_i)$ indicate positive spatial autocorrelation, i.e. that the $i$-th region is surrounded by regions that, on average, are similar to the $i$-th region with respect to the observed variable $y$. 
+    \item $I_i < E(I_i)$ would suggest negative spatial autocorrelation.
+    \item Significance of spatial dependency is then evaluated using $var(I_i)$ and the corresponding $z$-score.
     \bigskip
-    \item Again, this approach extends easily to logistic regression models if $y_i$ is binary (applies to count and similar LDVs by analogy):
-    \small
-    $$\textnormal{Pr}(y_i=1|x_i) 
-    = \frac{\exp[\beta_0 + \beta_1 C_1(x_i) + \beta_2 C_2(x_i) + \dots + \beta_K C_K(x_i)]}{1 + \exp[\beta_0 + \beta_1 C_1(x_i) + \beta_2 C_2(x_i) + \dots + \beta_K C_K(x_i)]}. $$
+    \item We may see the global nature of Moran's $I$ from
+    \begin{equation*} 
+    I = \frac{1}{N}\sum_{i=1}^N I_{i} \,.
+    \end{equation*}   
 \end{itemize}
 \end{frame}
-%---------------------------------------------
-\begin{frame}{Piecewise-constant regression (LRM \& logit examples)}
-\centering
-\medskip
-\texttt{~~~~~~Wage} $\leftarrow$ \texttt{Age~~~~~~} \qquad \qquad \texttt{1[Wage>250]} $\leftarrow$ \texttt{Age}\\
-\begin{figure}
-  \centering
-  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.9\textwidth]{IMG/ISLR72.pdf}
-\end{figure}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Step (piecewise-polynomial) regression}
-Combines polynomial regression with step (piecewise) regression.
-
-\bigskip
-\textbf{Piecewise-polynomial regression:} \\Fit separate (low-degree) polynomials over different regions of $X$ \\(instead of one high-degree polynomial over the entire range of $X$). \\ \bigskip
-Example: piecewise cubic polynomial with a single knot (cutpoint) $c_1$:
-\medskip
+%---------------------------------------------------------------------
+\begin{frame}{Geary's $C$}
+ Variance test similar (in principle) to the Durbin-Watson test statistic for residuals' autocorrelation in time-series regressions.
+ \begin{equation*}
+C = \frac{N-1}{2W}\,
+    \frac{\sum_{i}\sum_{j}w_{ij}(y_i-y_j)^2}
+         {\sum_{i}(y_i-\bar{y})^2} \,,
+\end{equation*}   
+where all elements follow from previous slides. Empirical Geary's $C$ values range from 0 to 2. However, occurrences of $C>2$ are possible.\\
+\smallskip
+\begin{itemize}
+    \item Under the null of no spatial autocorrelation, first two moments are:
 \begin{equation*}
-y_i = 
-    \begin{cases}
-        \beta_{01} + \beta_{11} x_i + \beta_{21} x_i^2 + \beta_{31} x_i^3 + u_i \textnormal{~~if~~} x_i <  c_1 ;& \\ ~ & \\
-         \beta_{02} + \beta_{12} x_i + \beta_{22} x_i^2 + \beta_{32} x_i^3 + u_i \textnormal{~~if~~} x_i \geq  c_1 .& 
-    \end{cases}
-\end{equation*}
-\medskip
-\begin{itemize}
-    \item Here, we fit two different polynomials to the data.
-    \smallskip
-    \item For $K$ knots (cutpoints), we fit $K+1$ different polynomials.
-    \smallskip
-    \item Different $d$ are possible: $d=1~\rightarrow~$ piecewise linear function.
+E(C) = 1\, ,\hspace{0.5cm}
+\textnormal{var}(C) = \frac{(N-1)(2W_1 + W_2) - 4W^2 }{2(N+1)W^2} \,,
+\end{equation*}  
+\item Positive spatial dependency: $C < 1$.\\ Negative spatial autocorrelation is reflected in $C > 1$.
+\smallskip
+\item $z$-transformation is asymptotically normally distributed. Therefore, $z(C)$ can be used for testing spatial randomness.
 \end{itemize}
 \end{frame}
-%---------------------------------------------
-\begin{frame}{Step (piecewise-polynomial) regression}
-Example: piecewise cubic polynomial with one knot:\\
-\centering
-\medskip
-\texttt{Wage} $\leftarrow$ \texttt{Age}\\
-\vspace{-0.2cm}
-\begin{figure}
-  \centering
-  \includegraphics[trim=0cm 9.5cm 10.5cm 0cm, clip=true, width=0.4\textwidth]{IMG/ISLR73.pdf}
-\end{figure}
-
-\vspace{-0.5cm}
+%---------------------------------------------------------------------
+\subsection{Clusters -- hotspots and coldspots}
+\begin{frame}{Clusters -- hotspots and coldspots}
+Getis' $G^{\ast}$: spatial clusters and hotspot analysis\\
+\smallskip
 \begin{itemize}
-    \item[\ding{51}] Improved flexibility
-    \item[\ding{55}] Fitted curve non-continuous
+    \item Clustering analysis by Getis can only be performed for positively autocorrelated spatial data.
+    \smallskip
+    \item $G_i^{\ast}(\tau) = \frac{\sum_{j=1}^N c_{ij}^{\ast} y_j}{\sum_{j=1}^N y_j} \,,$\\
+    \smallskip
+    where $c_{ij}^{\ast}$ come from amended distance-based (arbitrary $\tau$ used) connectivity matrix $\bm{C}^{\ast} = \bm{C}+\bm{I}_N$; i.e. $y_i$ observations enter $G_i^{\ast}(\tau)$ calculation. Observations of $y$ are assumed to have a natural origin and positive support.
+    \smallskip
+    \item $G_i^{\ast}(\tau)$ is a local stastic, a proportion of the aggregated $y_j$ values that lie within $\tau$ of $i$ to the total sum of $y_j$ observations.
+    \smallskip
+    \item Alternatively, Getis' statistic is calculated using $\bm{C}$ (not $\bm{C}^{\ast}$) and denoted $G_i(\tau)$ 
 \end{itemize}
 \end{frame}
-%---------------------------------------------
-\subsection{Regression splines and smoothing splines}
-\begin{frame}{Regression splines - motivation}
-\centering
-\vspace{-0.2cm}
+%---------------------------------------------------------------------
+\begin{frame}{Clusters -- hotspots and coldspots}
+\begin{itemize}
+    \item If we observe high values of $y_j$ within distance $\tau$ of unit $i$, then $G_i^{\ast}(\tau)$ would be relatively high compared to its expected value under the null hypothesis of full spatial randomness: $$E \left[G_i^{\ast}(\tau) \right] = \frac{c_i^{\ast}}{N}\,,$$ where $c_i^{\ast}$ is the sum of elements of $i$-th row of $\bm{C}^{\ast}$.
+    \medskip 
+    \item Also, under the $H_0$ of spatial randomness, we can write
+    $$
+    \textnormal{var} \left[G_i^*(\tau) \right] = 
+    \frac{c_i^*(N-c_i^*)}{N^2 (N-1)}
+    \left( \frac{Y_{i2}^*}{(Y_{i1}^*)^2} \right) , 
+    $$ 
+    where $Y_{i1}^*=\tfrac{\sum_j y_j}{N}$ and $Y_{i2}^*=\tfrac{\sum_j y_j^2}{N}-(Y_{i1}^*)^2$.
+    \medskip 
+    \item High positive $z$-score indicates ``hotspot'' (cluster of high values) and vice versa. Critical values provided by Getis and Ord. \\Say, for $N = 100$ and $\alpha = 5\%$, the $z$-scores would have to exceed $\pm 3.289$ for a statistically significant hot/cold spot.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Clusters -- hotspots and coldspots}
 \begin{figure}
-  \centering
-  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.75\textwidth]{IMG/ISLR73.pdf}
+	\includegraphics[width=.7\textwidth]{IMG/sp_coldspot.PNG}
+	\caption{Spatial clusters (hot and cold spots) of the municipalities in Serbia by the level of average monthly net earning from 2001 to 2010}
 \end{figure}
 \end{frame}
-%---------------------------------------------
-\begin{frame}{Regression splines -- motivation}
-\centering
-Piecewise linear regression with one knot at $c_1$:\\
-(fitted values: the line is not continuous at $c_1$)\\
-\vspace{-0.2cm}
+%---------------------------------------------------------------------
+\section{Spatial regression models (CS data)}
+\begin{frame}{Spatial regression models (CS data)}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial regression models (CS data)}
+\begin{columns}[T] % align columns
+\begin{column}{.48\textwidth}
+\vspace{-0.1cm}
+$\blacksquare~~$ Parametric models \\
+\vspace{-0.1cm}
+        \begin{itemize}
+        \item Spatial dependency \\is estimated (different functional forms exist).
+        \end{itemize}
+        \smallskip
+$\blacksquare~~$ Getis' filter (``nonparametric'')\\
+\vspace{-0.1cm}
+        \begin{itemize}
+        \item Spatial dependency is removed from observed variables (like s.a. in TS).
+        \end{itemize}
+        \smallskip
+$\blacksquare~~$ Semiparametric approach \\
+\vspace{-0.1cm}
+        \begin{itemize}
+        \item Observed variables are not transformed, spatial dependency is modelled separately, using map patterns/processes.
+        \end{itemize}
+\end{column}%
+\begin{column}{.48\textwidth}
+\vspace{-0.1cm}
 \begin{figure}
   \centering
-  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.4\textwidth]{IMG/ISLR73a.pdf}
+  \includegraphics[trim=0cm 3cm 1cm 2cm, clip=true, width=1\textwidth]{IMG/sp_GDP_Choropleth.pdf}\vspace{-0.4cm}\tiny{{\caption{Relative GDP per capita \\ (100 = EU avg.), 2016, NUTS 2. Source: Eurostat (\texttt{nama\_10r\_lfu3rt})}}}
 \end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+%---------------------------------------------------------------------
+\subsection{Parametric spatial models}
+\begin{frame}{Spatial regression models}
+\begin{itemize}
+\item Spatial regression models allow us to discern the influence of geographic factors (spatial autocorrelation, spill-over effects) from other relevant factors/variables -- say, economic -- that may be subject to macroeconomic policy tools.
+\medskip
+\item Observed data are characterized (indexed) by geographic location, distances between geo-coded units play a crucial role.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial regression models}
+\textbf{Spatial regression models -- examples}
+\medskip
+\begin{itemize}
+	\item House prices depend on utility-related variables (area in m$^2$, number of rooms/bedrooms, elevator, etc.). At the same time, prices in a given area/neighborhood tend to be correlated -- usually, positive spatial autocorrelation is present. 
+	\smallskip
+	\item Highway gas-stations' revenues depend on distance from \\a capital/major city (traffic intensities may be measured -- or proxied by distances). \\Can be considered as a special case of one-dimensional spatial dependency (distance measured along the highway route). 
+	\smallskip
+	\item Increased policing activity in a given area (county) may decrease local crime levels while causing increased illegal activities in nearby counties -- a negative spatial autocorrelation example.
+	\smallskip
+	\item Macroeconomic shocks (both positive and negative) may spill more prominently among spatially close economies: we need to account for such effects in econometric models.
+	\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial regression models}
+\textbf{Spatial regression models -- discussion}
+\medskip
+\begin{itemize}
+	\item Great proportion of spatial effects (spatial dependencies) is closely related to missing variables (significant yet often non-measurable) for a regression model.
+	\smallskip
+	\item Spatial lag is a proxy variable for (potentially many) unobservable factors. For example, using EU's labor market and/unemployment regression models:
+	\smallskip
+	\begin{itemize}
+		\item Work commuting among regions/districts/states and the problematic consistent measurements of this phenomenon.
+		\smallskip
+		\item Language, qualification and administrative barriers on labor market.
+		\smallskip
+		\item Aerial distances vs. topology and transportation infrastructure.
+	\end{itemize}
+	\smallskip
+	\item Spatial models may provide a simple and interpretable tool for analysis of macroeconomic (regional) dynamics.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial regression models -- main motivations}
 \vspace{-0.2cm}
+\begin{itemize}
+\item \textit{Omitted variables} motivation: discussed on previous slide.
+\smallskip
+\item \textit{Time-dependency}: agents make decisions influenced by the behavior of other agents in previous periods (state authorities may set taxes that reflect policy actions taken by their neighbors in previous periods).
+\smallskip
+\item \textit{Spatial heterogeneity} motivation is largely based on panel data methods and regression models. Spatially close units exhibit more similar individual effects as compared to non-neighboring units. 
+\smallskip
+\item \textit{Externalities-based} motivation comes from a well-established economic concept: individuals and regions may be subject to positive/negative consequences of activities exercised by unrelated third parties (heavy traffic, air pollution, etc.).
+\smallskip
+\item \textit{Model uncertainty} motivation: spatial autocorrelation may be used in circumstances where we face uncertainty in terms of specifying a proper data generating process (DGP). 
+\end{itemize} 
+Note that motivations are not mutually exclusive.
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial regression models}
+Generalized nesting spatial (GNS) model 
 \begin{equation*}
-y_i = 
-    \begin{cases}
-        \beta_{01} + \beta_{11} x_i + u_i \textnormal{~~if~~} x_i <  c_1 ;& \\ ~ & \\
-         \beta_{02} + \beta_{12} x_i + u_i \textnormal{~~if~~} x_i \geq  c_1 .& 
-    \end{cases}
+\begin{aligned}
+  \bm{y} &= \lambda \bm{W\!y} + \alpha \bm{\iota} + \bm{X \beta} + \bm{W\!X\theta} + \bm{u} \,, \\
+  \bm{u} &= \rho \bm{W\!u} + \bm{\varepsilon} \,,
+\end{aligned}
+\end{equation*}
+where $\bm{W\!y}$ is the spatial lag, $\bm{W\!X}$ is the spatial lag for regressor matrix $\bm{X}$ and $\bm{W\!u}$ describes spatial interactions (spatial lag) among disturbance elements. Elements $\lambda$, $\rho$ and $\bm{\theta}$ are the spatial parameters, estimated along with $\alpha$ and $\bm{\beta}$.\\ \bigskip
+Under the null hypothesis of no spatial dependency \\($\lambda = \rho =0$  and $\bm{\theta}=\bm{0}$), GNS simplifies to 
+\begin{equation*}
+  \bm{y} = 
+  \alpha \bm{\iota} + \bm{X \beta} + \bm{\varepsilon} \,,
+\end{equation*}
+Using apropriate null restrictions, GNS may be transformed to different types of spatial models.
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial regression models}
+\begin{figure}
+	\includegraphics[width=1\textwidth]{IMG/sp_reg.PNG}
+	\caption{The relationship between different spatial dependence models for cross-sectional data (source: Elhorst, 2014). Note: this illustration is based on a slightly modified notation of spatial parameters.}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial lag model}
+By assuming spatial interactions in the dependent variable only, \\($\bm{\theta}=\bm{0}$ and $\rho=0$), we simplify GNS into a spatial lag model (SLM):
+\begin{equation*} 
+\bm{y} = \lambda \bm{W\!y} + \alpha \bm{\iota} + \bm{X \beta} + \bm{\varepsilon}\,.
+\end{equation*}
+The SLM specification is used commonly throughout empirical literature, e.g. in models describing taxes imposed by governments. Reduced form of SLM can be expressed as:
+\begin{equation*} 
+(\bm{I}_{N} - \lambda \bm{W}) \bm{y} = \alpha \bm{\iota} + \bm{X \beta} + \bm{\varepsilon}\,,
+\end{equation*}
+where $\bm{I}_{N}$ is an $(N\! \times \!N)$ identity matrix and the RHS regression coefficients explain the variability of individual $y_{i}$ observations that is not explained spatially. Also, if the inverse to $(\bm{I}_{N} - \lambda \bm{W})$ exists, we can express DGP for $\bm{y}$ as
+\begin{equation*}
+\bm{y} = (\bm{I}_{N} - \lambda \bm{W})^{-1} (\alpha \bm{\iota} + \bm{X \beta} + \bm{\varepsilon})\,.
 \end{equation*}
 \end{frame}
-%---------------------------------------------
-\begin{frame}{Regression splines}
-\centering
-Piecewise linear ``continuous'' regression with one knot at $c_1$:\\
-\vspace{-0.2cm}
-\begin{figure}
-  \centering
-  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.4\textwidth]{IMG/ISLR73b.pdf}
-\end{figure}
-\vspace{-0.5cm}
-``Continuity'' can be easily imposed as follows:
-$$ y_i = \beta_0 + \beta_1x_i + \beta_2\{1[x_i > c_1](x_i-c_1)\} + u_i$$
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Regression splines -- linear splines}
-%\small 
-\textbf{Linear spline:} generalize previous example to multiple knots.\\ Fit regression line in each region of the predictor space, requiring ``continuity'' in each knot. Regression model with $K$ knots $\xi_k, k=1,\dots, K$ can be represented using \textcolor{blue}{basis functions} as follows:
-$$y_i = \beta_0 + \beta_1 \, b_1 (x_i) + \beta_2 \, b_2 (x_i) + \cdots  + \beta_{K+1} \, b_{K+1} (x_i) + u_i  $$
-where $b_k$ are the basis functions:\\
-\smallskip
-\qquad $b_1 (x_i) = x_i$\,,\\
-\qquad $b_2 (x_i) = (x_i-\xi_1)_{+} = 1[x_i > \xi_1](x_i-\xi_1)\}$,\\
-\qquad $b_3 (x_i) = (x_i-\xi_2)_{+}$\,, \\ \qquad etc.\\
-\medskip
+%---------------------------------------------------------------------
+\begin{frame}{Spatial lag model}
+\begin{equation*} 
+\bm{y} = \lambda \bm{W\!y} + \alpha \bm{\iota} + \bm{X \beta} + \bm{\varepsilon}\,.
+\end{equation*}
 \begin{itemize}
-    \item The $(x_i-\xi_k)_{+}$ means the positive part of the difference.
+    \item For each $y_i$, the element $\textit{SpatialLag}(y_{i}) = \bm{w}_i \bm{y}$ enters the equation, where $\bm{w}_i$ is the $i$-th row of $\bm{W}$.
     \smallskip
-    \item With linear splines, each knot only adds one estimated parameter to the estimation, i.e. $K\!+\!2\,$ d.f. are used (compare to non-continuous piecewise linear regression: $2K$ d.f. used).
+    \item For model stability, we assume $\lambda \in (-1,1)$. \\(rule of thumb, see Elhorst, 2014, Spatial Econometrics; From Cross-Sectional Data to Spatial Panels and the discussion provided next).
     \smallskip
-    \item Basis functions (notation) will be useful in subsequent discussion.
+    \item Coefficients $\bm{\beta},~\alpha$ and $\lambda$ are estimated by MLE (if distributional assumptions -- e.g. normality of the error term -- can be made).  Otherwise, GMM may be applied.
+    \smallskip
+    \item Coefficients $\bm{\beta}^{\prime} = (\beta_1, \dots, \beta_k)$ explain (ceteris paribus) variability in $\bm{y}$ that is not explained spatially.
 \end{itemize}
 \end{frame}
-%---------------------------------------------
-\begin{frame}{Regression splines -- cubic splines}
-\textbf{Cubic spline} with knots $\xi_k,~k=1,\dots, K$ is a piecewise cubic polynomial with continuous derivatives up to order 2 at each knot.\\
-\medskip
-Again we can represent this model with truncated power basis functions:
-$$y_i = \beta_0 + \beta_1 \, h_1 (x_i) + \beta_2 \, h_2 (x_i) + \cdots + \beta_{K+3} \, h_{K+3} (x_i) + u_i  $$
-where:\\
-\smallskip
-\qquad $h_1 (x_i) = x_i$\,,\\
-\smallskip
-\qquad $h_2 (x_i) = x_i^2$\,,\\
-\smallskip
-\qquad $h_3 (x_i) = x_i^3$\,,\\
-\smallskip
-\qquad $h_4 (x_i) = (x_i-\xi_1)_{+}^3 \,$, \qquad \qquad / note: $h_4 = h_{[k=1]+3}$,\\
-\smallskip
-\qquad $h_5 (x_i) = (x_i-\xi_2)_{+}^3 \,$, \qquad \qquad / generally: $h_{k+3}$ for $k=1,\dots,K$,\\
-\qquad $~~\vdots$ \\
-\qquad $h_{K+3} (x_i) = (x_i-\xi_K)_{+}^3 \,$.\\
-\medskip
+%---------------------------------------------------------------------
+\begin{frame}{Spatial Durbin model}
+If we drop the simplifying assumption $\bm{\theta}=\bm{0}$ from SLM, we get the spatial Durbin model (SDM):
+\begin{equation*} 
+  \bm{y} = \lambda \bm{W\!y} + \alpha \bm{\iota} + \bm{X \beta} + \bm{W\!X\theta} + \bm{\varepsilon}\,.
+\end{equation*}
+For example, if $y_i$ describes household income in a region $i$, then such income is influenced by incomes (say, wages) in neighboring regions and by both ``domestic'' and neighboring rates of unemployment, labor force productivities, etc.  
+\\ \medskip
+By analogy to the SLM case -- and  given $(\bm{I}_{N} - \lambda \bm{W})^{-1}$ exists -- we may write the DGP as follows:
+\begin{equation*}
+\bm{y} = (\bm{I}_{N} - \lambda \bm{W})^{-1} (\alpha \bm{\iota} + \bm{X \beta} + \bm{W\!X\theta}+ \bm{\varepsilon})\,.
+\end{equation*}
 \end{frame}
-%---------------------------------------------
-\begin{frame}{Regression splines -- cubic splines}
-\begin{itemize}
-    \item Cubic splines use $4+K$ d.f.
-    \smallskip
-    \item Cubic spline has continuous derivatives up to order 2 at each knot.\\
-    $d$-spline (degree-$d$ spline) has continuous derivatives up to degree $d-1$ at each knot.
-    \smallskip
-    \item Cubic spline popularity is based on human perception: this is the lowest-order spline where knot-discontinuity is not visible to the human eye.
-    \smallskip
-    \item Unfortunately, $d$-splines (incl. cubic splines) tend to have high variance at the outer range of the predictor (i.e. when $X$ is very low or very high). Possible solution: use ``natural splines'' with additional boundary constraints.
-\end{itemize}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial error model}
+Spatial error model (SEM) is another frequently used specification of the spatial model. SEM is obtained from the GNS model by assuming $\lambda=0$ and $\bm{\theta}=\bm{0}$. Hence, spatial interactions take place only among the error terms: 
+\begin{equation*}
+\begin{aligned}
+\bm{y} = \alpha \bm{\iota} + \bm{X \beta} + \bm{u}\,, \\
+ \bm{u} = \rho \bm{W\!u} + \bm{\varepsilon}\,.
+\end{aligned}
+\end{equation*}
+Theoretical (macroeconomic) reasoning of the spatial dependency is not required for SEMs -- this approach can be used to model a situation where endogenous variables are influenced by exogenous factors that are omitted from the main equation and spatially autocorrelated. Alternatively, unobserved shocks may follow spatial pattern(s).
 \end{frame}
-%---------------------------------------------
-\begin{frame}{Regression splines -- natural splines}
-\textbf{Natural cubic spline:} a cubic regression spline with additional boundary constraints:\\
-\smallskip
-\begin{itemize}
-    \item For a cubic spline regression model $y \leftarrow x$ with $K$ knots, \\$f(X)$ is required to be linear for $X \leq \xi_1$ and for $X > \xi_K$.
-    \smallskip
-    \item Additional restrictions free 4 d.f. (compared to cubic spline), \\so we use $K$ d.f. for estimation.
-\end{itemize}
-\vspace{-0.4cm}
-\begin{figure}
-  \centering
-  \includegraphics[trim=0cm 0cm 0cm 1cm, clip=true, width=0.5\textwidth]{IMG/ISLR74.pdf}
-\end{figure}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Regression splines -- natural splines}
-\small
-A natural cubic spline with $K$ knots is represented by $K$ basis functions. General notation for natural cubic splines with with knots $\xi_k,~k=1,\dots, K$:
-$$y_i = \beta_1 \, N_1 (x_i)  + \beta_2 \, N_2 (x_i) + \beta_3 \, N_{2+[k=1]} (x_i) + \cdots + \beta_{K} \, N_{2+[k=K-2]} (x_i) + u_i  $$\\
-\vspace{-0.2cm}
-~\,where:\\
-\smallskip
-\qquad $N_1 (x_i) = 1$\,,\\
-\smallskip
-\qquad $N_2 (x_i) = x_i$\,,\\
-\smallskip
-\qquad $N_{2+k} (x_i) = d_k(X)-d_{K-1}(X)\,$,\qquad ~~applies to all $k=1,\dots,K\!-\!2$.\\
-\qquad $\vdots$\\
-\smallskip
-\qquad $N_{K} (x_i) = d_{K-2}(X)-d_{K-1}(X)\,$,\qquad (note that $N_K=N_{2+[k=K-2]}$),\\
-\bigskip
-\qquad where $d_k(X)=\frac{(X-\xi_k)_{+}^3 - \, (X-\xi_K)_{+}^3}{\xi_K \,-\, \xi_k}$.\\
-\bigskip
-All basis functions $N_1,\dots,N_{K}$ have $2^{nd}$ and $3^{rd}$ derivatives \\equal to zero for $X < \xi_1$ and for $X \geq \xi_K$.
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Regression splines -- natural splines}
-Example: For $K\!=\!4$ and using the truncated power bases of cubic splines $(X-\xi_k)_{+}^3 \,$, we can write:
-$$y_i = \beta_1 \, N_1 (x_i)  + \beta_2 \, N_2 (x_i) + \beta_3 \, N_3 (x_i) + \beta_4 \, N_4 (x_i) + u_i  $$\\
-\vspace{-0.2cm}
-where:\\
-\smallskip
-\qquad $N_1 (x_i) = 1$\, \hspace{3.5cm} ~($\beta_1$ is the intercept),\\
-\smallskip
-\qquad $N_2 (x_i) = x_i$\,,\\
-\smallskip
-\qquad $N_3 (x_i) = d_1(X)-d_{3}(X)$,\\
-\smallskip
-\qquad $N_4 (x_i) = d_2(X)-d_{3}(X)$\\
-\medskip
-\qquad and $d_k(X)=\frac{(X-\xi_k)_{+}^3 \,-\, (X-\xi_K)_{+}^3}{\xi_K \,-\, \xi_k}$.\\
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Regression splines -- knot selection}
-Where should we place the knots?\\
-\bigskip
-\begin{itemize}
-    \item Specify the number of knots and use uniformly distributed quantiles.\\
-    \medskip    
-    \begin{itemize}
-        \item 1 knot: at median, 2 knots: at $q_{0.33}$ and $q_{0.66\,}$, etc.
-        \smallskip
-        \item Optimum number of knots can be determined by $k$FCV.
-    \end{itemize}
-    \bigskip
-    \item Spline function is most flexible in regions that contain a lot of knots. Hence:\\
-    \medskip    
-    \begin{itemize}
-        \item Place more knots in regions where we assume the function \\may vary most rapidly.
-        \smallskip
-        \item Place fewer knots where the function seems more stable.
-        \smallskip
-        \item Ad-hoc and potentially misleading approach.
-    \end{itemize}
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Smoothing splines -- overview}
-\begin{itemize}
-    \item Smoothing splines -- alternative to cubic \& natural splines. \\Essentially, a penalized natural cubic spline with (up to) $N$ knots (knot is placed at each unique observation of regressor.)
-    \bigskip
-    \item Search for a function $g(x)$ that minimizes RSS and is smooth.
-\end{itemize} \medskip
-$$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda \int g''(t)^2 \textit{dt}$$
-\begin{itemize}
-    \item $\sum_{i=1}^n [y_i - g(x_i)]^2$ is a loss function, makes $g(x)$ fit the data.\\  \smallskip
-    $g(x)$ can be any function for which the second term is defined.\\
-    \bigskip
-    \item $\lambda \int \! g''(t)^2 \textit{dt}~$ penalizes high variability in $g(x)$.\\  \smallskip
-    $\lambda$ is a penalty term. For $\lambda=\infty$, smoothing splines lead to OLS fit.
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Smoothing splines -- overview}
-$$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda \int g''(t)^2 \textit{dt}$$
-\begin{itemize}
-    \item $g'(t)$ is the first derivative, measures slope of $g(t)$ at $t$.\\
-    \smallskip
-    $g''(t)$ indicates $2^{nd}$ derivative and corresponds to the amount \\by which the slope is changing.
-    \medskip
-    \item $g''(t)$ is a measure of ``\textit{roughness}'' of $g(t)$ around $t$.\\
-    \smallskip
-    it is large (in absolute value) if $g(t)$ is ``wiggly'' near $t$,\\
-    \smallskip
-    it is zero if $g(t)$ is a straight line around $t$.
-    \medskip
-    \item $\int g''(t)^2 \textit{dt}$ ~is a (specific) measure of the total change in $g'(t)$ \\over the entire range. 
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Smoothing splines -- overview}
-$$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda \int g''(t)^2 \textit{dt}$$
-\begin{itemize}
-    \item While $g$ can be any function, it may be shown that $\textnormal{RSS}(g,\lambda)$ has an explicit \& unique minimizer: natural cubic spline with $N$ knots at unique values of $x_i,~i=1,2,\dots,N$. \\(more precisely, a penalized natural cubic spline with $N$ knots)
-    \medskip
-    \item With a suitable $\lambda$ parameter, the model is not overparameterized: \textcolor{blue}{effective degrees of freedom} used for estimation $(df_{\lambda})$ decrease from $N$ to 2 as $\lambda$ increases from 0 to $\infty$.
-    \medskip
-    \item Cross-validation can be used to find $\lambda$ with the lowest cross-validated RSS.
-    \medskip
-    \item For technical discussion of smoothing splines, see (\textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{ESL, ch. 5.4}}}).
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Smoothing splines -- overview}
-\vspace{-0.4cm}
-\begin{figure}
-  \centering
-  \includegraphics[trim=0cm 0cm 0cm 1cm, clip=true, width=0.6\textwidth]{IMG/ISLR78.pdf}
-\end{figure}
-\centering
-\vspace{-0.5cm}
-\tiny{Note that \textit{df} in the legend refer to $(df_{\lambda})$ used by the estimation.}
-\end{frame}
-%---------------------------------------------
-\subsection{Local regression}
-\begin{frame}{Local regression}
-\begin{itemize}
-    \item Another approach for fitting flexible (non-linear) functions.
-    \item For a given target point $x_0$, regression is fit using nearby observations only.
-\end{itemize}
-\bigskip
-\centering
-Local regression example (artificial data)
-\vspace{-0.4cm}
-\begin{figure}
-  \centering
-  \includegraphics[trim=0cm 0cm 0cm 1.1cm, clip=true, width=0.7\textwidth]{IMG/ISLR79.pdf}
-\end{figure}
-\vspace{-0.4cm}
-\tiny{Legend: orange: local regression, blue: DGP, yellow bell: weight of observations used in regression.}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Local regression algorithm}
-Local regression at $X = x_0$\\
-\bigskip
+%---------------------------------------------------------------------
+\begin{frame}{Spatial model stability conditions}
 \begin{enumerate}
-    \item Gather the fraction $s = k/n$ of training points whose $x_i$ \\are closest to $x_0$.
-    \medskip
-    \item Assign a weight $K_{i0} = K(x_i , x_0)$ to each point in this neighborhood, so that the closest point has the highest weight \\and vice versa. All but the nearest $k$ neighbors get zero weights.
-    \medskip
-    \item Fit \textit{weighted least squares regression} of $y_i$ on $x_i$ by finding $\beta$ parameters that minimize the following expression:
-    $$\min : ~~~ \sum_{i=1}^n K_{i0} (y_i - \beta_0 - \beta_1 x_i)^2 \,.$$
-    \item Fitted value at $x_0$ is given by $\hat{f}(x_0) = \hat{\beta}_0 + \hat{\beta}_1 x_0\,$.
-\end{enumerate}
-\bigskip
-$\Rightarrow$ repeat for all $x \in X$ observations in the dataset.
+\item Spatial matrix $\bm{C}$ is a non-negative matrix of known constants with zeros on the diagonal (if this holds for $\bm{C}$, it holds for the row-standardized $\bm{W}$ as well).
+\smallskip
+\item Spatial weak dependency  holds. Two alternative conditions: (a) The row and column sums of $\bm{C}$ should be uniformly bounded in absolute value as $N$ (the number of observed units) goes to infinity. (b) The row and column sums of $\bm{C}$ should not diverge to infinity at a speed equal to or faster than the growth of sample size $N$. Condition (b) is more general (relaxed) and (a) is its special case.
+\smallskip
+\item Matrices $(\bm{I}_{N} - \lambda \bm{W})$ and $(\bm{I}_{N} - \rho \bm{W})$ are non-singular. If the underlying $\bm{C}$ matrix is symmetric and non-negative, this condition is satisfied whenever $\lambda$ and $\rho$ lie within the $(1/\kappa_{min}, 1)$ interval, where $\kappa_{min}$ denotes the smallest (most negative) real eigenvalue of $\bm{W}$ and 1 is the largest eigenvalue for a row-standardized $\bm{W}\!.$ \vspace{0.2cm} \\
+\end{enumerate}    
 \end{frame}
-%---------------------------------------------
-\begin{frame}{Local regression}
-\textbf{Local regression: choices to be made}\\
-\smallskip
+%---------------------------------------------------------------------
+\begin{frame}{ML estimation of SLMs and SDMs}
 \begin{itemize}
-    \item Weighting function $K$ must be defined (e.g.: $\tfrac{1}{(x_0 - x_i)^2}, x_0 \neq x_i$).
+    \item The RHS regressor element $\bm{W\!y}$ in SLM or SDM is correlated with the error term. Hence, OLS estimation of models with spatially lagged endogenous variables is biased and inconsistent.
+    \smallskip 
+    \item ML estimators for such models are consistent (other methods are possible: GMM, 2SLS).
     \smallskip
-    \item Functional form in Step 3 (constant, linear, quadratic, etc.).
+    \item We use a slightly modified SDM notation to describe ML estimator for both SLMs and SDMs, as their likelihood functions coincide (SLM is a special case of SDM, with $\bm{\theta}=\bm{0}$ imposed). 
     \smallskip
-    \item Span $s$ controls flexibility of the fit (can choose using CV).
-\end{itemize}
-\bigskip
-\textbf{Local regression --  discussion}\\
-\smallskip
-\begin{itemize}
-    \item Local regression can be generalized to models with multiple regressors: the model is global in some regressors and local in others (say, time). Such model adapts to the most recently gathered observations.
-    \smallskip
-    \item Local regression can be generalized to neighborhoods of higher dimensions (say, over $X_1$ and $X_2$). However, this approach does not extend easily to higher dimensions (beyond 3 or 4).
+    \item First, we expand the DGP of SDM by $\textit{iid}$ normality assumption for residuals: 
+    \begin{equation*} 
+    \begin{aligned}
+    \bm{y} &= (\bm{I}_{N} - \lambda \bm{W})^{-1} (\alpha \bm{\iota} + \bm{X \beta} + \bm{W\!X\theta}+ \bm{\varepsilon})\,, \\ 
+    \bm{\varepsilon} &\sim N(\bm{0}, \sigma_{\varepsilon}^2 \, \bm{I}_{N}) \,,
+    \end{aligned}
+    \end{equation*}
+    where $\sigma_{\varepsilon}^2$ is the variance of $\bm{\varepsilon}$.
 \end{itemize}
 \end{frame}
-%---------------------------------------------
-\subsection{Generalized Additive Models (GAM)}
-\begin{frame}{Generalized Additive Models (GAM)}
-So far, polynomial and step regression, splines and local regression have been discussed as univariate regression models with $y_i \leftarrow f(x_i)$.\\
-\medskip GAMs extend multivariate LRMs by allowing non-linear functions\\ \& smoothers in each variable, while maintaining additivity (and ceteris paribus interpretation for each regressor).\\ \medskip
-Multiple-regressor LRM:
-$$ y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip} + u_i~~~~~~~~~~~~~~~~~$$
-can be generalized to a GAM:
-$$ y_i = \alpha + \, f_1(x_{i1}) + \, f_2(x_{i2}) + \cdots + \, f_p(x_{ip}) + u_i$$ 
-where each $f_j(x_{ij})$ is representing some convenient function of $x$: piecewise constant, linear, polynomial, spline, etc.
+%---------------------------------------------------------------------
+\begin{frame}{ML estimation of SLMs and SDMs}
+\begin{itemize}
+    \item In $\bm{y} = (\bm{I}_{N} - \lambda \bm{W})^{-1} (\alpha \bm{\iota} + \bm{X \beta} + \bm{W\!X\theta}+ \bm{\varepsilon})\,,$ we use substitution $\bm{Z}=[\bm{\iota} \,, \bm{X} \,, \bm{W\!X}]$ and $\bm{\delta}= \left[ \alpha \,, \bm{\beta} \,, \bm{\theta} \right]^{'}$. 
+    \smallskip
+    \item We can re-arrange DGP of the SDM/SLM equation as: 
+    \begin{equation*}
+    \begin{aligned}
+    \bm{y} &= (\bm{I}_{N} - \lambda \bm{W})^{-1} \bm{Z \delta} \, + \,
+    (\bm{I}_{N} - \lambda \bm{W})^{-1} \bm{\varepsilon}\,, \\ 
+    \bm{\varepsilon} &\sim N(\bm{0}, \sigma_{\varepsilon}^2 \, \bm{I}_{N})\,.
+    \end{aligned}
+    \end{equation*}
+    \item The above substitution allows us to use a single likelihood function for both SLM and SDM: for SDMs, we use $\bm{Z}=[\bm{\iota} \,, \bm{X} \,, \bm{W\!X}]$. \\ \smallskip For SLMs, $\bm{Z}=[\bm{\iota} \,, \bm{X}]$ and analogous amendments are made to the vector of parameters $\bm{\delta}$.
+    \smallskip
+    \item Note how our substitution transforms the original SDM model
+    \begin{equation*} 
+    \bm{y} = \lambda \bm{W\!y} + \alpha \bm{\iota} + \bm{X \beta} + \bm{W\!X\theta} + \bm{\varepsilon}\,.
+    \end{equation*}
+    into
+    \begin{equation*}
+    \bm{y} = \lambda \bm{W\!y} + \bm{Z \delta} + \bm{\varepsilon}\, \qquad \rightarrow \qquad
+    \bm{\varepsilon} = \bm{y} - \bm{W\!y} - \bm{Z \delta}.
+    \end{equation*}
+\end{itemize}
 \end{frame}
-%---------------------------------------------
-\begin{frame}{GAM example}
-$$\texttt{wage} = \alpha + f_1(\texttt{year}) + f_2(\texttt{age}) + f_3(\texttt{education}) + u_i$$
-\bigskip
-where $f_1$ and $f_2$ are smoothing splines and $f_3$ is a step function (\texttt{education} is a qualitative variable with five levels).
-\vspace{-0.2cm}
-\begin{figure}
-  \centering
-  \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, width=0.85\textwidth]{IMG/ISLR712.pdf}
-\end{figure}
+%---------------------------------------------------------------------
+\begin{frame}{ML estimation of SLMs and SDMs}
+\begin{itemize}
+    \item The log-likelihood function for the SLM (and SDM) model may be outlined as
+    \begin{equation*}
+    \begin{aligned}
+    LL(\lambda,\bm{\delta}, \sigma_{\varepsilon}^2) &= - \frac{N}{2} \log (\pi \sigma_{\varepsilon}^2) +
+    \log | \bm{I}_{N} - \lambda \bm{W} | - 
+    \frac{\bm{e}^{'} \bm{e} }{2\sigma_{\varepsilon}^2}\,, \\
+    \bm{e} &= \bm{y} - \lambda \bm{Wy} - \bm{Z \delta}\,,
+    \end{aligned}
+    \end{equation*}
+    where $N$ is the number of spatial units, $| \bm{I}_{N} - \lambda \bm{W} |$ is the determinant of this $N \! \times \! N$ matrix and $\bm{e}$ is a vector of residuals.
+    \smallskip
+    \item Direct estimation (maximization) of the $LL$ function is subject to multiple computational issues. Alternative approach -- by means \\of iterating over concentrated log-likelihood functions -- is used.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{ML estimation of SEMs}
+\begin{itemize}
+    \item We add $\textit{iid}$ normality assumption to $\bm{\varepsilon}$ residuals of the SEM:
+    \begin{equation*}
+    \begin{aligned}
+    \bm{y} &= \bm{X \beta} +  (\bm{I}_{N} - \rho \bm{W})^{-1} \bm{\varepsilon}\,, \\ 
+    \bm{\varepsilon} &\sim N(\bm{0}, \sigma_{\varepsilon}^2\,\bm{I}_{N})\,,
+    \end{aligned}
+    \end{equation*}
+    where the intercept term has been incorporated into the $\bm{X \beta}$ expression for simplicity. 
+    \smallskip
+    \item Now, the log-likelihood function for SEMs has the form
+    \begin{equation*}
+    \begin{aligned}
+    LL(\bm{\beta}, \rho, \sigma_{\varepsilon}^2) &= - \frac{N}{2} \log (\pi \sigma_{\varepsilon}^2) +
+    \log | \bm{I}_{N} - \rho \bm{W} | - 
+    \frac{\bm{e}^{'} \bm{e} }{2\sigma_{\varepsilon}^2}\,, \\
+    \bm{e} &= (\bm{I}_{N} - \rho \bm{W}) (\bm{y} - \bm{X \beta})\,.
+    \end{aligned}
+    \end{equation*}
+    \item Again, for computational reasons, concentrated log-likelihood functions are calculated iteratively to maximize $LL$ function and obtain parameter estimates and corresponding standard errors. 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{ML estimation \& testing of spatial models}
+\begin{itemize}
+    \item $LL$ functions  for SDMs (SLMs) and SEMs may be amended to accommodate binomial, count, multinomial and other dependent variables (LeSage, Pace: Introduction  to  spatial  econometrics).
+    \smallskip
+    \item Likelihood ratio ($LR$) test can be used to evaluate spatial model specification through a set of conveniently chosen restrictions leading to two alternative nested models:
+\begin{equation*}
+\textit{LR} = 2(\mathcal{L}_{ur}-\mathcal{L}_{r}) \,\,\, \underset{H_0}{\sim} \,\,\, \chi_q^2 \, ,
+\end{equation*}
+where $\mathcal{L}_{ur}$ is the maximized $LL$ function  of the estimated spatial model. The null hypothesis is used to enforce zero restriction on all parameters describing spatial autocorrelation ($\lambda$, $\bm{\theta}$ or $\rho$ -- given specification of the unrestricted model) and $\mathcal{L}_{r}$ is the maximized $LL$ of the non-spatial model.
+\smallskip
+\item $LR$ tests may be applied more generally (different restrictions may be evaluated).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{SLM vs SEM specification tests}
+\begin{itemize}
+    \item LM-based test for SEM specification evaluates the null hypothesis of no spatial autocorrelation of residuals against the alternative of SEM specification: 
+\begin{equation*}
+\textit{LM-SEM}=\frac{1}{T}
+\left(\frac{\bm{\hat{u}}^{'}\bm{W\hat{u}}}{\hat{\sigma}^2}\right)^{2} 
+\,\,\, \underset{H_0}{\sim} \,\,\, \chi_1^2 \,\,,
+\end{equation*}
+where $\hat{\sigma}^2$ is the estimated variance of residuals $\bm{\hat{u}}$ and $T=\textnormal{tr}(\bm{W}^{'}\bm{W} \! + \! \bm{W}^2)$ is trace of the matrix. Note that the $\textit{LM-SEM}$ statistic is just a scaled version of Moran's $I$.
+\smallskip
+\item The $\textit{LM-SEM}$ test is not robust against SLM specification (spatial dependency in $y$).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{SLM vs SEM specification tests}
+\begin{itemize}
+    \item The $\textit{LM-SLM}$ statistic is used in OLS-estimated linear models to test $H_0$ of spatial independence in $\bm{y}$ against the alternative of its spatial autocorrelation (SLM): 
+\begin{equation*} 
+\textit{LM-SLM}=\frac{1}{N \, J_{\lambda,\bm{\beta}}}
+\left(\frac{\bm{\hat{u}}^{'}\bm{Wy}}{\hat{\sigma}^2}\right)^{2} 
+\,\,\, \underset{H_0}{\sim} \,\,\, \chi_1^2 \,\,,
+\end{equation*}
+where the term $J_{\lambda,\bm{\beta}} = \left[ (\bm{WX\hat{\beta}})^{'}\bm{M}(\bm{WX\hat{\beta}}) + T \hat{\sigma}^2 \right] \! / N \hat{\sigma}^2$ is calculated using the vector of OLS-estimated parameters $\bm{\hat{\beta}}$ and the ``residual maker'' (orthogonal projection matrix) $\bm{M} = \bm{I}_N - \bm{X}(\bm{X}^{'}\bm{X})^{-1}\bm{X}^{'}$.
+\smallskip
+\item The $\textit{LM-SLM}$ test is not robust against autocorrelated error term (SEM-type).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{SLM vs SEM specification tests}
+\begin{itemize}
+    \small{
+    \item The test for a spatial error process that is robust to local presence of \\a spatial lag is given as:
+    \begin{equation*} 
+    \textit{RLM-SEM}=\frac{1}{T-T^2(NJ_{\lambda,\bm{\beta}})^{-1}}
+    \left(\frac{\bm{\hat{u}}^{'}\bm{W\hat{u}}}{\hat{\sigma}^2}
+    -T(NJ_{\lambda,\bm{\beta}})^{-1}
+    \frac{\bm{\hat{u}}^{'}\bm{Wy}}{\hat{\sigma}^2}
+    \right)^{2} 
+    \! \underset{H_0}{\sim} \chi_1^2,
+    \end{equation*}
+    }% end small
+\textnormal{where the subtraction of a correction factor that accounts for the local misspecification (potentially omitted spatial lag process) is visible. 
+    \smallskip
+    \item By $\textit{RLM-SEM}$, we test the $H_0$ of no spatial dependency in residuals (OLS-estimated) against the alternative of SEM specification, while controlling for possible local spatial lag (SLM process). 
+    } % normal
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{SLM vs SEM specification tests}
+\begin{itemize}
+    \item Test for a spatial lag process robust to local presence of spatial error autocorrelation is defined as:
+    \begin{equation*}
+    \textit{RLM-SLM}=\frac{1}{N \, J_{\lambda,\bm{\beta}} - T}
+    \left(\frac{\bm{\hat{u}}^{'}\bm{Wy}}{\hat{\sigma}^2}
+    - \frac{\bm{\hat{u}}^{'}\bm{W\hat{u}}}{\hat{\sigma}^2} \right)^{2} 
+    \,\,\, \underset{H_0}{\sim} \,\,\, \chi_1^2 \,\,.
+    \end{equation*}
+    \item Heteroskedasticity-robust versions of statistics $\textit{LM-SEM}$ and $\textit{LM-SLM}$ are available. 
+    \smallskip
+    \item Heteroskedasticity-robust versions of the $\textit{RLM-SEM}$ and $\textit{RLM-SLM}$ tests are not easily accessible as accounting for heteroskedasticity leads to highly non-linear expressions.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{itemize}
+	\item In spatial models (SLM, SDM), there are two basic types of marginal effects: direct and indirect effects. \\ \bigskip 
+	Sometimes a third effect -- total effect -- is reported: a sum of the previous two effects. 
+	\bigskip
+	\item In presence of spatial autocorrelation among observed variables (and for SDM), if a given explanatory variable in some $i$-th unit changes, than not only the dependent variable in the $i$-th unit is expected to change (direct effect) but also the dependent variables in other units (neighbors of unit $i$) would change. \\ \bigskip Such effect across spatial units is the indirect effect, sometimes called ``spillover''.
+	\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{itemize}
+	\item Marginal effects can be conveniently illustrated using a slightly modified GNS model:
+\begin{equation*}
+\bm{y} = (\bm{I}_N - \lambda \bm{W})^{-1}
+         (\bm{X \beta}+\bm{WX\theta}) + \bm{r} \,,
+\end{equation*}
+where $\bm{r}$ contains both the intercept and (potentially spatially dependent) error term. Marginal effects for some arbitrary regressor $\bm{x}_k$ are given by a Jacobian matrix of first derivatives of the expected values of $\bm{y}$ with respect to the explanatory variable: 
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k} = 
+\begin{pmatrix}
+		\dfrac{ \partial E(\bm{y})}{ \partial x_{1k}} & \cdots & \dfrac{\partial E(\bm{y})}{ \partial x_{Nk}}
+	\end{pmatrix} = 	
+	\begin{pmatrix}
+		\dfrac{\partial E(y_{1})}{\partial x_{1k}} & \cdots & \dfrac{\partial E(y_{1})}{\partial x_{Nk}} \\
+		\vdots & \ddots & \vdots \\
+		\dfrac{\partial E(y_{N})}{\partial x_{1k}} &\cdots & \dfrac{\partial E(y_{N})}{\partial x_{Nk}} \\
+	\end{pmatrix}.
+\end{equation*}
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{itemize}
+	\item After some re-arranging, we can write:
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
+    =(\bm{I}_N-\lambda \bm{W})^{-1} (\bm{I}_N \beta_k + \bm{W} \theta_k)\,.
+\end{equation*}
+\item 
+For convenience and clarity, the RHS may also be re-written as:
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
+    =(\bm{I}_N-\lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
+\item Recall that $w_{ij}$ denotes element of the $\bm{W}$ matrix and $w_{ij} > 0$ if two spatial units $i$ and $j$ are neighbors (and zero otherwise). \\$\beta_k$ and $\theta_k$ are parameters of the GNS/SDM, corresponding to the $k$-th regressor. The RHS is a $N\!\times\!N$ matrix.
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
+    =(\bm{I}_N - \lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
+\begin{itemize}
+	\item Each diagonal element of the partial derivatives matrix  represents a direct effect and every off-diagonal element represents an indirect effect.
+	\smallskip
+	\item Direct effects and indirect effects differ across spatial units. Each element of the RHS matrix might be different. 
+	\smallskip
+	\begin{itemize}
+	    \item Individual direct effects differ because the diagonal elements of $(\bm{I}_N - \lambda \bm{W})^{-1}$ are different for each unit (given $\lambda \neq 0$).
+	    	\smallskip
+	    \item Indirect effects are different because off-diagonal element of both $\bm{W}$ and $(\bm{I}_N - \lambda \bm{W})^{-1}$ are different if $\lambda \neq 0$ and/or $\theta_k \neq 0$.
+	\end{itemize} 
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\vspace{-0.3cm}
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
+    =(\bm{I}_N - \lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
+\begin{itemize}
+	\item In absence of spatial autocorrelation of $\bm{y}$ and $\bm{x}_k$, i.e. if both $\lambda = 0$ and $\theta_k = 0$, then all off-diagonal elements equal zero. In this case, indirect effects are not present. Also, direct effects are constant (equal to $\beta_k$) across all spatial units as $(\bm{I}_N - \lambda \bm{W})^{-1}$ simplifies to $\bm{I}_N$ if $\lambda=0$. 
+	\medskip
+    \item The indirect effects that occur if $\theta_k \neq 0$ and $\lambda = 0$ are referred to as \textbf{local effects}. The name arises from the fact that such effect only arise from the neighborhood of a given unit. For example, the effect of $x_{jk}$ ($k$-th regressor for the $j$-th unit) on $y_i$ is nonzero only if units $i$ and $j$ are neighbors (i.e. $w_{ij} > 0$). For non-neighboring units, $x_{jk}$ has no effect on $y_i$.
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
+    =(\bm{I}_N - \lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
+\begin{itemize}
+	\item The indirect effects that occur if $\lambda \neq 0$ and $\theta_k = 0$ are referred to as \textbf{global effects}. The name comes from the fact that effects on $y_i$ originate from units that lie within the neighborhood of $i$ as well as from units outside this neighborhood. Mathematically, this is due to the fact that matrix $(\bm{I}_N-\lambda \bm{W})^{-1}$ does not contain zero elements (given $\lambda \neq 0$) -- even though $\bm{W}$ does contain (usually many) zero elements.
+	\medskip
+    \item For $\lambda \neq 0$ and $\theta_k \neq 0$, both local and global indirect effect are present and they cannot be separated from each other.
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
+    =(\bm{I}_N - \lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
+\begin{itemize}
+    \item The presence or absence of spatial autocorrelation $\rho$ in the error term of GNS/SDM has no impact on the marginal effects: as we take the first derivative of $E(\bm{y})$ with respect to $\bm{x}_k$, the $\bm{r}= (\alpha \bm{\iota} + \rho \bm{W\!u} + \bm{\varepsilon})$ element disappears because it is a ``constant''.
+    \medskip
+    \item Considering the complexity of marginal effects for one regressor, the problem of presenting estimation output from a model with multiple regressors may be severe: even if reliable estimates $\hat{\lambda}, \hat{\bm{\beta}}$ and $\hat{\bm{\theta}}$ are available, we have to deal with a $N\!\times\!N$ matrix of marginal (direct and indirect) effects for each regressor.
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
+    =(\bm{I}_N - \lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
+Estimated marginal effects are usually presented in an aggregated form. For each regressor, we usually report two (sometimes three) statistics:
+ \begin{itemize}
+    \item Summary indicator for direct effects is calculated as the average of all diagonal elements (of the Jacobian for a given regressor $\bm{x}_k$). 
+    \medskip
+    \item Indirect effects are reported as the average of all off-diagonal elements. 
+    \medskip
+    \item The above statistics are usually reported along with their corresponding standard errors and statistical significance indicators ($p$-values) -- see \textcolor{blue}{\underline{\href{http://www.springer.com/cda/content/document/cda_downloaddocument/9783642403392-c2.pdf}{Elhorst (2014)}}} for technical discussion.
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\vspace{-0.3cm}
+\begin{equation*}
+\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
+    =(\bm{I}_N - \lambda \bm{W})^{-1}
+	\begin{pmatrix}
+		\beta_{k} & w_{12}\theta_{k}& \cdots & w_{1N}\theta_{k}\\
+		w_{21}\theta_{k}& \beta_{k} & \cdots & w_{2N}\theta_{k}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		w_{N1}\theta_{k} & w_{N2}\theta_{k} & \cdots & \beta_{k} \\
+	\end{pmatrix}\,. 
+\end{equation*}
+\begin{itemize}
+    \item Total effect is just a sum of the direct and indirect impacts. Total standard errors, $z$ scores and significance levels are also calculated by aggregating the underlying direct impacts and spillovers. 
+    \smallskip
+    \item Motivation: in many empirical applications, the direct and indirect effects may come with opposite signs. Therefore, at some higher level of spatial aggregation, direct impacts and spillovers could cancel out. For example, positive direct effects may come at the ``price'' of equally prominent negative spillovers. 
+    \smallskip
+    \item Total impacts are often reported along with their direct/indirect constituents -- even if there are no contradicting signs of direct/indirect impacts. 
+\end{itemize}	
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects in spatial models}
+\begin{itemize}
+	\item Sample output from a SLM (model with a single regressor).
+	
+	\end{itemize}
+\begin{table}[]
 \centering
-\vspace{-0.3cm}
-\tiny
-As we hold \texttt{age} and \texttt{education} fixed, \texttt{wage} increases slightly with \texttt{year}.\\
-If we fix \texttt{year} and \texttt{education}, than \texttt{wage} tends to be highest for intermediate \\values of  \texttt{age} and lowest for the very young and very old workers.
+\caption{Estimated direct, indirect and total   impacts}
+\begin{tabular}{llll}
+&         &          &             \\
+& Mean    & Std. dev & t-statistic \\
+\hline
+Direct effect                                                                                          & 0.586   & 0.0148   & 39.6106     \\
+Indirect effect                                                                                        & 1.084 & 0.0587   & 18.4745     \\
+Total effect                                                                                           & 1.670    & 0.0735   & 22.7302    
+\end{tabular}
+\end{table}
 \end{frame}
-%---------------------------------------------
-\begin{frame}{GAM estimation (backfitting)}
-\vspace{-0.3cm}
-$$ y_i = \alpha + f_1(x_{i1}) + f_2(x_{i2}) + \cdots + f_p(x_{ip}) + u_i$$
-\vspace{-0.3cm}
+%---------------------------------------------------------------------
+\begin{frame}{Drawbacks of SLMs/SDMs/SEMs}
 \begin{itemize}
-    \item $f_j$ functions are unspecified smooth (``nonparametric'') functions.
-    \smallskip
-    \item With smoothing splines, we do not use an expansion of basis functions for estimation (i.e. constituent elements used in some matrix of regressors $\bm{X}$).
-    \smallskip
-    \item Instead, we fit all $p$ functions ``simultaneously'', using a scatterplot smoother (e.g. smoothing spline, local regression, etc.) along with a \textbf{backfitting algorithm}.
-    \smallskip
-    \item Say, we use cubic smoothing splines for all regressors. The penalized RSS (PRSS) can be specified as:
-    \small{$$\textnormal{PRSS}(\alpha,f_1,\dots,f_p,\bm{\lambda}) = \sum_{i=1}^n \left[y_i - \alpha - \sum_{j=1}^p f_j(x_{ij}) \right]^2 + \sum_{j=1}^p \lambda_j \int f_j''(t_j)^2 \textit{dt}_j\,,$$}
-    where $\lambda_j \geq 0$ and PRSS is used for estimaton (described next).
+\item In SDM/SLM, the ratio between direct and indirect effect for \\a regressor $\bm{x}_k$ is independent of $\beta_k$. This is because the $\beta_k$ coefficients cancel out in the numerator and denominator of such ratio (direct/indirect effects). 
+\smallskip
+\item This ratio depends only on the parameter $\lambda$ and on the $\bm{W}$ matrix specification. 
+\smallskip 
+\item Hence, direct/indirect effect ratio is the same for all regressors in \\a given spatial model.
+\smallskip
+\item Unfortunately, this ``behavior'' (identical relative strengths of direct and indirect effects for all regressors) seems rather implausible in many types of empirical applications.
 \end{itemize}
 \end{frame}
-%---------------------------------------------
-\begin{frame}{GAM estimation (backfitting)}
-\vspace{-0.3cm}
-$$ y_i = \alpha + f_1(x_{i1}) + f_2(x_{i2}) + \cdots + f_p(x_{ip}) + u_i$$\\
-\bigskip
-\textbf{Backfitting algorithm for GAMs}\\ \medskip
+%---------------------------------------------------------------------
+\begin{frame}{Drawbacks of SLMs/SDMs/SEMs}
+\begin{itemize}
+    \item $\bm{W}$ matrices cannot be estimated along with model parameters. 
+    \medskip
+    \item Rather, $\bm{W}$ needs to be specified prior to model estimation. 
+    \medskip
+    \item There is little theoretical background for choosing the ``right'' \\$\bm{W}$ matrix specification. 
+    \medskip
+    \item As $\bm{W}$ matrix in a SLM/SDM/SEM changes, the estimated parameters tend to change as well. Large changes to $\bm{W}$ may \\cause large changes in estimated parameters.
+    \medskip
+    \item The variety of available neighborhood definitions and standardization methods implies that researchers usually evaluate several alternative spatial structure settings in order to verify model stability and robustness of the results. 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Robustness against changes in spatial structure}
 \begin{enumerate}
-    \item Initialize: $\hat{\alpha}=\frac{1}{n} \sum_{i=1}^n y_i~~\textnormal{and}~~\hat{f}_j \equiv 0,~~\forall i,j.$
-    \bigskip
-    \item Cycle: $j = 1,2,\dots,p,1,2,\dots,p,\dots$
-    \bigskip
-    \begin{itemize}
-        \item[(a)] $\hat{f}_j~\leftarrow ~ \mathcal{S}_j \left[ \left\lbrace y_i - \hat{\alpha} - \sum_{k \neq j} \hat{f}_k (x_{ik}) \right\rbrace_1^n \right]~~~$(backfitting step)
-        \bigskip
-        \item[(b)] $\hat{f}_j~\leftarrow ~ \hat{f}_j - \frac{1}{n} \sum_{i-1}^n \hat{f}_j (x_{ij}) ~~~$(mean centering of estimated function)\\
-        \bigskip
-        until functions $\hat{f}_j$ change less than a prespecified threshold.
-    \end{itemize}
+\item Start with a relatively sparse $\bm{W}$ distance matrix, that is generated by using a restrictive (i.e. low) $\tau$. Note that the threshold must be high enough to ensure at least one neighbor for each spatial unit
+\medskip
+\item Increase $\tau$ by some low amount (eg 10-km in NUTS2 units). Estimate the model and record all relevant information. 
+\medskip
+\item Repeat step 2 until a some preset maximum $\tau$ is reached. Usually, this would happen in one of the following manners: (a) ``range'' (as in the semivariogram) is reached, (b) $\tau$ becomes so large that the assumption of spatial weak dependency no longer applies, (c) We have prior information limiting the plausible range of spatial interactions.
+\medskip
+\item Plot the estimated spatial parameters, direct and indirect effects of interest and statistical significance data  against the distance thresholds used.
 \end{enumerate}
+Analogous approach can be used for $k$NN, contiguity neighbors, etc.
 \end{frame}
-%---------------------------------------------
-\begin{frame}{GAM estimation (backfitting)}
-\textbf{Backfitting algorithm for GAMs}\\ \medskip
-\begin{itemize}
-    \item Each of the $f_j$ functions is a cubic spline (with knots at each unique value of $x_j$ and $\textit{df}_{\lambda}$).
-    \smallskip
-    \item Without further restrictions, solution is non-unique -- constant $\alpha$ is non-identifiable as we can add/subtract any constant to each of the $f_j$ functions.
-    \smallskip
-    \item This is solved in Step 1 (i.e. by setting $\hat{\alpha} = \textnormal{mean}(y_i)$ and $\hat{f}_j \equiv 0 $). Note that this setting does not change troughout the backfitting estimation.
-    \smallskip
-    \item Step 2 (a) applies a cubic smoothing spline $\mathcal{S}_j$ to the $X_j$ regressor while fixing all other $\hat{f}_k$ at their current estimates when computing the $\left\lbrace y_i - \hat{\alpha} - \sum_{k \neq j} \hat{f}_k (x_{ik}) \right\rbrace_1^n$ term.
-    \smallskip
-    \item Step 2 (b) is technical -- it adjusts for rounding errors in the algorithm (in theory, fit to a mean-zero response has mean zero).
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Generalized Additive Models (GAM)}
-\begin{itemize}
-    \item[\ding{51}] GAM backfitting can accommodate regression/natural splines, piecewise and local regression and even interaction terms in the \\$f_j$ functions.
-    \bigskip
-    \item[\ding{51}] GAMs extend easily to logistic regression models if $y_i$ is binary (applies to count and similar LDVs by analogy):
-    $$ \log \left( \frac{p_i}{1+p_i}
-    \right) = \alpha + f_1(\texttt{year}) + f_2(\texttt{age}) + f_3(\texttt{education}) + u_i$$
-where $p_i = P(\texttt{wage}_i > 250~|~ \texttt{year}_i, \texttt{age}_i, \texttt{education}_i)$.
-\bigskip
-\item[\ding{51}] Individual $f_j$ in GAMs can be very flexible -- we do not have to manually try different transformations for each regressor.
-\bigskip
-\item[\ding{51}] Non-linear fits can produce more accurate predictions.
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Generalized Additive Models (GAM)}
-\begin{itemize}
-    \item[\ding{51}] As GAMs are additive, they provide intuitive interpretation. 
-    \bigskip
-    \item[\ding{51}] Also, GAMs provide useful representation for statistical inference.
-    \bigskip
-    \item[\ding{51}] For each regressor, smoothness of $f_j$ can be represented by (effective) \textit{df} used.
-    \bigskip
-    \item[\ding{55}] Additive nature of GAMs may lead to missing important interactions. 
-    \bigskip 
-    \item[\ding{51}] However, low-dimensional interactions can be included manually; e.g. by adding some $f_{jm}(X_j,X_m)$ term into the model.
-\end{itemize}
-\end{frame}
-%---------------------------------------------
-\begin{frame}{Final note}
-\centering
-For a detailed technical discussion of the topics covered in Block 2,\\ \medskip you may consult e.g.: \textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{The Elements of Statistical Learning}}}
-\end{frame}
-%---------------------------------------------
-\begin{frame}[noframenumbering]{Final note }
-John von Neumann: ``With 4 parameters, I can fit an elephant\\ and with 5, I can make him wiggle his trunk.''
+%---------------------------------------------------------------------
+\begin{frame}{Spatial robustness -- SLM illustration}
+\vspace{-0.3cm}
 \begin{figure}
-  \includegraphics[width=0.6\textwidth]{IMG/Elephant.jpg}
+	\includegraphics[width=.65\textwidth]{IMG/sp_Stability.pdf}
 \end{figure}
-\centering
-\textcolor{blue}{\underline{\href{https://fermatslibrary.com/s/drawing-an-elephant-with-four-complex-parameters}{Drawing an elephant with four complex parameters}}}
 \end{frame}
-%---------------------------------------------
+%---------------------------------------------------------------------
+\subsection{Spatial filtering and semiparametric models}
+\begin{frame}{Spatial filtering and semiparametric models}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial filtering and semiparametric models}
+\begin{itemize}
+    \item Parametric methods are potentially not robust in a situation where the model suffers from a simultaneous presence of different sources of misspecification. \\Unaccounted nonlinear relationship among spatially correlated variables, spatially varying relationships (non-stationarity), uncontrolled common factors (spatial and time-related) and other instances of spatial heterogeneity can disrupt spatial dependencies or even manifest themselves as such. 
+    \medskip
+    \item Spatial filtering may be used to remove global and/or local spatial dependencies among geo-coded variables. 
+    \medskip
+    \item Spatial filtering does not rely on distributional assumptions and is fairly robust to model misspecification. 
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial filtering and semiparametric models}
+\begin{itemize}
+    \item Getis' nonparametric filtering can be used to eliminate spatial autocorrelation from observed data by ``spatial demeaning''. \\Based on $G_i(\tau)$ by Getis -- only applicable for positive spatial autocorrelation and positive support of the observed spatial variables.
+    \bigskip
+    \item Moran eigenvector map (MEM) filtering can be used to preserve some level of spatial properties within the model -- it is a semiparametric method.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\subsection{Getis' spatial filtering (``nonparametric'' spatial models)}
+\begin{frame}{Getis univariate filtering}
+\begin{itemize}
+    \item Approach based on $G_i(\tau)$ statistic by Getis: 
+    $$
+    G_i(\tau) = \frac{\sum_{j=1}^N c_{ij} \, y_j}{\sum_{j=1}^N y_j},
+    \qquad ; \qquad
+    E \left[G_i(\tau) \right] = \frac{c_i}{N}\,,
+    $$
+    where $c_i$ is the sum of elements of $i$-th row of $\bm{C}$ \\(note that $\bm{C}$ is used for filtering, not the $\bm{C}^{\ast} = \bm{C}+\bm{I}_N$).
+    \bigskip
+    \item Multiplicative transformation (filtering) of a spatial variable $y_i$: 
+    \begin{equation*}
+    \ddot{y}_i = \frac{E \left[G_i(\tau) \right]}{G_i(\tau)} \cdot y_i \>,
+    \end{equation*}
+    where $\ddot{y}_i$ is the spatially filtered value of $y_i$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Getis univariate filtering}
+$$\ddot{y}_i = \frac{E \left[G_i(\tau) \right]}{G_i(\tau)} \cdot y_i \>,$$
+\begin{itemize}
+    \item Corrects for positive spatial autocorrelation in observed data by counterbalancing the clustering.
+    \smallskip
+    \item Filtering factor shrinks $y_i$ if the majority of observations $y_j$ within the $\tau$ distance of unit $i$ are above average. 
+    \smallskip
+    \item Similarly, $y_i$ is inflated if neighboring observations feature below-average values.
+    \smallskip
+    \item Simple and intuitive, yet positive support assumption can be a limitation. Also, the process of setting $\tau$ is arbitrary (robustness evaluation possible). 
+    \item Univariate -- to estimate models using filtered data, such as $\bm{\ddot{y}} = 
+  \alpha \bm{\iota} + \bm{\ddot{X} \beta} + \bm{\varepsilon} \, ,$ all variables have to be filtered individually.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\subsection{Moran's eigenvector map filtering (semiparametric spatial models)}
+\begin{frame}{Moran's eigenvector map (MEM) filtering}
+Econometric models are partitioned into two elements that are both employed within the spatial regression:
+\medskip
+\begin{itemize}
+    \item  Exogenous regressors (say, macroeconomic indicators) 
+    \smallskip
+    \item Complementary spatial-filter variate (e.g. a MEM) describing spatial dependency that would otherwise affect model's residuals.
+    \smallskip
+    \item For MEM-based spatial filtering, all units need to be connected -- i.e. there has to be a ``path'' between any two regions, based on connections (edges) between neighboring units. Hence, for spatial filtering applications, $\tau$ value must not be lower than the longest edge of a minimum spanning tree of a graph based on $\bm{D}$ (where $d_{ij}$ are distances between units). Maximum limit on $\tau$ also applies (recall weak dependency assumptions).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+\begin{itemize}
+    \item[1] Use $\bm{C}$ to construct a double-centered connectivity matrix $\bm{\Omega}$:
+\begin{equation*}
+\bm{\Omega} = (\bm{I}_N - \frac{1}{N}\,\bm{\iota}_N \bm{\iota}_N^{\prime})\, \bm{C} \, (\bm{I}_N - \frac{1}{N}\,\bm{\iota}_N \bm{\iota}_N^{\prime}) \,,
+\end{equation*}
+where $\bm{I}_N$ is the identity matrix and $\bm{\iota}_N$ is a column vector of ones. Double-centering standardizes $\bm{C}$ so that all rows and columns in $\bm{\Omega}$ add up to zero. $\bm{C}$ may be full rank (not guaranteed), $\bm{\Omega}$ is always rank deficient.
+\medskip
+\item[2] Calculate all distinct eigenvectors $\bm{v}_i$ and eigenvalues $\kappa_i$ for the double-centered matrix $\bm{\Omega}$ -- by solving the characteristic equation system  $(\bm{\Omega} - \kappa\, \bm{I}_{N}) \, \bm{v} = \bm{0} $. As $\bm{\Omega}$ is a real symmetric matrix, all distinct eigenvectors are orthogonal and linearly independent (given rank-deficiency of $\bm{\Omega}$, some eigenvalues and eigenvectors are duplicated). \\ \medskip 
+MEM -- convenient subset of eigenvectors $\bm{v}$ -- can be used as a synthetic explanatory variable in semiparametric regression.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+\begin{itemize}
+    \item[4] Semiparametric model is established using a misspecification paradigm and based on a regression model with spatially autocorrelated disturbances:
+    \begin{equation*} 
+    \begin{aligned}
+    \bm{y} & = \bm{X\beta} + \bm{u} \,, \\
+    \bm{u} & = \bm{E\gamma} + \bm{\varepsilon} \, ,
+    \end{aligned}
+    \end{equation*}
+    where $\bm{u}$ are the spatially autocorrelated disturbances that may be decomposed into $\bm{\varepsilon}$ (white noise) and $\bm{E}$: a set of missing (unobservable) exogenous variables that follow common spatial dependency pattern ($\bm{C}$) and $\bm{\gamma}$ is a vector of parameters.
+    \\ \medskip The $\bm{E\gamma}$ term is based on approximation and it is not directly comparable with the SEM parametric specification
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+\begin{itemize}
+    \item[5] Using a stepwise algorithm described next, the misspecification term $\bm{E}$ is approximated by MEM -- a convenient subset of Morans eigenvectors
+\begin{equation*} 
+\left\lbrace
+\bm{v}_1, \dots , \bm{v}_{r} 
+\right\rbrace 
+\equiv 
+\textnormal{evec}
+\left(\bm{\Omega}\right) \, ,
+\end{equation*}
+where $r=\textnormal{rank}(\Omega)$ is the number of distinct eigenvectors of $\bm{\Omega}$. 
+\\ \medskip 
+We can approximate $\bm{E}$ by a parsimonious subset of eigenvectors $\bm{v}$ such that $\bm{M} = \left\lbrace \bm{v}_1, \dots , \bm{v}_{\ell} \right\rbrace$ where $\ell \leq r$. 
+\\ \medskip 
+Since spatial misspecification term $\bm{E}$ is correlated with $\bm{X}$ (at least potentially), the explicit inclusion of proxy element (MEM) $\bm{M}$ corrects for the bias in estimated coefficients $\hat{\bm{\beta}}$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+\begin{itemize}
+    \item[6] After substitution of $\bm{E}$ by $\bm{M}$, we get
+\begin{equation*}
+\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon} \, ,
+\end{equation*}
+where $\bm{y}$ is decomposed into a systematic component (featuring $\bm{X}$), stochastic spatial component and white-noise residuals. 
+\\ \medskip 
+For conveniently specified $\bm{M}$, the stochastic spatial term $\bm{M \hat{\gamma}}$ removes a significant portion of the mean squared error (MSE) term, attributable to spatial autocorrelation 
+\\ \medskip 
+Hence, $\bm{M \hat{\gamma}}$ is often referred to as spatial filter. 
+\\ \medskip 
+Filtering is fairly robust to model specification errors when compared with fully parametric models.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+Stepwise algorithm for choosing $\bm{M}$:
+\medskip
+\begin{itemize}
+    \item We choose $\bm{M}$ so that the residuals $\bm{\hat{\varepsilon}}$ become spatially random (independent with respect to the underlying spatial domain). 
+    \smallskip
+    \item We aim to find a parsimonious, i.e. smallest possible subset of eigenvectors $\bm{v}$, leading to spatial independence of $\bm{\hat{\varepsilon}}$.
+    \smallskip
+    \item Stepwise regression approach is often used.
+    \smallskip
+    \item Stepwise algorithm often based on a modified Moran's $I$ coefficient: Moran's $\textit{MC}$.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+Stepwise algorithm for choosing $\bm{M}\,$:
+\medskip
+\begin{itemize}
+    \item $\textit{MC}_{\bm{v}_i} = \frac{N}{\bm{\iota}_N^{\prime} \, \bm{Z} \, \bm{\iota}_N } \, \bm{v}_i^{\prime} \bm{C} \bm{v}_i \, ,$\\ \smallskip
+    where $\bm{Z}$ is a distance-based similarity matrix with $[z_{ij}] = 1 - (\tfrac{h_{ij}}{\textnormal{max}(h_{ij})})^2$. Individual $z_{ij}$ vary between zero for $h_{ij} = \textnormal{max}(h_{ij})$ and 1 for $h_{ij} = 0$.
+    \smallskip
+    \item First eigenvector is selected by maximizing $\textit{MC}_{\bm{v}_i}$. 
+    \smallskip 
+    \item Using such $\bm{v}_i$ as a starting eigenvector subset for $\bm{M}$, equation $\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon}$ is estimated and residuals are evaluated for spatial autocorrelation (e.g. using Moran's $I$). 
+    \smallskip
+    \item If residuals are spatially dependent, new eigenvector is added to $\bm{M}$ using the same $\textit{MC}$ criterion, model is re-estimated and spatial autocorrelation in residuals is tested again. \smallskip 
+    \item Eigenvectors are iteratively added to $\bm{M}$, until spatial autocorrelation in residuals $\bm{\hat{\varepsilon}}$ falls below a predetermined threshold (e.g. 5 \% significance level).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+$\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon}$
+\medskip
+\begin{itemize}
+    \item Eigenvectors in $\bm{M}$ are orthogonal and follow a strictly decreasing sequence.
+    \smallskip
+    \item Each eigenvector explains a specific proportion of variance in residuals of the model -- the largest proportion of variance is explained by the first eigenvector selected into $\bm{M}$, the second largest amount of variance is explained by the second eigenvector, etc. 
+    \smallskip
+    \item This leads to identical $\bm{M}$ matrices, obtained through forward and backward stepwise selection methods. 
+    \smallskip
+    \item Convenient linear combination of the above eigenvectors (i.e. $\bm{M\hat{\gamma}}$) is our spatial filter. 
+    \smallskip
+    \item Often, we only take into account positive spatial autocorrelation: only $\bm{v}_i$ associated with positive $\kappa_i$ are considered.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Semiparametric model with MEM-filter}
+$\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon}$\\
+\medskip
+Individual $\bm{v}$ elements of $\bm{M}$ bear the following interpretation:\\
+\bigskip
+\begin{itemize}
+    \item  MEMs -- spaces spanned by single or multiple $\bm{v}$ eigenvectors -- with associated ``large'' positive eigenvalues $\kappa_i$ represent global-scale spatial trends (say, landscape-wide dynamics in observed spatial data). 
+    \medskip
+    \item Eigenvectors with medium eigenvalues represent medium scale dynamics. 
+    \medskip
+    \item Eigenvectors with small positive eigenvalues would represent small scale dependencies (``local'' patchiness).   
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{MEM - illustrative example}
+\vspace{-0.3cm}
+\begin{figure}
+	\includegraphics[width=.8\textwidth]{IMG/sp_Eigen.eps}
+\end{figure}
+\end{frame}
+%---------------------------------------------------------------------
+\section{Spatial panel models (parametric)}
+\begin{frame}{Spatial panel models (parametric)}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial panel models}
+For repeated geo-coded observations, spatial panel models depict interactions among variables across spatial units and over time:
+\begin{equation*}
+\begin{aligned}
+  \bm{y}  &= 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + \bm{X\beta} + \bm{u}\,, \\
+  \bm{u} &= 
+  \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + \bm{\varepsilon}\,, \\
+  \bm{\varepsilon} &= \rho
+  \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{\varepsilon} + \bm{\upsilon}\,,
+\end{aligned}
+\end{equation*}
+\small{where $\bm{y}$ is a $NT \!\times \!1$ column vector of dependent variable observations ($i = 1, 2, \dots, N$, $t=1,2, \dots, T$ and $i$ is the ``fast'' index). $\bm{W}$ is a spatial weights matrix and $\bm{X}$ is a $(NT \!\times \!k)$ matrix of exogenous regressors. Elements $\Ms{I}{T}$ and $\Ms{I}{N}$ are identity matrices and $\Ms{\iota}{T}$ is a  $(T \! \times \!1)$ vector of ones. Operator $\otimes$ is the Kronecker product. Elements of vector $\bm{\beta}$ as well as $\lambda$ and $\rho$ are parameters of the model. The disturbance vector $\bm{u}$ ($NT \!\times \!1$) is a sum of two terms: the unobserved individual effects $\bm{\mu}$ and spatially autocorrelated innovations $\bm{\varepsilon}$. The $(N \!\times \!1)$ vector $\bm{\mu}$ holds time-invariant and spatially uncorrelated individual effects. Innovations $\bm{\varepsilon}$ are spatially autocorrelated with a spatial error autoregressive parameter $\rho$ where $|\rho| < 1$. $\bm{\upsilon}$ is a vector of spatially independent innovations: $\upsilon_{it} \sim \textit{IID} \left( 0,\sigma_{\upsilon}^2 \right)$.}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial panel models}
+\begin{equation*}
+\begin{aligned}
+  \bm{y}  &= 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + \bm{X\beta} + \bm{u}\,, \\
+  \bm{u} &= 
+  \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + \bm{\varepsilon}\,, \\
+  \bm{\varepsilon} &= \rho
+  \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{\varepsilon} + \bm{\upsilon}\,,
+\end{aligned}
+\end{equation*}
+\begin{itemize}
+    \item Spatial dependency  tests (Moran's $I$) for panel data are available.
+    \smallskip
+    \item By analogy to the GNS model (for CS data), the above specification is simplified (restricted) before estimation.
+    \smallskip
+    \item Generally, $\bm{\beta}$ parameters do not constitute marginal effects -- direct/indirect effects have to be calculated (using the same general approach as for CS data).
+    \smallskip
+    \item With ``random effects'' (RE) models, we assume that unobserved individual effects $\bm{\mu}$ are not correlated to other regressors of the model. 
+    \smallskip
+    \item For ``fixed effects'' (FE) models, some level of correlation between individual effects and other regressors is acceptable.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial panel models}
+We shall briefly discuss three types of spatial panel models:
+\bigskip
+\begin{itemize}
+    \item Fixed effects spatial lag model
+    \medskip
+    \item Fixed effects spatial error model
+    \medskip
+    \item Random effects spatial lag model
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Fixed effects spatial lag model}
+\begin{itemize}
+    \item FE spatial lag model that does not feature spatial autocorrelation in the error term can be written as 
+\begin{equation*}
+  \bm{y}  = 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + 
+  \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + 
+  \bm{X \beta} + \bm{\upsilon} \,,
+\end{equation*}
+where $\bm{\upsilon}$ is a vector of spatially independent and normally distributed innovations.
+\medskip
+\item First step in FE spatial lag model estimation: eliminating the individual effects: 
+\begin{equation*}
+  \ddot{\bm{y}}  = 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \ddot{\bm{y}} + 
+  \ddot{\bm{X}} \bm{\beta} + \ddot{\bm{\upsilon}} \,,
+\end{equation*}
+where $\ddot{y}_{it}=y_{it}-\bar{y}_i$, etc.
+\medskip
+\item As individual effects are time-invariant, $\ddot{\mu}_{i}=\mu_{i}-\bar{\mu}_i=0$ \\and $\bm{\mu}$ disappears from equation.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Fixed effects spatial lag model}
+$$
+\bm{y}  = 
+  \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + 
+  \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + 
+  \bm{X \beta} + \bm{\upsilon}
+$$
+\begin{itemize}
+    \item FE spatial lag model is estimated by MLE method. For detailed description, see \textcolor{blue}{\underline{\href{https://www.jstatsoft.org/article/view/v047i01}{Milo, Piras (2012)}}}
+    \medskip
+    \item Direct/indirect/total effects and their statistical significance is calculated (bootstrapped standard errors) -- see Milo, Piras (2012).
+    \medskip
+    \item From estimated FE model, we can calculate individual effects:
+\begin{equation*}
+\hat{\mu}_i =
+\frac{1}{T} \sum_{t=1}^T \left[ y_{it} - \hat{\lambda} \left( \sum_{j=1}^N \! w_{ij} y_{jt} \right)
+- \bm{x}_{it} \bm{\hat{\beta}} \right] \,.
+\end{equation*}
+However, for short panels $(N \gg T)$, enough observations for reliable $\mu_i$ estimation often do not accumulate.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Fixed effects spatial error model}
+\begin{itemize}
+    \item Spatial lag is absent in the FE spatial error model:
+    \begin{equation*}
+    \begin{aligned}
+      \bm{y}  &= 
+      \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + \bm{X\beta} + \bm{\varepsilon}\,, \\
+      \bm{\varepsilon} &= \rho
+      \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{\varepsilon} + \bm{\upsilon}\,.
+    \end{aligned}
+    \end{equation*}
+    \item Model is estimated by MLE (time-demeaning is used).
+    \smallskip
+    \item Coefficients $\bm{\beta}$ are the marginal effects here
+    \smallskip
+    \item Individual effects can be retrieved from the estimated model as 
+\begin{equation*} 
+\hat{\mu}_i =
+\frac{1}{T} \sum_{t=1}^T \left( y_{it} - \bm{x}_{it} \bm{\hat{\beta}} \right),
+\end{equation*}
+and reliability issues for short panels $(N \gg T)$ apply.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Random effects spatial lag model}
+\begin{itemize}
+    \item Individual effects can be viewed as random and independent of regressors -- random effect (RE) model and RE estimator provide efficient estimates. RE properties of $\bm{\mu}$: \\$\mu_i \sim \textit{IID} \left( 0,\sigma_{\mu}^2 \right)$; normality is often assumed.
+    \medskip
+    \item Under RE assumptions, GNS panel model can be re-written as:
+    \begin{equation*} 
+     \begin{aligned}
+      \bm{y}  &= 
+      \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + \bm{X\beta} + \bm{u}\,, \\
+      \bm{u} &= 
+      \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + 
+      \left( \Ms{I}{T} \otimes \Ms{B}{N}^{-1} \right) \bm{\upsilon}
+     \end{aligned}
+    \end{equation*}
+    where $\Ms{B}{N}= \left( \Ms{I}{N} - \rho \bm{W} \right)$ and error variance may be outlined as
+    \begin{equation*}
+  \textnormal{var} \left( \bm{u} \right) = \bm{\Omega}_{\bm{u}} =
+  \sigma_{\bm{\mu}}^2 \left( \Ms{\iota}{T} \Ms{\iota}{T}^\prime \otimes \Ms{I}{N} \right) 
+  + \sigma_{\bm{\upsilon}}^2 \left[ \Ms{I}{T} \otimes \left( \Ms{B}{N}^\prime \Ms{B}{N} \right)^{-1} \right].
+\end{equation*}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Random effects spatial lag model}
+    \begin{equation*} 
+     \begin{aligned}
+      \bm{y}  &= 
+      \lambda \left( \Ms{I}{T} \otimes \bm{W} \right) \bm{y} + \bm{X\beta} + \bm{u}\,, \\
+      \bm{u} &= 
+      \left( \Ms{\iota}{T} \otimes \Ms{I}{N} \right) \bm{\mu} + 
+      \left( \Ms{I}{T} \otimes \Ms{B}{N}^{-1} \right) \bm{\upsilon}
+     \end{aligned}
+    \end{equation*}
+\begin{itemize}
+    \item Model is estimated by MLE (iterative estimation involving concentrated $LL$ functions), see Milo, Piras (2012).
+    \medskip
+    \item Direct/indirect/total effects can be calculated.
+    \medskip
+    \item RE vs. FE: Generalized Hausman test can be applied: 
+    \begin{equation*} 
+    H = NT \left( \bm{\hat{\theta}}_{RE} - \bm{\hat{\theta}}_{FE} \right)^{\prime}
+    \! \left( \bm{\hat{\Sigma}}_{RE} - \bm{\hat{\Sigma}}_{FE} \right)^{-1}
+    \! \left( \bm{\hat{\theta}}_{RE} - \bm{\hat{\theta}}_{FE} \right)
+    \,\,\, \underset{H_0}{\sim} \,\,\, \chi_k^2 \,\,,
+\end{equation*}
+where $\bm{\hat{\theta}}_{RE}$ and $\bm{\hat{\theta}}_{FE}$ are the RE and FE-based estimates, $\bm{\hat{\Sigma}}_{RE}$ and $\bm{\hat{\Sigma}}_{FE}$ are corresponding variance-covariance matrices. Under $H_0$ (RE assumptions hold), the test statistic is asymptotically $\chi^2$-distributed with $k$ d.f. ($k$ is the number of regressors).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Spatial analysis and regression models in R}
+\begin{itemize}
+	\item \{spdep\} 
+	\item \{splm\}
+	\item \{sf\}, \{sp\}, \{ggplot2\}
+	\item \textcolor{blue}{\underline{\href{https://cran.r-project.org/web/views/Spatial.html}{https://cran.r-project.org/web/views/Spatial.html}}}
+\end{itemize}
+ \begin{figure}
+ 	\includegraphics[width=.7\textwidth]{IMG/sp_unemp.PNG}
+ \end{figure}
+\end{frame}
+%---------------------------------------------------------------------
 \end{document}
