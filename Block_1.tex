@@ -304,13 +304,13 @@ $$
 \begin{enumerate}
     \item[3] Using ~$(\bm{z}_i \hat{\bm{\beta}}^{\ast})$~, generate predicted values $\hat{x}_i$ for \textbf{all cases}, \\both with data missing on $x_i$ and with data observations present.
     \medskip
-    \item[4] For each case with missing $x_i$, take the fitted $\hat{x}_i$ and search for a set of similar ``closely matching'' $\hat{x}_j$ predictions (we are only interested in $j$ cases where $x_j$ is observed).
+    \item[4] For each case with missing $x_i$, use the fitted $\hat{x}_i$ and search for a set of similar ``closely matching'' $\hat{x}_{\ell}$ predictions (here, $\ell$ is a row index, different from $i$; we are only interested in ${\ell}$ cases where $x_{\ell}$ is observed).
     \medskip
     \begin{itemize}
         \item For ``close'' values, proximity rules are defined separately.
     \end{itemize}
     \medskip
-    \item[5] From each missing $x_i$, randomly choose one $x_j$ (observation) from the set of ``close'' observations and use its observed value to substitute for the missing value ($x_j$ observation is imputed, NOT the $\hat{x}_j$ value).
+    \item[5] For each missing $x_i$, randomly choose one $x_{\ell}$ (observation) from the set of ``close'' observations and use its observed value to substitute for the missing value ($x_{\ell}$ observation is imputed, NOT the $\hat{x}_{\ell}$ value).
     \medskip
     \item[6] For MI, repeat steps 2 through 5 $m$-times to produce $m$ imputed datasets.  
 \end{enumerate}
