@@ -1029,12 +1029,12 @@ z_{i1}^{\textnormal{PLS}} \sum_{j=1}^p \psi_{j1} x_{ij}$$
 \medskip
 and coefficients $\psi_{j1}$ are calculated in two steps:
 \begin{enumerate}
-\item Use OLS to estimate slope-coefficients $\psi_{j1}$ of the ``simple'' \\linear regressions $\bm{y} \leftarrow \bm{x}_j$.\\ \smallskip Here, $j=1,\dots,p$ separate SLRM are estimated and corresponding $\psi$ slope-coefficients are recorded.
+\item Use OLS to estimate slope-coefficients $\psi_{j1}$ of the ``simple'' \\linear regressions $\bm{y} \leftarrow \bm{x}_j$.\\ \smallskip Here, $j=1,\dots,p$ : separate SLRMs are estimated and corresponding $\psi$ slope-coefficients are recorded.
 \medskip
 \item Standardize the $\psi_{j1}$ coefficients so that $\sum_{j=1}^p \psi_{j1}^2=1$.
 \end{enumerate}
 \bigskip
-Note that with PLS, highest weights are on variables ($\bm{x}_j$) that are most related to the response. 
+Note that with PLS, highest weights are on variables ($\bm{x}_j$) that are most related to the response (individually). 
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Partial least squares (PLS) -- illustration}
@@ -1057,7 +1057,7 @@ Second component for PLS:\\
     (Run all $\bm{y} \leftarrow \ddot{\bm{x}}_j$ regressions and standardize coefficients).
 \end{enumerate}
 \bigskip
-By analogy, this procedure can be repeated for all subsequent components.
+By analogy to PCA, this (PLS) procedure can be repeated for all subsequent components.
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Partial least squares (PLS)}
