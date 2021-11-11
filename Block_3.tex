@@ -1522,22 +1522,41 @@ Local regression at $X = x_0$\\
 $\Rightarrow$ repeat for all $x \in X$ observations in the dataset.
 \end{frame}
 %---------------------------------------------
-\begin{frame}{Local regression}
-\textbf{Local regression: choices to be made}\\
-\smallskip
+\begin{frame}{Local regression: choices to be made}
+\small
 \begin{itemize}
-    \item Weighting function $K$ must be defined (e.g.: $\tfrac{1}{(x_0 - x_i)^2}, x_0 \neq x_i$).
-    \smallskip
     \item Functional form in Step 3 (constant, linear, quadratic, etc.).
+    \item Fraction $s = k/n$ controls flexibility of fit (CV can be used).
+    \item Weighting function $K_{i0}$ must be defined: 
+    $$K_{i0}=
+    \begin{cases}
+    (1-|u|^3)^3 & |u| < 1 \\
+    0 & |u| \geq 1
+    \end{cases}, 
+    \textnormal{~~~where~} 
+    |u| = \left| 
+    \frac{d(x_i,x_0)}{\underset{i \in K_0}{\max}\,d(x_i,x_0)}
+    \right|
+    $$
+    is the \texttt{R}-default tricube kernel \textcolor{blue}{\underline{\href{https://en.wikipedia.org/wiki/Kernel_(statistics)}{before normalization}}}, \\where $K_0$ denotes a set of $k$ closest observations $x_i$ around $x_0$\\ and $d(\cdot)$ is ``distance'' (difference) between two $x$ observations.
     \smallskip
-    \item Span $s$ controls flexibility of the fit (can choose using CV).
+  \vspace{-0.1cm}
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 0.5cm 0cm 0cm, clip=true, width=0.35\textwidth]{IMG/tricubeKernel.png}
+\end{figure}  
+    Other kernels: for Epanechnikov, substitute $(1-|u|^3)^3$ by $(1-u^2)$, etc.
 \end{itemize}
 \bigskip
+
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Local regression}
 \textbf{Local regression --  discussion}\\
 \smallskip
 \begin{itemize}
     \item Local regression can be generalized to models with multiple regressors: the model is global in some regressors and local in others (say, time). Such model adapts to the most recently gathered observations.
-    \smallskip
+    \bigskip
     \item Local regression can be generalized to neighborhoods of higher dimensions (say, over $X_1$ and $X_2$). However, this approach does not extend easily to higher dimensions (beyond 3 or 4).
 \end{itemize}
 \end{frame}

@@ -62,34 +62,75 @@
 \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
 \end{frame}
 
-%----------------------------------------------------------------------------------------
+%---------------------------------------------------------------------
 %	PRESENTATION SLIDES
 %---------------------------------------------------------------------
 \section{Introduction}
 \begin{frame}{Introduction}
+LME generalization of a linear regression model:
+\medskip
+$$
+    \bm{y} = \bm{X \beta} + \bm{Z u} + \bm{\omega},  
+    \qquad \bm{u} \sim N(\bm{0}, \bm{G}),
+    \qquad \bm{\omega} \sim N(\bm{0}, \bm{R}),
+$$
+\medskip
+\small
+where 
+\begin{itemize}
+    \item[] $\bm{y}$ is a vector of dependent variable observations,
+    \item[] $\bm{X}$ is a $(N\! \times \! p)$ matrix of $N$ observations and $p$ predictor variables,
+    \item[] $\bm{\beta}$ is a vector of ``fixed-effects'' regression coefficients,
+    \item[] $\bm{Z}$ is a $(N\! \times \! s)$ design matrix for the $s$ ``random effects'' $\bm{u}$ that are complementary to $\bm{\beta}$,
+    \item[] $\bm{\omega}$ is the error term,
+    \item[] $\bm{u}$ and $\bm{\omega}$ are assumed normally distributed and mutually independent, with variance-covariance matrices $\bm{G}$ and $\bm{R}$ respectively.
+\end{itemize}   
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Introduction}
+
+LME generalization of a linear regression model -- example: 
+$$y_i = \beta_0 + \beta_1 x_i + \omega_i.$$ 
+If observations $i=1,\dots,N$ are organized into $j=1,\dots,J$ relevant groups, and assuming there are random effects on both $\beta$-coefficients, we may generalize the model into a LME (after re-arranging):
+$$y_{ij} = (\beta_0 + u_{0j}) + (\beta_1 + u_{1j}) x_{ij} + \omega_{ij},$$
+where the combined $ij$ subscript refers to an $i$th observation that belongs to a $j$th group. 
+
+\medskip
+In the LME model, $u_{0j}$ and $u_{1j}$ are stochastic deviations from $\beta$-coefficients that are associated with a particular $j$th group. While random effects may look like model coefficients, we are only interested in estimating their variances. 
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Introduction}
 \small 
-\textbf{Linear mixed effect model (LME)} -- generalization of linear (panel) model
+\textbf{Linear mixed effect model (LME)} -- data types:
 \medskip
 \begin{itemize}
-\item LMEs \& longitudinal data: repeated measurements are performed on each individual  unit. Several units are sampled. Number of observations may differ across units (both longitudinal \& hierarchical data).\\ \smallskip
+\item \textbf{Longitudinal data:} repeated measurements are performed on each individual  unit. Several units are sampled. Number of observations may differ across units.\\ \smallskip
 \quad $y_{ti}$ - observation at time $t$ for $i$-th individual. \\  
-\quad $y_{ij}$ - $i$th observation of $j$th individual (if time aspect secondary). \\ 
+\quad $y_{ij}$ - $i$th observation of $j$th individual (if time aspect not relevant). \\ 
 \bigskip
-\item LMEs \& nesting (hierarchical) data structures: data with two or more groups/levels of observations. \\ \smallskip
+\item \textbf{Hierarchical data structures:} data with two or more groups/levels of observations. Number of observations may differ across units.\\ \smallskip
 \quad $y_{ij}$ - observation for $i$-th company within $j$-th region. \\ 
 \quad $y_{ij}$ - observation for $i$-th student within $j$-th class. \\ 
 \medskip
-We can group observations at multiple levels:\\
+\bigskip
+\item \textbf{Combined:} We can group observations at three levels (or more):\\
 \smallskip
-\quad $y_{tij}$ - measurement at time period $t$,  in region $i$ within state $j$.\\ 
+\quad $y_{tij}$ - measurement at time period $t$, admin. region $i$ within state $j$.\\ 
 \bigskip
 \item Note how indices are ordered (left to right) from individual to highest level of aggregation. (alternative orderings exist in literature).
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{Introduction}
-\textbf{Linear mixed effect model (LME)} 
+\begin{frame}{Longitudinal data}
+\begin{itemize}
+\item $N$ individual CS units are followed over time.
 \medskip
+\item The observation set $\{y_{ti},\bm{x}_{ti}\}$ denotes some $i$th individual  observed at a time period $t$. The number of observations in time may differ among CS units and observations may occur at different time points. \\ \medskip 
+\textbf{Example:} For a medical study, we measure child's weight (plus other data) at birth and repeatedly over a period of one year. For some $y_{ti}$ observation, index $t$ denotes days from birth. Due to doctor visit scheduling, children are weighted at different $t$ ``values''. Typically, the number of doctor visits (observations) differs across children. Children in the study are born on different dates (say, Jan 2015 - Oct 2019). \\ \medskip Example extends easily to economic environment \\(we can follow newly founded companies, etc.).
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Hierarchical data structures}
 \begin{itemize}
 \item Nested/hierarchical structure of the LME model:
 \medskip
@@ -99,9 +140,13 @@ We can group observations at multiple levels:\\
     \item within $j$ groups (Level 2) with group-specific observation sizes $n_j$.
 \end{itemize}
 \medskip
-\item One or more $\beta$-coefficients can vary across groups.
+\item One or more coefficient(s) can vary across groups \\(``random effects).
+\end{itemize}
 \bigskip
-\item The same nesting/hierarchical framework applies to longitudinal data and their LME-based analysis:
+\textbf{LME: Longitudinal vs. hierarchical data structures:}
+\medskip
+\begin{itemize}
+\item Essentially, the same nesting/hierarchical framework applies to longitudinal data and their LME-based analysis:
 \medskip
 \begin{itemize}
     \item Observations at time $t$ (Level 1) are nested
@@ -140,7 +185,7 @@ We can group observations at multiple levels:\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\section{LME model example}
+\section{LME model}
 \begin{frame}{LME model example}
 \begin{itemize}
 \item Data: \\London Education Authority Junior School Project
@@ -157,7 +202,7 @@ Population mean math score \& the variance of $\varepsilon$ are estimated by tak
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{LME model example - continued}
+\begin{frame}{LME model}
 \begin{itemize}
 \item The school effect (differences among schools) may be incorporated in the model by allowing the mean of each school to be represented by a separate parameter (\textit{fixed effect})
 $$ \texttt{math5}_{ij} = \beta_{0j}~+~\varepsilon_{ij}, \quad i=1,\dots,n_j,  \quad j=1,\dots, M,  \quad \varepsilon_{ij} \sim N(0,\sigma^2_{\varepsilon}) $$
@@ -172,41 +217,42 @@ $\Rightarrow~M=48$ school-specific intercepts are estimated.\\
 \item Using the terminology of LME, $\beta_{0j}$ are fixed. Hence:\\
 \begin{itemize}
     \item \textbf{Estimated intercepts only model (refer to) the specific sample}  of schools, while -usually- the main interest is in the population from which the sample was drawn. \smallskip
-    \item Regression does not provide an estimate of the between-school variability, which is also of central interest.
+    \item OLS regression does not provide an estimate of the between-school variability, which is also of central interest.
 \end{itemize}
 \end{itemize}
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{LME model with random intercept}
+\begin{frame}{LME model}
+\small
 \begin{itemize}
-\item \textit{Random effects} model can solve the above problems by treating the school effects as random variations around a population mean.
+\item \textit{Random effects} approach: LME model can solve the above problem by treating school effects as random variations around population mean.
 \medskip
-\item \textit{Fixed effects} model can be reparametrized as: \\
+\item Ordinary model (with \textit{fixed effects})  can be reparametrized as: \\
 \smallskip
 \textcolor{blue}{$ y_{ij} = \beta_{0j} + \varepsilon_{ij}$} \\
 \smallskip
 $y_{ij} = \textcolor{orange}{\beta_0} + ( \beta_{0j} \textcolor{orange}{-\beta_0}) + \varepsilon_{ij}$,\\
 \medskip
-\textit{Random effect} $u_{0j} = \beta_{0j} - \beta_0$ is the school-specific deviation from overall mean $\beta_0$. It can be used to replace the the \textit{fixed effect} $\beta_{0j}\,$:\\
+\textit{Random effect}: ~~$u_{0j} = \beta_{0j} - \beta_0$~~ is the school-specific deviation from overall mean $\beta_0$. It can be used to replace the the \textit{fixed effect} $\beta_{0j}\,$:\\
 \medskip
 $u_{0j} = \beta_{0j} - \beta_0 ~~~ \Rightarrow ~~~ \beta_{0j} = \beta_0 + u_{0j}.$ Hence:\\  \smallskip
 \textcolor{blue}{$ y_{ij} = \beta_{0} + u_{0j} + \varepsilon_{ij}.$}\\
 \medskip
 \item $u_{0j}$ is a random variable, specific for the $j$-th school, with zero
-mean and unknown variance $\sigma^2_u$. \\ 
+mean and unknown variance $\sigma^2_u$. \\ \smallskip
 $u_{0j}$ is a \textit{random effect}, associated with the particular sample units (schools are selected at random from the population).\\ 
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{LME model with random intercept}
+\begin{frame}{LME model}
 \begin{itemize}
-\item The \textit{random effects} model is given as:
+\item LME model with \textit{random effects} (on the intercept) is given as:
 $$ y_{ij} = \beta_{0} + u_{0j} + \varepsilon_{ij}, \qquad u_{0j} \sim N(0,\sigma^2_u), \qquad \varepsilon_{ij} \sim N(0,\sigma^2_{\varepsilon}), $$
 and we assume $u_{0j}$ are $iid$ and independent from $\varepsilon_{ij}$.\\
 \smallskip
 \begin{itemize}
-\item Observations within the same school share the same random effect $u_{0j}$, hence are positively ``correlated'' with \textnormal{ICC} = $\sigma^2_u \, / (\sigma^2_u + \sigma^2_{\varepsilon})$ \\ (see ICC on next slide).
+\item Observations within the same school share the same random effect $u_{0j}$, hence are positively ``correlated'' with \textnormal{ICC} = $\sigma^2_u \, / (\sigma^2_u + \sigma^2_{\varepsilon})$ \\ (see ICC discussion on a separate slide).
 \medskip
 \item This \textit{random effects} model has three parameters: $\beta_{0},~ \sigma^2_u$ and $\sigma^2_{\varepsilon}$. (regardless of $M$, the number of schools).
 \medskip
@@ -217,19 +263,23 @@ and we assume $u_{0j}$ are $iid$ and independent from $\varepsilon_{ij}$.\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{LME model with random intercept and fixed slope}
+\begin{frame}{LME model}
+\small
 \begin{itemize}
 \item Exogenous regressors can be used in LMEs (like in LRMs).\\
 \smallskip
 For example, \texttt{math5} grades depend on \texttt{math3} ($3{^{\textnormal{rd}}}$ year grades).\\
-\bigskip
-$ \texttt{math5}_{ij} = \left( \beta_{0} + u_{0j} \right) + \beta_1 \, \texttt{math3}_{ij} + \varepsilon_{ij}, $\\
 \medskip
-alternatively: \\ \medskip
-$ \texttt{math5}_{ij} = \beta_{0} + \beta_1 \, \texttt{math3}_{ij} + u_{0j} + \varepsilon_{ij}, $\\
+$ \texttt{math5}_{ij} = \left( \beta_{0} + u_{0j} \right) + \beta_1 \, \texttt{math3}_{ij} + \varepsilon_{ij} $\\
+\bigskip
+\textcolor{orange}{alternative notation:} \\ \medskip
+$ \texttt{math5}_{ij} = \beta_{0} + \beta_1 \, \texttt{math3}_{ij} + u_{0j} + \varepsilon_{ij} $\\ \bigskip
+\textcolor{orange}{alternative notation:} \\ \medskip
+\textit{Level 1}:~~~$ \texttt{math5}_{ij} = \beta_{0j} + \beta_1 \, \texttt{math3}_{ij} + \varepsilon_{ij} $\\ \smallskip
+\textit{Level 2}:~~~~~~~~~$ \beta_{0j} = \beta_{0} + u_{0j} $\\
 \bigskip
 \begin{itemize}
-\item Intercept is random, given the $u_{0j}$ element.
+\item Intercept has a random effect, given the $u_{0j}$ element.
 \smallskip
 \item Slope of the regression line for each school is fixed at $\beta_1$.\\
 \dots \texttt{math3} has a \textit{fixed effect}.
@@ -244,26 +294,40 @@ $ \texttt{math5}_{ij} = \beta_{0} + \beta_1 \, \texttt{math3}_{ij} + u_{0j} + \v
 $$ \textnormal{ICC}=\frac{\sigma^2_u}{\sigma^2_u + \sigma^2_{\varepsilon}} $$
 \begin{itemize}
     \item Describes how strongly units in the same group are ``correlated''.
-    \item While interpreted as a type of correlation, ICC operates on groups, rather than paired observations. See \textcolor{blue}{\underline{\href{https://en.wikipedia.org/wiki/Intraclass_correlation}{Wikipedia}}} for formal definition \& relation between ICC and actual correlation.
+    \medskip
+    \item While interpreted as a type of correlation, ICC operates on groups, rather than paired observations. 
+    \medskip
+    \item See \textcolor{blue}{\underline{\href{https://en.wikipedia.org/wiki/Intraclass_correlation}{link}}} for relation between ICC and actual correlation.
 \end{itemize}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LME model: ICC}
+\small
+\begin{itemize}
+\item \textbf{ICC:} Intra class correlation in a LME regression model: \qquad
+$$ \textnormal{ICC}=\frac{\sigma^2_u}{\sigma^2_u + \sigma^2_{\varepsilon}} $$
 \medskip
 \item Example: \qquad $\texttt{math5}_{ij} = \beta_{0} + \beta_1 \, \texttt{math3}_{ij} + u_{0j} + \varepsilon_{ij},$\\ \medskip
 \qquad \qquad \qquad ~where $\sigma^2_u = \textnormal{var}(u_{0j})$ and $\sigma^2_{\varepsilon} = \textnormal{var}(\varepsilon_{ij})$.\\ \smallskip
 \medskip
-\item Here, $\textnormal{ICC}$  measures ``correlation'' between \texttt{math5}  observations (randomly chosen) within a given school.\\ \smallskip \textbf{Note:} ICC has another useful interpretation. Say, ICC = 0.6 in our $\texttt{math5}_{ij}$ example. Hence, differences between schools explain 60\% of variance ``left over'' after the variance explained by fixed effects \\(i.e. by $\texttt{math3}_{ij}$).
+\item $\textnormal{ICC}$: ``correlation'' between \texttt{math5}  observations (randomly chosen) within a given school.
+\bigskip 
+\item ICC has another useful interpretation: Say, ICC = 0.6 in our $\texttt{math5}_{ij}$ example. Hence, differences between schools explain 60\% of ``remaining'' variance -- i.e. after the variance explained by fixed effects (i.e. by $\texttt{math3}_{ij}$) is subtracted.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\begin{frame}{LME model with random intercept and slope}
+\begin{frame}{LME model: random effects on intercept and slope}
+\small
 \begin{itemize}
 \item If teaching is different from school to school, it would make
 sense to have different slopes for each of the schools.\\
 \medskip
-Instead of \textit{fixed effects} (using interaction terms \texttt{math3:School}), \\we use random slopes: $ u_{1j} = \beta_{1j} - \beta_1 $. \\
+Instead of using \textit{fixed effects} on slopes (interaction terms \texttt{math3:School}), we use random slopes: \textcolor{blue}{$ u_{1j} = \beta_{1j} - \beta_1 $}. \\
 \bigskip
 $ \texttt{math5}_{ij} = \left( \beta_{0} + u_{0j} \right) + \left( \beta_1\, \texttt{math3}_{ij}  + u_{1j} \, \texttt{math3}_{ij}  \right) + \varepsilon_{ij}, $ \\
 \medskip
-alternatively:\\
+alternative notation:\\
 \medskip
 $\texttt{math5}_{ij} = \underbrace{\beta_{0} + \beta_1 \,  \texttt{math3}_{ij}}_{\textit{fixed}}
 + \underbrace{u_{0j} + u_{1j} \, \texttt{math3}_{ij}}_{\textit{random}} 
@@ -279,33 +343,76 @@ $\texttt{math5}_{ij} = \underbrace{\beta_{0} + \beta_1 \,  \texttt{math3}_{ij}}_
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\section{LME model in matrix form}
-\begin{frame}{LME model in matrix form}
+\begin{frame}{LME: matrix form re-visited}
 \begin{itemize}
-\item Linear models 
-$$\bm{y} = \bm{X \beta} + \bm{\varepsilon} 
-\qquad \bm{\varepsilon} \sim N(\bm{0}, \,\sigma^2_{\varepsilon} \bm{I}),$$
-
-\item can be generalized into LME models
+\item LME model:
 $$\bm{y} = \bm{X \beta} + \bm{Z u} + \bm{\varepsilon} 
 \qquad \bm{u} \sim N(\bm{0}, \bm{G})
 \qquad \bm{\varepsilon} \sim N(\bm{0}, \bm{R}),$$
-where (for balanced panels):\\
+where:\\
 $\bm{X}$ is a $(n \! \times \! k)$ matrix, $k$ is the number of \textit{fixed effects},\\
 $\bm{Z}\,$ is a $(n \! \times \! p)$ matrix, $p$ is the number of \textit{random effects},\\
 $\bm{G}\,$ is a $(p \! \times \! p)$ variance-covariance matrix of the \textit{random effects},\\
 $\bm{R}\,$ is a $(n \! \times \! n)$ variance-covariance matrix of errors.\\
 \medskip
 \begin{itemize}
-    \item Independence between $\bm{u}$ and $\bm{\varepsilon}$ is assumed.\\
-    \item  Often, $\bm{R}=\sigma^2_{\varepsilon} \bm{I}_n$ is assumed group-wise correlations.\\
-    \item $\bm{G}\,$ is diagonal, if \textit{random effects} are mutually independent.
+    \item Independence between $\bm{u}$ and $\bm{\varepsilon}$ is assumed,\\
+    \item  Often, $\bm{R}=\sigma^2_{\varepsilon} \bm{I}_n$ is assumed,\\
+    \item $\bm{G}\,$ is diagonal if \textit{random effects} are mutually independent.
 \end{itemize}
+\medskip
+\item Estimation: MLE, RMLE, penalized least squares
+\small
+\\ \url{https://www.jstatsoft.org/article/view/v067i01/0}\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\section{More complex LME models}
-\begin{frame}{More complex LME models - brief outline}
+\begin{frame}{LME: R syntax}
+\small 
+For a single random effect (on the intercept): \\
+\bigskip
+\begin{itemize}
+    \item \texttt{\{nlme\}} package: \\ \medskip
+    \texttt{lme( y $\sim$ x + z, random = $\sim$ 1 | g, data = df )}
+    \bigskip
+    \item \texttt{\{lme4\}} package: \\ \medskip
+    \texttt{lmer( y $\sim$ x + z + ( 1 | g ), data = df )}
+    \bigskip
+    \item where \texttt{y} is the response variable with predictors \texttt{x} and \texttt{z}, \\and grouping factor variable \texttt{g}.
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LME: R syntax}
+\small 
+For random effects on the intercept and \texttt{x}: \\
+\bigskip
+\begin{itemize}
+    \item \texttt{\{nlme\}} package: \\ \medskip
+    \texttt{lme( y $\sim$ x + z, random = $\sim$ 1 + x | g, data = df )}\\
+    \texttt{lme( y $\sim$ x + z, random =~~~~~$\sim$ x | g, data = df )}
+    \bigskip
+    \item \texttt{\{lme4\}} package: \\ \medskip
+    \texttt{lmer( y $\sim$ x + z + ( 1 + x | g ), data = df )} \\
+    \texttt{lmer( y $\sim$ x + z + ~~~ ( x | g ), data = df )}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LME: R syntax}
+\small 
+For uncorrelated random effects on the intercept and \texttt{x}: \\
+\bigskip
+\begin{itemize}
+    \item \texttt{\{nlme\}} package: \\ \medskip
+    \texttt{lme( y $\sim$ x + z, random = list ( g = pdDiag ( $\sim$ x ) ) , \\~~~~~data = df )}
+    \bigskip
+    \item \texttt{\{lme4\}} package: \\ \medskip
+    \texttt{lmer( y $\sim$ x + z + ( 1 | g ) + (0 + x | g) , data = df )} \\
+    \texttt{lmer( y $\sim$ x + z + ( x || g ) , data = df )}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\section{Complex LME models}
+\begin{frame}{Complex LME models - brief outline}
 Different types of LME models exist:\\
 \bigskip
 \begin{itemize}
@@ -313,7 +420,7 @@ Different types of LME models exist:\\
 \medskip
 \item LME models with crossed effects,
 \medskip
-\item Complex behavior of the error term in LME models can be addressed.
+\item Complex behavior of the error term in LME models can be addressed (heteroscedasticity and serial correlation).
 \medskip
 \item LME models with non-Gaussian dependent variables \\(binary, Poisson, etc.).
 \end{itemize}
@@ -341,6 +448,22 @@ States are nested in regions, we have 2 levels of random intercepts: \\
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
+\begin{frame}{LME: R syntax}
+\small 
+For intercept varying among \texttt{g1} and \texttt{g2} within \texttt{g1}: \\
+\textcolor{blue}{For intercept \& \texttt{x} varying among \texttt{g1} and \texttt{g2} within \texttt{g1}:}
+\bigskip
+\begin{itemize}
+    \item \texttt{\{nlme\}} package: \\ \medskip
+    \texttt{lme( y $\sim$ x + z, random = $\sim$ 1 |  g 1 / g 2 , data = df )}\\
+    \textcolor{blue}{\texttt{lme( y $\sim$ x + z, random = $\sim$ x |  g 1 / g 2 , data = df )}}
+    \bigskip
+    \item \texttt{\{lme4\}} package: \\ \medskip
+    \texttt{lmer( y $\sim$ x + z +( 1 | g 1 / g 2 ), data = df )}\\
+    \textcolor{blue}{\texttt{lmer( y $\sim$ x + z +( x | g 1 / g 2 ), data = df )}}
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
 \begin{frame}{LME models with crossed random effects}
 Crossed \textit{random effects} example:\\
 \medskip
@@ -360,16 +483,50 @@ where $i=1, \dots, 10$ and \\firms are followed over $t=1,\dots,20$ years.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
-\section{LME models in R}
-\begin{frame}{LME models in R}
+\begin{frame}{LME: R syntax}
+\small 
+For intercept varying among \texttt{g1} and \texttt{g2} \\
+\bigskip
+\begin{itemize}
+    \bigskip
+    \item \texttt{\{lme4\}} package: \\ \medskip
+    \texttt{lmer( y $\sim$ x + z + ( 1 | g 1 ) + ( 1 | g 2 ), data = df )}\\
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{LME with heteroscedasticity and serial correlation}
+\small 
+\texttt{\{nlme\}} package: \\
+\bigskip
+\begin{itemize}
+    \item Heteroscedastic residual variance at level 1:\\ \medskip
+    \texttt{lme( y $\sim$ x + z, random = $\sim$ 1 |  g , \\
+           ~~~~~~~~~weights = varIdent ( form = $\sim$ 1 | g ) , data = df )}\\
+    \bigskip
+    \item Autoregressive \texttt{ar(1)} residuals:\\ \medskip
+    \texttt{lme( y $\sim$ x + z, random = $\sim$ time |  g , \\
+           ~~~~~~~~~correlation = corAR1 ( ) , data = df )}\\
+    \bigskip
+    \item General residuals (HAC estimation):\\ \medskip
+    \texttt{lme( y $\sim$ x + z, random = $\sim$ time |  g , \\
+           ~~~~~~~~~weights = varIdent ( form = $\sim$ 1 | time ) , \\
+           ~~~~~~~~~correlation = corAR1 ( ) , data = df )}\\
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\section{LME models -- references, R packages}
+\small
+\begin{frame}{LME models -- references, R packages}
 \begin{itemize}
     \item \texttt{\{lme4\}} package \\ \smallskip
-    \url{https://www.jstatsoft.org/article/view/v067i01/0}\\~\\
+    \url{https://www.jstatsoft.org/article/view/v067i01/0}\\
     \bigskip 
     \item \texttt{\{nlme\}} package \\ \smallskip
-    \url{https://cran.r-project.org/web/packages/nlme/nlme.pdf}\\~\\
+    \url{https://cran.r-project.org/web/packages/nlme/nlme.pdf}\\
     \bigskip
-    \item \url{https://www.r-bloggers.com/2017/12/linear-mixed-effect-models-in-r/}\\~\\
+    \item \url{https://www.r-bloggers.com/2017/12/linear-mixed-effect-models-in-r/}\\
+    \bigskip
+    \item \textcolor{blue}{\url{https://rpsychologist.com/r-guide-longitudinal-lme-lmer}}\\
     \bigskip
     \item Finch, Bolin, Kelley: Multilevel Modeling Using R (2014).
 \end{itemize}
