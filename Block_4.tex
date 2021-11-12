@@ -511,16 +511,16 @@ For intercept varying among \texttt{g1} and \texttt{g2} \\
 \begin{itemize}
     \item Heteroscedastic residual variance at level 1:\\ \medskip
     \texttt{lme( y $\sim$ x + z, random = $\sim$ 1 |  g , \\
-           ~~~~~~~~~weights = varIdent ( form = $\sim$ 1 | g ) , data = df )}\\
+           ~~~~~~~~~weights = varIdent ( form = $\sim$ 1 | g ) , data  )}\\
     \bigskip
     \item Autoregressive \texttt{ar(1)} residuals:\\ \medskip
-    \texttt{lme( y $\sim$ x + z, random = $\sim$ time |  g , \\
-           ~~~~~~~~~correlation = corAR1 ( ) , data = df )}\\
+    \texttt{lme( y $\sim$ x + z, random = $\sim$ 1 |  g , \\
+           ~~~~~~~~~correlation = corAR1 ( form = $\sim$ time ) , data  )}\\
     \bigskip
-    \item General residuals (HAC estimation):\\ \medskip
-    \texttt{lme( y $\sim$ x + z, random = $\sim$ time |  g , \\
-           ~~~~~~~~~weights = varIdent ( form = $\sim$ 1 | time ) , \\
-           ~~~~~~~~~correlation = corAR1 ( ) , data = df )}\\
+    \item General residuals:\\ \medskip
+    \texttt{lme( y $\sim$ x + z, random = $\sim$ 1 |  g , \\
+           ~~~~~~~~~weights = varIdent ( form = $\sim$ 1 | g ) , \\
+           ~~~~~~~~~correlation = corAR1 ( form = $\sim$ time ) , data )}\\
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
