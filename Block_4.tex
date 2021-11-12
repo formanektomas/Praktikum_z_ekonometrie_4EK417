@@ -79,12 +79,22 @@ $$
 where 
 \begin{itemize}
     \item[] $\bm{y}$ is a vector of dependent variable observations,
-    \item[] $\bm{X}$ is a $(N\! \times \! p)$ matrix of $N$ observations and $p$ predictor variables,
+    \item[] $\bm{X}$ is a $(N\! \times \! p)$ matrix of ``fixed effects'' with $N$ observations and $p$ predictor variables,
     \item[] $\bm{\beta}$ is a vector of ``fixed-effects'' regression coefficients,
     \item[] $\bm{Z}$ is a $(N\! \times \! s)$ design matrix for the $s$ ``random effects'' $\bm{u}$ that are complementary to $\bm{\beta}$,
     \item[] $\bm{\omega}$ is the error term,
     \item[] $\bm{u}$ and $\bm{\omega}$ are assumed normally distributed and mutually independent, with variance-covariance matrices $\bm{G}$ and $\bm{R}$ respectively.
 \end{itemize}   
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Introduction}
+\begin{itemize}
+    \item \textbf{Fixed effects:} variables with expected impacts (effects) on the dependent/response variable.\\ \medskip
+    Essentially the same as explanatory variables in a standard linear regression models.
+    \bigskip
+    \item \textbf{Random effects:} typically, grouping factors that we are trying to control for. \\ \medskip RE are always categorical variables (\texttt{R} cannot treat continuous variables as random effects). \\ \medskip 
+    Often, we are not interested in specific impacts of individual random effects on the response variable -- but we know RE might be influencing the patterns we see \& we want to control for such processes.
+\end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Introduction}
@@ -326,8 +336,8 @@ sense to have different slopes for each of the schools.\\
 Instead of using \textit{fixed effects} on slopes (interaction terms \texttt{math3:School}), we use random slopes: \textcolor{blue}{$ u_{1j} = \beta_{1j} - \beta_1 $}. \\
 \bigskip
 $ \texttt{math5}_{ij} = \left( \beta_{0} + u_{0j} \right) + \left( \beta_1\, \texttt{math3}_{ij}  + u_{1j} \, \texttt{math3}_{ij}  \right) + \varepsilon_{ij}, $ \\
-\medskip
-alternative notation:\\
+\bigskip
+\textcolor{orange}{alternative notation:}\\
 \medskip
 $\texttt{math5}_{ij} = \underbrace{\beta_{0} + \beta_1 \,  \texttt{math3}_{ij}}_{\textit{fixed}}
 + \underbrace{u_{0j} + u_{1j} \, \texttt{math3}_{ij}}_{\textit{random}} 
