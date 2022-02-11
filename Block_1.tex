@@ -203,7 +203,7 @@ With mean substitution & 69 & .54 &  310.747 & 59.12 \\
 \bigskip   
  \textbf{Predictive mean matching (PMM)}\\
 \begin{itemize}
-     \item Discussed within the Multiple imputation section (next)
+     \item Discussed next, within the Multiple imputation section
  \end{itemize}
 
 \end{frame}
@@ -230,7 +230,11 @@ MI motivation and algorithm\\
 \begin{frame}
 \frametitle{Multiple imputation (MI)}
 Multiple imputation scheme (example with $m=3$ imputations):\\
-\vspace{-1cm}
+\small
+\begin{itemize}
+    \item The first step -- \texttt{mice()} function -- involves PMM.
+\end{itemize}
+\vspace{-1.5cm}
 \begin{figure}
 \includegraphics[width=1\linewidth]{IMG/mice_scheme.pdf}
 \end{figure}
@@ -307,7 +311,7 @@ $$
     \item[4] For each case with missing $x_i$, use the fitted $\hat{x}_i$ and search for a set of similar ``closely matching'' $\hat{x}_{\ell}$ predictions (here, $\ell$ is a row index, different from $i$; we are only interested in ${\ell}$ cases where $x_{\ell}$ is observed).
     \medskip
     \begin{itemize}
-        \item For ``close'' values, proximity rules are defined separately.
+        \item Similarity (``closeness'') rules are defined separately.
     \end{itemize}
     \medskip
     \item[5] For each missing $x_i$, randomly choose one $x_{\ell}$ (observation) from the set of ``close'' observations and use its observed value to substitute for the missing value ($x_{\ell}$ observation is imputed, NOT the $\hat{x}_{\ell}$ value).
