@@ -201,13 +201,13 @@ $d(\bm{s}_i)$ is the distance from origin)
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Measuring spatial distances}
-\small{\textbf{Euclidean distances}, measured between two point in the ``ordinary'' Euclidean space. In 2D, the Euclidean distance ($L_2$ norm) is defined as 
+\small{\textbf{Euclidean distance}, measured between two points in the ``ordinary'' Euclidean space. In 2D, the Euclidean distance ($L_2$ norm) is defined as 
 $$
 d(\bm{s}_i, \bm{s}_j) = \sqrt[]{(s_{ix}-s_{jx})^2+(s_{iy}-s_{jy})^2}\,,
 $$
 where the $x$ and $y$ subscripts handle planar coordinates. For smaller distances, the computational simplicity is attractive.\\
 \medskip
-\textbf{Great circle distances} - for larger distances, planar projection accumulates non-negligible errors. The shortest path between two points on a sphere (given their longitudes and latitudes): 
+\textbf{Great circle distance} - for larger distances, planar projection accumulates non-negligible errors. The shortest path between two points on a sphere (given their longitudes and latitudes): 
 $$
 d(\bm{s}_i, \bm{s}_j) = 2r \, \arcsin \,
  \sqrt{ \sin^2 \left( \frac{\phi_j-\phi_i}{2} \right)
@@ -216,12 +216,12 @@ d(\bm{s}_i, \bm{s}_j) = 2r \, \arcsin \,
 $$
 where $r$ is the radius of the sphere, $\phi_1$ and $\phi_2$ are the latitudes of $\bm{s}_i$ and $\bm{s}_j$ in radians, $l_i$ and $l_j$ are the longitudes (in radians). Its only an approximation when applied to the Earth, which is not a perfect sphere (correct within a 0.5\%; alternative: Vicenty's formulae).\\
 \medskip
-\textbf{Manhatan distances} - $L_1$ norm, a function on a fixed grid.
+\textbf{Manhatan distance} - $L_1$ norm, a function on a fixed grid.
 }
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Spatial stochastic processes}
-For a generic location $\bm{s}$ given by a vector of $d$ coordinates in a $d$-dimensional Euclidean space, spatial stochastic process \\(``random field'') is often denoted as
+For a generic location $\bm{s}$ given by a vector of $d$ coordinates in a $d$-dimensional Euclidean space, spatial stochastic process, i.e. ``random field'', $Z(\bm{s})$ of a geo-located variable $Z$ is often denoted as
 $$ Z(\bm{s}): \bm{s} \in D \subseteq \mathbb{R}^d \, .$$
 \vspace{-0.5cm}
 \begin{itemize}
@@ -264,7 +264,7 @@ As autocovariance is a function of $\bm{h}$ only (under weak st.), \\for any spa
 \end{equation*}
 Covariogram $C(\bm{h})$ is the covariance between two spatial units, separated by $\bm{h}$. For $\bm{h} = \bm{0}$, it simply describes variance: 
 $$\textnormal{cov}\,[Z(\bm{s}+\bm{0}),Z(\bm{s})] =  C(\bm{0}) = \textnormal{var}\,[Z(\bm{s})]\,.$$
-Under weak dependency, covariance disappears with growing distance: 
+\textbf{Weak dependency:} covariance disappears with growing distance: 
 $$C(\bm{h}) \rightarrow 0~\textnormal{as}~||\bm{h}|| \rightarrow \bm{\infty}$$.
 \end{frame}
 %---------------------------------------------------------------------
@@ -306,7 +306,7 @@ Isotropy means that the semivariogram depends only on the distance $d$ between t
 \textbf{Empirical semivariogram} \\
 To perform empirical analysis of distance-based data correlations, we construct the so called empirical semivariogram. First, we divide the distances observed over the domain $D$ into $K$ conveniently chosen intervals: 
 $$I_1 = (0, d_1 ], \, I_2 = (d_1, d_2 ], \, \dots \, , \, I_K = (d_{K-1}, d_K ] \, .$$
-Here, $d_1$ is the maximum distance within the $I_1$ interval and $d_K$ is the maximum distance observed over the field of data. \\ \smallskip The intervals can be proportional in terms of distance or in terms of sets of observation pairs allocated to each interval (to adjust for unevenly spaced observations). \\ \smallskip Note that distances are determined by $d$ (distance magnitudes) only -- here, we do not use the orientated distances $\bm{h}$.
+Here, $d_1$ is the maximum distance within the $I_1$ interval and $d_K$ is the maximum distance observed over the field of data. \\ \smallskip The intervals can be proportional in terms of distance or in terms of sets of observation pairs allocated to each interval (to adjust for unevenly spaced observations). \\ \smallskip Note that we use the isotropy simplification here: distances are determined by $d$ (distance magnitudes).
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Spatial stochastic processes}
