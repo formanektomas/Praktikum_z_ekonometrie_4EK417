@@ -1050,16 +1050,17 @@ Theoretical (macroeconomic) reasoning of the spatial dependency is not required 
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{ML estimation \& testing of spatial models}
+\small
 \begin{itemize}
     \item $LL$ functions  for SDMs (SLMs) and SEMs may be amended to accommodate binomial, count, multinomial and other dependent variables (LeSage, Pace: Introduction  to  spatial  econometrics).
     \smallskip
-    \item Likelihood ratio ($LR$) test can be used to evaluate spatial model specification through a set of conveniently chosen restrictions leading to two alternative nested models:
+    \item Likelihood ratio ($LR$) test can be used to evaluate spatial model specification (against non-spatial), through a set of conveniently chosen restrictions leading to two alternative nested models:
 \begin{equation*}
 \textit{LR} = 2(\mathcal{L}_{ur}-\mathcal{L}_{r}) \,\,\, \underset{H_0}{\sim} \,\,\, \chi_q^2 \, ,
 \end{equation*}
 where $\mathcal{L}_{ur}$ is the maximized $LL$ function  of the estimated spatial model. The null hypothesis is used to enforce zero restriction on all parameters describing spatial autocorrelation ($\lambda$, $\bm{\theta}$ or $\rho$ -- given specification of the unrestricted model) and $\mathcal{L}_{r}$ is the maximized $LL$ of the non-spatial model.
 \smallskip
-\item $LR$ tests may be applied more generally (different restrictions may be evaluated).
+\item For spagial models, $LR$ tests may be applied more generally (different restrictions may be evaluated).
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -1119,7 +1120,9 @@ where the term $J_{\lambda,\bm{\beta}} = \left[ (\bm{WX\hat{\beta}})^{'}\bm{M}(\
     \left(\frac{\bm{\hat{u}}^{'}\bm{Wy}}{\hat{\sigma}^2}
     - \frac{\bm{\hat{u}}^{'}\bm{W\hat{u}}}{\hat{\sigma}^2} \right)^{2} 
     \,\,\, \underset{H_0}{\sim} \,\,\, \chi_1^2 \,\,.
-    \end{equation*}
+    \end{equation*}\\
+    \bigskip
+    \textbf{Note:} \\ \medskip
     \item Heteroskedasticity-robust versions of statistics $\textit{LM-SEM}$ and $\textit{LM-SLM}$ are available. 
     \smallskip
     \item Heteroskedasticity-robust versions of the $\textit{RLM-SEM}$ and $\textit{RLM-SLM}$ tests are not easily accessible as accounting for heteroskedasticity leads to highly non-linear expressions.
