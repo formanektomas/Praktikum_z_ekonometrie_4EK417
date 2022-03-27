@@ -633,11 +633,11 @@ $$\min \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0
 $$
 \small
 \begin{itemize}
-\item \textbf{Lasso penalty} encourages sparse solutions (in terms of coefficients), yet it is somewhat indifferent to the choice among a set of strong but correlated regressors.
+\item \textbf{Lasso penalty} (for $\alpha = 1$) encourages sparse solutions (in terms of coefficients), yet it is somewhat indifferent to the choice among a set of strong but correlated regressors.
 \smallskip
-\item \textbf{Ridge penalty} shrinks coefficients of correlated variables toward each other, no spare solution effect.
+\item \textbf{Ridge penalty} (for $\alpha = 0$) shrinks coefficients of correlated variables toward each other, no spare solution effect.
 \smallskip
-\item \textbf{Elastic net penalty} is a compromise (combined method). The second term of the penalization element encourages highly correlated features to be averaged, while
+\item \textbf{Elastic net penalty} (for $0 < \alpha < 1$) is a compromise (combined method). The second term of the penalization element encourages highly correlated features to be averaged, while
 the first term encourages a sparse solution in the coefficients of these averaged features.
 \item Minimizer follows from Zou and Hastie, (2005). Other penalty specifications are possible (e.g. general $\lambda_1$ and $\lambda_2$ can be applied).
 \end{itemize}
@@ -705,9 +705,9 @@ transformed variables:
 \medskip
 \item Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization.
 \medskip
-\item Suppose we have a $(n \! \times \! p)$ dataset $\bm{X}$. Since we are mainly interested in variance here, we can assume that each of the variables in $\bm{X}$ has been \textbf{centered} to have mean zero \\(all column-means of $\bm{X}$ are zero). If necessary, the transformation (centering of $\bm{X}$) is straight-forward.
+\item Suppose we have a $(n \! \times \! p)$ dataset $\bm{X}$. Since we are mainly interested in variance here, we can assume that each of the variables in $\bm{X}$ has been \textbf{centered} to have mean zero \\(all column-means of $\bm{X}$ are zero). If necessary, centering of $\bm{X}$ is straight-forward and can be performed easily.
 \medskip
-\item Typically, empirical analyses (in \texttt{R} and elsewhere) would involve variable standardizing/scaling to $\textnormal{var}(\bm{x}_j)=1$.
+\item Typically, empirical analyses (in \texttt{R} and elsewhere) would also involve variable standardizing/scaling to $\textnormal{var}(\bm{x}_j)=1$.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -819,7 +819,7 @@ where $\bm{\phi}_2 = (\phi_{12}, \phi_{22},\dots, \phi_{p2})^\prime$ is the seco
 \medskip
 \item Subsequent principal components: \\ \medskip For a sequence of additional $\bm{z}_2, \bm{z}_3,\dots$ principal components, we solve \eqref{PCA1} while adding orthogonality condition with respect to all preceding principal components.
 \medskip
-\item Important geometrical interpretations to principal components apply (see \textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR textbook}}}).
+\item Important geometrical interpretations to principal components apply -- direction of the first principal component is given by the first eigenvector of the covariance matrix of variables in $\bm{X}$. \\(see \textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR textbook}}} or \textcolor{blue}{\underline{\href{https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues}{Cross Validated}}}).
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -1089,6 +1089,8 @@ Different approaches are discussed (from simple to more complex), QREG is includ
 \smallskip
 \item Smoothing splines
 \smallskip
+\item Local regression
+\smallskip
 \item Generalized Additive Models (GAM)
 \end{itemize}
 \end{frame}
@@ -1166,7 +1168,7 @@ Standard way to apply LRMs in situations where the relationship between a regres
     $\hat{f}(x_0) = \hat{\beta}_0 + \hat{\beta}_1 x_0 + \hat{\beta}_2 x_0^2 + \dots + \hat{\beta}_d x_0^d $\\ \smallskip 
     and we study the general  prediction properties (variance, bias) \\of  $\hat{f}(x_0)$.
     \smallskip
-    \item Choice of $d$: fix the $d$ at some low value (4 at most), \\or use cross-validation to choose $d$.
+    \item Choice of $d$: fix $d$ at some low value (4 at most), \\or use cross-validation to choose $d$.
     \smallskip
     \item Potential problem with predictions based on polynomial regressors: notoriously bad tail behavior -- not suitable for extrapolation.
     \smallskip 
