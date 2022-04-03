@@ -1181,7 +1181,7 @@ Standard way to apply LRMs in situations where the relationship between a regres
 \begin{itemize}
     \item Polynomial regression function imposes a \textit{global} structure on the non-linear function.
     \smallskip
-    \item Instead, we can use a step function where regressor $x$ is broken into different bins and we fit a different constant for each bin (our regressor is transformed into a ordered categorical variable).
+    \item Instead, we can use a step function where a continuous regressor $x$ is broken into different bins and we fit a different constant for each bin (regressor is transformed into an ordered categorical variable).
     \smallskip
     \item Alternatively, we select adequate (ad-hoc) cutpoints $c_1, c_2, \dots, c_K$ for a continuous regressor $x$ and construct $K+1$ dummy variables:
     \begin{equation*}
@@ -1673,7 +1673,7 @@ where $p_i = P(\texttt{wage}_i > 250~|~ \texttt{year}_i, \texttt{age}_i, \texttt
 %---------------------------------------------
 \begin{frame}{Final note}
 \centering
-For a detailed technical discussion of the topics covered in Block 2,\\ \medskip you may consult e.g.: \textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{The Elements of Statistical Learning}}}
+For a detailed technical discussion of the topics covered in Block 3,\\ \medskip you may consult e.g.: \textcolor{blue}{\underline{\href{https://web.stanford.edu/~hastie/ElemStatLearn/}{The Elements of Statistical Learning}}}
 \end{frame}
 %---------------------------------------------
 \begin{frame}[noframenumbering]{Final note }
