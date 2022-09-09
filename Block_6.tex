@@ -87,15 +87,13 @@
 \section{Treatment effects: Introduction}
 \begin{frame}{Treatment effects: Introduction}
 \begin{itemize}
-    \item Broadly speaking, treatment evaluation focuses on evaluating impact of intervention(s) on outcome(s) of interest.
+    \item Evaluation focuses on the impact of intervention (treatment) on some \textbf{outcome} of interest.
     \medskip
-    \item Some of the methodology and terminology comes from medical sciences.
+    \item We are interested in measuring response to treatment. Such response is evaluated relative to a benchmark: no treatment or different treatment. 
     \medskip
-    \item Typically, we are interested in measuring response to treatment, relative to some benchmark: no treatment or different treatment. 
+    \item \textbf{Outcome} typically refers to (changes in)  `status' (economic, social, medical, etc.) of individuals / companies / CS units.
     \medskip
-    \item In economic applications, treatment and intervention are synonyms. 
-    \medskip
-    \item \textbf{Outcome} typically refers to (changes in) economic `status' of individuals / companies / CS units. Typically, outcome is the dependent variable in a specialized regression model.
+    \item Analysis of treatment effect is typically based on regression models, with \textbf{outcome} as the dependent variable.
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -104,7 +102,7 @@
 \begin{itemize}
     \item Enrollment in some form of labor training program
     \medskip
-    \item Being member of trade union
+    \item Becoming member of trade union
     \medskip
     \item Receiving transfer payment from a social program
     \medskip
@@ -122,9 +120,10 @@
     rectangle, rounded corners, inner sep=1pt, inner ysep=10pt]
 \tikzstyle{fancytitle} =[fill=blue!35, text=black]
 %---------------------------------
-\begin{frame}{Treatment effects: Types of studies}
+\begin{frame}{Treatment effects: Introduction}
+\textbf{Studies of treatment effects:} types of studies and types of data used for evaluation:\\
 \begin{itemize}
-    \item Controlled experiments -- scientific experiments (assignment into treated and control groups is random)
+    \item ``Proper'' (controlled) scientific experiments: assignment into treated and control groups is random. \\ \medskip Relatively rare in socio-economic studies (common/required in medical studies, etc.). 
     \bigskip
     \item Observational studies -- natural experiments, quasi-experiments (assignment into treatment and control group is not random) \\ \medskip
     
@@ -132,7 +131,7 @@
 \end{itemize}
 \end{frame}
 %---------------------------------
-\begin{frame}{Treatment effects: Types of studies}
+\begin{frame}{Treatment effects: Introduction}
 \begin{tikzpicture}
 \node [mybox] (box){%
 \begin{minipage}{0.50\textwidth}
@@ -169,12 +168,39 @@ individual house-prices?
 \end{tikzpicture}%
 \end{frame}
 %---------------------------------
-\section{DiD estimator: Policy analysis with pooled CS data}
-\begin{frame}{DiD estimator: Policy analysis with pooled CS data}
+\begin{frame}{Treatment effects: Introduction}
+\small
+For evaluation of scientific experiments (if treatment/intervention is exogenous), one can formulate a regression model with a treatment-related dummy variable, as follows:
+$$
+y_i = \bm{x}_i^{\prime}\bm{\beta} + \delta D_i + \varepsilon_i,
+$$
+where $D_i = 1$ if the $i$th individual (CS unit) is in the treatment group and zero otherwise (for the control group). \\
+\medskip
+For a simplified scenario, we can leave out covariates $\bm{x}$ and compare two groups (treated/untreated):
+$$
+y_i = \beta_0 + \delta D_i + \varepsilon_i,
+$$    
+with $\hat{\beta}_0 = [\overline{y}|_{D_i=0}]$ being the average outcome for the untreated,\\
+and $\hat{\delta} = [\overline{y}|_{D_i=1}] - [\overline{y}|_{D_i=0}]$ as the mean difference between the two groups.\\
+\bigskip
+\textbf{Note:} exogeneity of $D$ is crucial for estimation of the treatment effect. Inclusion of $\bm{x}_i^{\prime}\bm{\beta}$ in the equation doesn't change the general interpretation of $\delta$.
 \end{frame}
 %---------------------------------
-\begin{frame}{DiD estimator: Policy analysis with pooled CS data}
-    describe general principle t/cont,  b/a
+\section{DiD estimator: Policy analysis with pooled CS data}
+\begin{frame}{DiD estimator: Policy analysis with pooled CS data} 
+\small
+DiD refers to a popular approach towards policy analysis \& evaluation, based on models with two dummy variables: $T$ differentiates between two time periods (before/after treatment) and $D$ distinguishes the two groups (treatment/control). \\ \medskip 
+DiD estimator is based on model: \\ 
+$$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \varepsilon_{it},$$
+where:
+\begin{itemize}
+\item $i=1, \dots, N;~~t=1,2$. \\
+\item[$T_t$] is a time dummy, $T_1=0$ is the first (pre-treatment) period and \\$T_2 = 1$ is the second period (post treatment),
+\item[$D_i$] is a treatment dummy, $D_i=1$ for the treated,
+\item[$D_i T_t$] is an interaction element, i.e. $(D_i\! \cdot \! T_t)$,
+\item[$\delta_1$] is the DiD estimator (coefficient),
+\item adding $\bm{x}_{it}^{\prime}\bm{\beta}$ to model doesn't change the general interpretation of $\delta_1$.
+\end{itemize}
 \end{frame}
 %---------------------------------
 \begin{frame}{DiD estimator: Policy analysis with pooled CS data}
@@ -186,64 +212,51 @@ individual house-prices?
 \end{frame}
 %---------------------------------
 \begin{frame}{DiD estimator: Policy analysis with pooled CS data}
-\underline{\textbf{DiD estimator:}} we can use LRMs to compare the changes in conditional means for the treatment and control groups…
+\small 
+\underline{\textbf{DiD estimator:}} we use LRMs to compare changes in conditional means for the treatment and control groups.
 \begin{itemize}
-\item Group specific and time specific effects are allowed (controlled for)
+\item Group specific (treatment/control) and time specific effects are addressed.
 \end{itemize}
+\medskip
 \underline{\textbf{Assumptions:}}
 \begin{itemize}
-\item Unbiased DiD estimates require that the treatment (being subject to economic policy change…) is not systematically
-related to factors affecting the outcome (dependent variable) that are not accounted for explicitly in our model and
-thus are “hidden” in the random element.
+\item Exogeneity of the treatment (of the $D_i$ variable): unbiased DiD estimates require that the treatment (individual being subject to economic policy change) is not systematically related to factors affecting the outcome (dependent variable), that are not accounted for explicitly in our model and thus are ``hidden'' in the random element.\\ \smallskip
 \item DiD \textbf{attributes all differences in trends} between the treatment and control groups \textbf{to the intervention} (treatment). We assume there are no other factors that affect the difference in trends between the two groups.
 \end{itemize}
 \end{frame}
 %---------------------------------
-\begin{frame}{Example: DiD estimator}
-$y_{it}=\beta_0 + \delta_0 d2 + \beta_1 dT + \delta_1 (d2 \times dT) + \bm{x}_{it} \bm{\gamma} + u_{it},$\\
-\medskip
-$i=1, \dots, N;~~t=1,2$. \\
+\begin{frame}{DiD estimator: Policy analysis with pooled CS data}
+$$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \varepsilon_{it}$$\\
 \bigskip
-where:
-\begin{itemize}
-\item[$d2$] is a dummy variable, $d2=1$ for the second period (post treatment),
-\item[$dT$] is a dummy variable, equals 1 for the individuals in the treatment group,
-\item[$\bm{x}_{it}$ ] is a $1 \times k$ (row) vector of additional regressors and \\
-$\bm{\gamma}$ is a $k \times 1$ vector of coefficients.
-\end{itemize}
-\end{frame}
-%---------------------------------
-\begin{frame}{Example: DiD estimator}
-$y_{it}=\beta_0 + \delta_0 d2 + \beta_1 dT + \delta_1 (d2 \times dT) + u_{it},$\\
-\medskip
-$i=1, \dots, N;~~t=1,2$. \\
-\bigskip
-In this simplified model (we drop $\bm{x}_{it} \bm{\gamma}$), the estimated $\delta_1$ \\has a convenient DiD interpretation:
-\begin{align*}
-\hat{\delta}_1 &= (\overline{y}_{Tr,\,t=2} - \overline{y}_{Co,\,t=2}) -  (\overline{y}_{Tr,\,t=1} - \overline{y}_{Co,\,t=1}), \\ ~& \\
-& \hspace{0.5cm} \textnormal{which may be rearranged as:} \\ ~& \\
-&= (\overline{y}_{Tr,\,t=2} - \overline{y}_{Tr,\,t=1}) -  (\overline{y}_{Co,\,t=2} - \overline{y}_{\textit{Co},\,t=1})
-\end{align*}
-\end{frame}
-%---------------------------------
-\begin{frame}{Example: DiD estimator}
-$$y_{it}=\beta_0 + \delta_0 d2 + \beta_1 dT + \delta_1 (d2 \times dT) + u_{it},$$
 \footnotesize
 \begin{table}[]
 \centering
 \caption{Table: Illustration of the DiD estimator}\label{Tab1}
 \begin{tabular}{|l|c|c|c|}
 \hline
-\multicolumn{1}{|c|}{$E(y_{it} | d2, dT)$} & Before $(t = 1)$    & After $(t=2)$                             & After - Before        \\ \hline
-Control                                    & $\beta_0$           & $\beta_0 + \delta_0$                      & $\delta_0$            \\ \hline
-Treatment                                  & $\beta_0 + \beta_1$ & $\beta_0 + \delta_0 + \beta_1 + \delta_1$ & $\delta_0 + \delta_1$ \\ \hline
-Treatment - Control                        & $\beta_1$           & $\beta_1 + \delta_1$                      & \circled{$\delta_1$}            \\ \hline
+\multicolumn{1}{|c|}{$E(y_{it} | D_i, T_t)$} & Before $(t = 1)$    & After $(t=2)$                             & After -- Before        \\ \hline
+Control $(D_i=0)$                                    & $\beta_0$           & $\beta_0 + \delta_0$                      & $\delta_0$            \\ \hline
+Treatment $(D_i=1)$                                  & $\beta_0 + \beta_1$ & $\beta_0 + \delta_0 + \beta_1 + \delta_1$ & $\delta_0 + \delta_1$ \\ \hline
+Treatment -- Control                        & $\beta_1$           & $\beta_1 + \delta_1$                      & \circled{$\delta_1$}            \\ \hline
 \end{tabular}
 \end{table} 
 
 ~\\
-Even if $\bm{x}_{it} \bm{\gamma}$ is added back to the equation, interpretation of $\delta_1$ remains essentially unchanged.
+Again, if $\bm{x}_{it} \bm{\beta}$ is added back to the equation, interpretation of $\delta_1$ remains essentially unchanged.
 
+\end{frame}
+%---------------------------------
+\begin{frame}{DiD estimator: Policy analysis with pooled CS data}
+$$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \varepsilon_{it}$$\\
+\bigskip
+In this simplified model (again, we drop $\bm{x}_{it} \bm{\beta}$), the estimated $\delta_1$ has \\a convenient DiD interpretation, as follows:\\
+\bigskip
+\begin{align*}
+\hat{\delta}_1 &= (\overline{y}_{Tr,\,t=2} - \overline{y}_{Co,\,t=2}) -  (\overline{y}_{Tr,\,t=1} - \overline{y}_{Co,\,t=1}), \\ ~& \\
+& \hspace{0.5cm} \textnormal{which may be rearranged as:} \\ ~& \\
+&= (\overline{y}_{Tr,\,t=2} - \overline{y}_{Tr,\,t=1}) -  (\overline{y}_{Co,\,t=2} - \overline{y}_{\textit{Co},\,t=1}),
+\end{align*}
+where the \textit{Tr} subscript stands for treatment group and the \textit{Co} subscript identifies the control group.
 \end{frame}
 %---------------------------------
 \begin{frame}{Example: DiD estimator}
@@ -299,6 +312,9 @@ Say, we have a “poor neighborhood” with relatively old and small houses and 
 \medskip
 We do not have variables to control for this factor $\rightarrow$ the DiD estimator may be severely biased 
 \end{block}
+
+-- propensity to participation... as in Greene
+
 \end{frame}
 %---------------------------------
 \section{Regression discontinuity design}
@@ -323,13 +339,13 @@ We do not have variables to control for this factor $\rightarrow$ the DiD estima
 For detailed \& technical discussion, see:\\
 \medskip
 \begin{itemize}
-\item[1.] Wooldridge: Econometric analysis of C-S and panel data, chapter 21 Estimating Average Treatment Effects
+\item[1.] Greene: Econometric analysis, chapter 19.6
 \medskip
-\item[2.] Greene: Econometric analysis, chapter 19.6
+\item[2.] Angrist, Pischke: Mostly Harmless Econometrics
 \medskip
-\item[3.] Angrist, Pischke: Mostly Harmless Econometrics
+\item[3.] Cameron, Trivendi: Microeconometrics, Methods and Applications, chapter 25
 \medskip
-\item[4.] Cameron, Trivendi: Microeconometrics, Methods and Applications, chapter 25
+\item[4.] Wooldridge: Econometric analysis of C-S and panel data, chapter 21 Estimating Average Treatment Effects
 \end{itemize}
 \end{frame}
 %---------------------------------
