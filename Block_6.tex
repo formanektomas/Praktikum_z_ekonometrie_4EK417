@@ -28,6 +28,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage{caption} % remove "Figure1:"  from figures
 \usepackage{color}
 \usepackage[czech]{babel}
 \usepackage{lmodern}  
@@ -186,7 +187,7 @@ and $\hat{\delta} = [\overline{y}|_{D_i=1}] - [\overline{y}|_{D_i=0}]$ as the me
 \textbf{Note:} exogeneity of $D$ is crucial for estimation of the treatment effect. Inclusion of $\bm{x}_i^{\prime}\bm{\beta}$ in the equation doesn't change the general interpretation of $\delta$.
 \end{frame}
 %---------------------------------
-\section{DiD estimator: Policy analysis with pooled CS data}
+\section{Treatment effects analysis - exogenous assignment \& DiD estimator}
 \begin{frame}{DiD estimator: Policy analysis with pooled CS data} 
 \small
 DiD refers to a popular approach towards policy analysis \& evaluation, based on models with two dummy variables: $T$ differentiates between two time periods (before/after treatment) and $D$ distinguishes the two groups (treatment/control). \\ \medskip 
@@ -220,7 +221,7 @@ where:
 \medskip
 \underline{\textbf{Assumptions:}}
 \begin{itemize}
-\item Exogeneity of the treatment (of the $D_i$ variable): unbiased DiD estimates require that the treatment (individual being subject to economic policy change) is not systematically related to factors affecting the outcome (dependent variable), that are not accounted for explicitly in our model and thus are ``hidden'' in the random element.\\ \smallskip
+\item Exogeneity of treatment (of the $D_i$ variable): unbiased DiD estimates require that the treatment (individual being subject to economic policy change) is not systematically related to factors affecting the outcome (dependent variable), that are not accounted for explicitly in our model and thus are ``hidden'' in the random element.\\ \smallskip
 \item DiD \textbf{attributes all differences in trends} between the treatment and control groups \textbf{to the intervention} (treatment). We assume there are no other factors that affect the difference in trends between the two groups.
 \end{itemize}
 \end{frame}
@@ -272,7 +273,7 @@ where the \textit{Tr} subscript stands for treatment group and the \textit{Co} s
 \multicolumn{1}{c}{Variable}    & Coefficient          & \multicolumn{1}{c}{Std. Error} & t-Statistic          & \multicolumn{1}{l}{Prob.} \\
                                 
                                 & \multicolumn{1}{l}{} &                                & \multicolumn{1}{l}{} & \multicolumn{1}{l}{}      \\
-\multicolumn{1}{c}{C}           & 82517.23             & \multicolumn{1}{c}{2726.910}   & 30.26034             & 0.0000                    \\
+\multicolumn{1}{c}{(Intercept)}           & 82517.23             & \multicolumn{1}{c}{2726.910}   & 30.26034             & 0.0000                    \\
 \multicolumn{1}{c}{Y81}         & 18790.29             & \multicolumn{1}{c}{4050.065}   & 4.639502             & 0.0000                    \\
 \multicolumn{1}{c}{NEARINC}     & -18824.37            & \multicolumn{1}{c}{4875.322}   & -3.861154            & 0.0001                    \\
 \multicolumn{1}{c}{Y81*NEARINC} & -11863.90            & \multicolumn{1}{c}{7456.646}   & -1.591051            & 0.1126                    \\
@@ -292,39 +293,99 @@ Prob(F-statistic)               & 0.000000             & \multicolumn{2}{l}{}   
     mynode/.style={rectangle,draw=blue, fill=blue!30, very thick, inner sep=.5em, minimum size=2em, text width=25em}
 }
 \node[mynode] at (7.8, 0.3) (Table){
-\scriptsize{PRICE - house price in real terms (USD) \\ 
-$Y81$ – dummy variable for $1981$, \ ($t=1978,1981$)\\
-$1978$ – before ``rumors''~; $1981$ – incinerator operational \\
+\scriptsize{RPRICE - house price in real terms (USD) \\ 
+$Y81$ – dummy variable for $1981$, \ ($t=1978,1981$),\\
+~~$1978$ – before ``rumors''; $1981$ – incinerator operational \\
 NEARINC – dummy for the treatment group}};
 \end{tikzpicture}
 \end{frame}
 %---------------------------------
-\begin{frame}{Example: DiD estimator}
+\begin{frame}{Example: DiD estimator (contnd.)}
+\begin{block}{Selection bias (treatment effect vs. selection bias):}
 \small
-Incinerator effect on prices example, contd: \\
+\textbf{Assumption:} Unbiased DiD estimates require that the treatment is not systematically related to factors affecting the outcome that are not in model.  \\
 \medskip
-The model may be easily expanded by explanatory variables such as: \textit{HOUSE.AGE, ROOMS, AREA, LOT.AREA}, etc. and the DiD interpretation remains basically unchanged \dots
-\begin{block}{Selection bias (treatment effect vs. selection bias) example:}
-\small
-\textbf{Assumption:} “Unbiased DiD estimates require that the treatment is not systematically related to factors affecting the outcome that are not explicitly accounted for.”  \\
+\textbf{Incinerator example:} Say, we have a “poor neighborhood” with relatively old and small houses and low house-prices. For complex reasons, it suffers from a representation deficit within the local city council (as compared to other “rich neighborhoods”) and is therefore more likely to get the incinerator. If we do not have variables to control for this factor $\rightarrow$ the DiD estimator may be severely biased. We may be measuring latent ``propensity'' of the neighborhood, rather than intervention effects. \\
 \medskip
-Say, we have a “poor neighborhood” with relatively old and small houses and low house-prices. For complex reasons, it suffers from a representation deficit within the local city council (as compared to other “rich neighborhoods”) and is therefore more likely to get the incinerator. \\
-\medskip
-We do not have variables to control for this factor $\rightarrow$ the DiD estimator may be severely biased 
+\textbf{Example 2:} In a scientific medical experiment, patients do not know whether they are in the control or in the treatment group. For a natural experiment with job-training effects, we have voluntary participation. If more agile workers tend to participate, we cannot assume treatment and control group are identical -- except for the treatment. Hence, instead/besides of treatment effect, DiD would measure latent ``propensity'' to participate.
 \end{block}
-
--- propensity to participation... as in Greene
-
 \end{frame}
 %---------------------------------
-\section{Regression discontinuity design}
+\section{Dealing with endogeneity and the missing counterfactual}
+\subsection{Evaluating treatment effects}
+%---------------------------------
+\begin{frame}{Problems with evaluating treatment effects}
+    
+    Greene 19.6
+    
+\end{frame}
+%---------------------------------
+\subsection{Regression discontinuity design}
 \begin{frame}{Regression discontinuity design}
     Violates common support assumption
 \end{frame}
 %---------------------------------
-\section{Propensity score matching}
-\begin{frame}{Propensity score matching}
+\subsection{Regression discontinuity design}
+\begin{frame}{Regression discontinuity design}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{./IMG/RDD1.png} 
+    \caption*{RDD: treatment effect visualization example,\\ linear, common slope.}
+    \label{fig:my_label}
+\end{figure}    
+  
     
+\end{frame}
+%---------------------------------
+\begin{frame}{Regression discontinuity design -- potential problems}
+\begin{itemize}
+    \item[I.a] Misspecification of the model/functional form, which is used to estimate treatment effect.\\
+    \bigskip
+    Linearity is often the default approach (assumption) in regression models. However, this may not reflect real DGP. For proper treatment effect estimation, model should be accurately formulated. If appropriate, use quadratic forms, higher polynomials or LOESS (locally estimated scatterplot smoothing).
+\end{itemize}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.55\textwidth]{./IMG/RDD2.png} 
+    \caption*{True outcome function can be non-linear.} \label{fig:my_label1}
+\end{figure}    
+\end{frame}
+%---------------------------------
+\begin{frame}{Regression discontinuity design -- potential problems}
+\begin{itemize}
+    \item[I.b] Misspecification of the model/functional form, which is used to estimate treatment effect.\\ 
+    \bigskip
+    Possibly, once a nonlinear relationship is modelled correctly, discontinuity disappears as it was caused by a misspecification in the functional form. In the plot below, the correct relationship is specified by a curve. If we use a linear relationship, we might observe a (spurious) discontinuity.
+\end{itemize}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.55\textwidth]{./IMG/RDD3.png}
+    \caption*{``Discontinuity'' caused by functional misspecification.} \label{fig:my_label2}
+\end{figure}    
+\end{frame}
+%---------------------------------
+\begin{frame}{Regression discontinuity design -- potential problems}
+\begin{itemize}
+    \item[II.] Diffusion of the treatment.\\ \bigskip \small
+    
+    RDD assumes that all individuals below (or above) the cutoff point received the treatment and vice versa.\\ \smallskip
+    In reality, the treatment and the control groups can be ``contaminated''. Say, despite mandatory attendance policy (below a given grade average), some students do not attend classes. Alternatively, individuals below (or above) the cutoff might be \textit{allowed} to attend special classes or programs. \\ \medskip
+
+    \textbf{RDD fuzzy design}: cut off is probabilistic. Methodology \& solutions:\\
+
+    \begin{itemize}
+        \item Acknowledge possible issues, but still run RDD model comparing eligible vs ineligible individuals.
+        \item Use eligibility as an instrument (IV). First estimate treatment probability, then use RDD to estimate the treatment on the treated.
+        \item \textcolor{blue}{\underline{\href{https://onlinelibrary.wiley.com/doi/10.1111/1468-2354.t01-1-00055}{Methodology details provided by: van der Klaauw, 2003}}}
+    \end{itemize}
+
+
+\end{itemize}
+\end{frame}
+%---------------------------------
+
+\subsection{Propensity score matching}
+\begin{frame}{Propensity score matching}
+    Greene 19.6.2
 \end{frame}
 %---------------------------------
 
