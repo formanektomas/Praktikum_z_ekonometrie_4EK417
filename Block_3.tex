@@ -540,7 +540,7 @@ This was the main motivation for ridge regression when it was first introduced i
 \item Ridge regression has one empirical disadvantage:
 unlike subset selection, which will generally select models
 that involve just a subset of the variables, ridge regression
-will include all $p$ predictors in the final model (with potentially small but nonzero values).
+will include all $p$ predictors in the final model (with potentially small but nonzero $\hat{\beta}_{j}$ values).
 \medskip
 \item The Lasso is a relatively recent alternative to ridge
 regression that overcomes this disadvantage. The lasso
@@ -577,7 +577,7 @@ estimates towards zero.
 \medskip
 \item In the case of the lasso, the $\ell_1$ penalty has the
 effect of forcing some of the coefficient estimates to be
-exactly equal to zero when the tuning parameter $\lambda$ is
+exactly zero when the tuning parameter $\lambda$ is
 sufficiently large (see \textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR textbook}}}).
 \medskip
 \item Much like stepwise model selection, the lasso regression performs variable selection.
@@ -635,7 +635,7 @@ $$
 \begin{itemize}
 \item \textbf{Lasso penalty} (for $\alpha = 1$) encourages sparse solutions (in terms of coefficients), yet it is somewhat indifferent to the choice among a set of strong but correlated regressors.
 \smallskip
-\item \textbf{Ridge penalty} (for $\alpha = 0$) shrinks coefficients of correlated variables toward each other, no spare solution effect.
+\item \textbf{Ridge penalty} (for $\alpha = 0$) shrinks coefficients of correlated variables toward each other, no sparse solution effect.
 \smallskip
 \item \textbf{Elastic net penalty} (for $0 < \alpha < 1$) is a compromise (combined method). The second term of the penalization element encourages highly correlated features to be averaged, while
 the first term encourages a sparse solution in the coefficients of these averaged features.
@@ -1025,7 +1025,7 @@ Potential solutions to the problem:
 First component for PLS:
 
 $$ \bm{z}_1^{\textnormal{PLS}} = \bm{X\psi}_1 \qquad \textnormal{where} \qquad 
-z_{i1}^{\textnormal{PLS}} \sum_{j=1}^p \psi_{j1} x_{ij}$$
+z_{i1}^{\textnormal{PLS}} = \sum_{j=1}^p \psi_{j1} x_{ij}$$
 \medskip
 and coefficients $\psi_{j1}$ are calculated in two steps:
 \begin{enumerate}
@@ -1323,6 +1323,43 @@ where $b_k$ are the basis functions:\\
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Regression splines -- cubic splines}
+By analogy to linear splines, we can construct cubic splines as follows:
+\medskip
+\begin{equation*}
+y_i = 
+    \begin{cases}
+        \beta_{01} + \beta_{11} x_i + \beta_{21} x_i^2 + \beta_{31} x_i^3 + u_i \textnormal{~~if~~} x_i <  c_1 ;& \\ ~ & \\
+         \beta_{02} + \beta_{12} x_i + \beta_{22} x_i^2 + \beta_{32} x_i^3 + u_i \textnormal{~~if~~} x_i \geq  c_1 .& 
+    \end{cases}
+\end{equation*}
+\begin{itemize}
+    \item Is non-continuous, 8 parameters estimated
+\end{itemize}
+\bigskip
+Cubic spline with one knot at $c_1$:
+$$
+y_i = \beta_{0} + \beta_{1} x_i + \beta_{2} x_i^2 + \beta_{3} x_i^3 + \beta_{4} (x_i-c_1)_{+}^3 + u_i
+$$
+\vspace{-0.5cm}
+\begin{itemize}
+    \item ``Continuous'', only 5 parameters estimated (continuity restriction imposed)
+\end{itemize}
+\end{frame}
+%---------------------------------------------
+\begin{frame}{Cubic splines - one knot}
+\centering
+\vspace{-0.2cm}
+\begin{figure}
+  \centering
+  \includegraphics[trim=0cm 0cm 10.5cm 0cm, clip=true, width=0.35\textwidth]{IMG/ISLR73.pdf}
+\end{figure}
+\end{frame}
+%---------------------------------------------
+
+
+
+
+\begin{frame}{Regression splines -- cubic splines}
 \textbf{Cubic spline} with knots $\xi_k,~k=1,\dots, K$ is a piecewise cubic polynomial with continuous derivatives up to order 2 at each knot.\\
 \medskip
 Again we can represent this model with truncated power basis functions:
@@ -1469,7 +1506,7 @@ $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda 
 \begin{frame}{Smoothing splines -- overview}
 $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda \int g''(t)^2 \textit{dt}$$
 \begin{itemize}
-    \item While $g$ can be any function, it may be shown that $\textnormal{RSS}(g,\lambda)$ has an explicit \& unique minimizer: natural cubic spline with $N$ knots at unique values of $x_i,~i=1,2,\dots,N$. \\(more precisely, a penalized natural cubic spline with $N$ knots)
+    \item While $g$ can be any function, it may be shown that $\textnormal{RSS}(g,\lambda)$ has an explicit \& unique minimizer: natural cubic spline with $N$ knots at unique values of $x_i,~i=1,2,\dots,N$.
     \medskip
     \item With a suitable $\lambda$ parameter, the model is not overparameterized: \textcolor{blue}{effective degrees of freedom} used for estimation $(df_{\lambda})$ decrease from $N$ to 2 as $\lambda$ increases from 0 to $\infty$.
     \medskip
@@ -1634,7 +1671,7 @@ $$ y_i = \alpha + f_1(x_{i1}) + f_2(x_{i2}) + \cdots + f_p(x_{ip}) + u_i$$\\
     \smallskip
     \item Without further restrictions, solution is non-unique -- constant $\alpha$ is non-identifiable as we can add/subtract any constant to each of the $f_j$ functions.
     \smallskip
-    \item This is solved in Step 1 (i.e. by setting $\hat{\alpha} = \textnormal{mean}(y_i)$ and $\hat{f}_j \equiv 0 $). Note that this setting does not change troughout the backfitting estimation.
+    \item This is solved in Step 1 (i.e. by setting $\hat{\alpha} = \textnormal{mean}(y_i)$ and $\hat{f}_j \equiv 0 $).
     \smallskip
     \item Step 2 (a) applies a cubic smoothing spline $\mathcal{S}_j$ to the $X_j$ regressor while fixing all other $\hat{f}_k$ at their current estimates when computing the $\left\lbrace y_i - \hat{\alpha} - \sum_{k \neq j} \hat{f}_k (x_{ik}) \right\rbrace_1^n$ term.
     \smallskip
