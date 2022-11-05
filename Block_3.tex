@@ -300,7 +300,7 @@ predictors to fit \\a linear regression model by least squares.
 \subsection{Stepwise model selection}
 \begin{frame}
 \frametitle{Best subset selection}
-
+For a dataset containing the dependent variable $y_i$ and $p$ exogenous variables (potential regressors/predictors):
 \begin{enumerate}
   \item Let $\mathcal{M}_0$ denote the \textit{null model}, which contains no predictors.
   \\Say, $y_i=\beta_0+u_i$
@@ -330,7 +330,7 @@ predictors to fit \\a linear regression model by least squares.
   \\Say, $y_i=\beta_0+u_i$
   \item For $k=0,1, \dots , \left(p-1\right)$:
 \begin{enumerate}[{(a)}]
-  \item Consider all $(p-k)$ models that augment the predictors in $\mathcal{M}_k$ with one additional predictor.
+  \item Consider all $(p-k)$ models that augment the (previous set of) predictors in $\mathcal{M}_k$ with one additional predictor.
   \item Choose the best among these $(p-k)$ models, and call it $\mathcal{M}_{k+1}$.
         \\Here, best is defined as having smallest $\textit{RSS}$ or highest $R^2$.
 \end{enumerate}
