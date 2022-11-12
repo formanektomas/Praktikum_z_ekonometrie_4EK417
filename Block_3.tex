@@ -1342,7 +1342,7 @@ y_i = \beta_{0} + \beta_{1} x_i + \beta_{2} x_i^2 + \beta_{3} x_i^3 + \beta_{4} 
 $$
 \vspace{-0.5cm}
 \begin{itemize}
-    \item ``Continuous'', only 5 parameters estimated (continuity restriction imposed)
+    \item ``Continuous'', only 5 parameters estimated \\(with continuity restriction imposed)
 \end{itemize}
 \end{frame}
 %---------------------------------------------
@@ -1482,7 +1482,7 @@ $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda 
     $g(x)$ can be any function for which the second term is defined.\\
     \bigskip
     \item $\lambda \int \! g''(t)^2 \textit{dt}~$ penalizes high variability in $g(x)$.\\  \smallskip
-    $\lambda$ is a penalty term. For $\lambda=\infty$, smoothing splines lead to OLS fit.
+    $\lambda$ is a penalty term. For $\lambda \rightarrow \infty$, smoothing splines lead to OLS fit.
 \end{itemize}
 \end{frame}
 %---------------------------------------------
@@ -1499,16 +1499,16 @@ $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda 
     \smallskip
     it is zero if $g(t)$ is a straight line around $t$.
     \medskip
-    \item $\int g''(t)^2 \textit{dt}$ ~is a (specific) measure of the total change in $g'(t)$ \\over the entire range. 
+    \item $\int g''(t)^2 \textit{dt}$ ~is a \textit{specific measure} of the total change in $g'(t)$ \\over the entire range. 
 \end{itemize}
 \end{frame}
 %---------------------------------------------
 \begin{frame}{Smoothing splines -- overview}
 $$\min:~~~\textnormal{RSS}(g,\lambda) = \sum_{i=1}^n [y_i - g(x_i)]^2 + \lambda \int g''(t)^2 \textit{dt}$$
 \begin{itemize}
-    \item While $g$ can be any function, it may be shown that $\textnormal{RSS}(g,\lambda)$ has an explicit \& unique minimizer: natural cubic spline with $N$ knots at unique values of $x_i,~i=1,2,\dots,N$.
+    \item While $g$ can be any function, it may be shown that $\textnormal{RSS}(g,\lambda)$ has an explicit \& unique minimizer: natural cubic spline with (up to) $N$ knots at unique values of $x_i,~i=1,2,\dots,N$.
     \medskip
-    \item With a suitable $\lambda$ parameter, the model is not overparameterized: \textcolor{blue}{effective degrees of freedom} used for estimation $(df_{\lambda})$ decrease from $N$ to 2 as $\lambda$ increases from 0 to $\infty$.
+    \item With a suitable $\lambda$ parameter, the model is not overparameterized: \textcolor{blue}{effective degrees of freedom} used for estimation $(df_{\lambda})$ decrease from $N$ (unique values) to 2 as $\lambda$ increases from 0 to $\infty$.
     \medskip
     \item Cross-validation can be used to find $\lambda$ with the lowest cross-validated RSS.
     \medskip
@@ -1623,8 +1623,8 @@ where $f_1$ and $f_2$ are smoothing splines and $f_3$ is a step function (\textt
 \centering
 \vspace{-0.3cm}
 \tiny
-As we hold \texttt{age} and \texttt{education} fixed, \texttt{wage} increases slightly with \texttt{year}.\\
-If we fix \texttt{year} and \texttt{education}, than \texttt{wage} tends to be highest for intermediate \\values of  \texttt{age} and lowest for the very young and very old workers.
+As we hold \texttt{age} and \texttt{education} fixed, \texttt{wage} increases approx. linearly with \texttt{year}.\\
+If we fix \texttt{year} and \texttt{education}, \texttt{wage} tends to be highest for intermediate \\values of  \texttt{age} and lowest for the very young and very old workers.
 \end{frame}
 %---------------------------------------------
 \begin{frame}{GAM estimation (backfitting)}
@@ -1632,7 +1632,7 @@ If we fix \texttt{year} and \texttt{education}, than \texttt{wage} tends to be h
 $$ y_i = \alpha + f_1(x_{i1}) + f_2(x_{i2}) + \cdots + f_p(x_{ip}) + u_i$$
 \vspace{-0.3cm}
 \begin{itemize}
-    \item $f_j$ functions are unspecified smooth (``nonparametric'') functions.
+    \item $f_j$ functions are -some- smooth (``nonparametric'') functions.
     \smallskip
     \item With smoothing splines, we do not use an expansion of basis functions for estimation (i.e. constituent elements used in some matrix of regressors $\bm{X}$).
     \smallskip
