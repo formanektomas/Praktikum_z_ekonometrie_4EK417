@@ -1323,6 +1323,49 @@ Total effect                                                                    
 \end{table}
 \end{frame}
 %---------------------------------------------------------------------
+\begin{frame}{Marginal effects \& $\beta$-coefficients in spatial models}
+\begin{itemize}
+    \item With SLM models $
+\bm{y} = (\bm{I}_N - \lambda \bm{W})^{-1}
+         (\bm{X \beta}) + \bm{r} \,$,\\ \medskip 
+         marginal effect of $\bm{x}_k$ simplifies to: 
+         \begin{equation*}
+         \begin{aligned}
+         \frac{\partial E(\bm{y})}{\partial \bm{x}_k}
+          =&~(\bm{I}_N - \lambda \bm{W})^{-1}
+	   \begin{pmatrix}
+		\beta_{k} & 0& \cdots & 0\\
+		0 & \beta_{k} & \cdots & 0\\
+		\vdots & \vdots & \ddots & \vdots \\
+		0 & 0 & \cdots & \beta_{k} \\
+	   \end{pmatrix} \\
+    & \\
+    =&~(\bm{I}_N - \lambda \bm{W})^{-1} (\bm{I}_N \beta_k)
+    \end{aligned}
+    \end{equation*} 
+    \item The spatial multiplier matrix can be decomposed as:
+    $$
+    (\bm{I}_N - \lambda \bm{W})^{-1} = 
+    \bm{I}_N + \lambda \bm{W} + \lambda \bm{W}^2 + \lambda \bm{W}^3 + \cdots
+    $$
+\end{itemize}
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}{Marginal effects \& $\beta$-coefficients in spatial models}
+\small
+By substituting $(\bm{I}_N - \lambda \bm{W})^{-1} = \textcolor{orange}{
+    \bm{I}_N + \lambda \bm{W} + \lambda \bm{W}^2 + \lambda \bm{W}^3 + \cdots}
+    $ \\ \bigskip
+into \hspace{3.3cm} $\frac{\partial E(\bm{y})}{\partial \bm{x}_k}
+          = \textcolor{orange}{(\bm{I}_N - \lambda \bm{W})^{-1}} (\bm{I}_N \beta_k)$: \\ \bigskip
+\begin{enumerate}
+    \item First RHS item $(\bm{I}_N \beta_k)$ represents the direct effects on a change in $x_k$ only (this is the estimated $\beta_k$ coefficient).
+    \item Second RHS element $(\lambda \bm{W} \beta_k)$ represents indirect  effects of first-order neighbors only. Recall that $\bm{W}$ has zeros on the main diagonal. 
+    \item Next element represents direct \& indirect effects. Please note the second order (feedback) direct effects: Say, units 1 and 2 are neighbors -- there is a  feedback of impact going from 1 to 2 and back: $[1 \rightarrow 2 \rightarrow 1]$
+    \item The remaining RHS elements represent third-order and higher order effects (direct and indirect). Overall, direct marginal effect is always greater than $\beta_j$ (this does not depend on the sign of $\beta_j$).  
+\end{enumerate}          
+\end{frame}
+%---------------------------------------------------------------------
 \begin{frame}{Drawbacks of SLMs/SDMs/SEMs}
 \begin{itemize}
 \item In SDM/SLM, the ratio between direct and indirect effect for \\a regressor $\bm{x}_k$ is independent of $\beta_k$. This is because the $\beta_k$ coefficients cancel out in the numerator and denominator of such ratio (direct/indirect effects). 
@@ -1742,8 +1785,8 @@ where $\bm{\hat{\theta}}_{RE}$ and $\bm{\hat{\theta}}_{FE}$ are the RE and FE-ba
 %---------------------------------------------------------------------
 \begin{frame}{Spatial analysis and regression models in R}
 \begin{itemize}
-	\item \{spdep\} 
-	\item \{splm\}
+	\item \{spdep\} , \{spatialreg\} , \{splm\} 
+	\item \{spgwr\} - spatial ``local regression'', discussed in Block 3
 	\item \{sf\}, \{sp\}, \{ggplot2\}
 	\item \textcolor{blue}{\underline{\href{https://cran.r-project.org/web/views/Spatial.html}{https://cran.r-project.org/web/views/Spatial.html}}}
 \end{itemize}
