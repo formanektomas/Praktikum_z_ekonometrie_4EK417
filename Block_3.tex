@@ -402,10 +402,16 @@ Forward \& Backward stepwise [and their hybrid combinations] tends to do well in
 %------------------------------------------------
 \subsection{Penalized regression}
 \begin{frame}{Parameter shrinkage methods}
-\textbf{Ridge regression and lasso regression}
+\textbf{Ridge regression and LASSO regression}
+\small
 \medskip
 \begin{itemize}
-\item As an alternative to stepwise selection, we can fit a model containing all $p$ predictors using a shrinkage method that constrains or regularizes the coefficient estimates and/or that shrinks the coefficient estimates towards zero.
+\item With OLS estimator, computing the inverse value $(\bm{X}^{\prime}\bm{X})^{-1}$ can \\ fail / be problematic if $(\bm{X}^{\prime}\bm{X})$ is singular or nearly singular. 
+\medskip
+\item One way out of this situation is to abandon the requirement of an unbiased estimator. Hoerl and Kennard (1970) proposed to address instability in OLS estimator by by adding a small constant value $\lambda$ to the diagonal entries of the matrix 
+$(\bm{X}^{\prime}\bm{X})$ before taking its inverse.
+\medskip
+\item Ridge/LASSO: alternative to stepwise selection, we can fit a model containing all $p$ predictors using a shrinkage method that constrains or regularizes the coefficient estimates and/or that shrinks the coefficient estimates towards zero.
 \medskip
 \item It may not be immediately obvious why such constraints or shrinkage
 should improve the fit -- details discussed next.
@@ -413,8 +419,9 @@ should improve the fit -- details discussed next.
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Ridge regression}
+\small
 Consider a LRM: $y = f( x_1, x_2, \dots , x_p)$
-
+\smallskip
 \begin{itemize}
 \item \textbf{OLS} can be used to estimate $\bm{\hat{\beta}}=(\hat{\beta}_0, \hat{\beta}_1, \dots , \hat{\beta}_p)^{\prime}$ by minimizing the RSS:
 $$\underset{\bm{\beta}}{\textnormal{min:~}} RSS = \sum_{i=1}^n \left(y_i - \hat{\beta}_0 
@@ -424,8 +431,10 @@ $$\underset{\bm{\beta}}{\textnormal{min:~}} RSS = \sum_{i=1}^n \left(y_i - \hat{
 are the values that minimize:
 $$\underset{\bm{\beta}}{\textnormal{min:~}} \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0  - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
 \! + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right]
-\, = \, \left( RSS + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right)$$
-where $\lambda > 0$ is a tuning parameter, determined separately.
+\, = \, \left( RSS + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right),$$
+where $\lambda > 0$ is a tuning parameter, determined separately,\\
+and ridge-estimated $\beta_j$ coefficients -- while not unbiased -- retain their 
+\textcolor{blue}{\underline{\href{https://online.stat.psu.edu/stat508/lesson/5/5.1}{interpretation as marginal effects.}}}
 \end{itemize}
 \end{frame}
 %------------------------------------------------
@@ -533,15 +542,15 @@ This was the main motivation for ridge regression when it was first introduced i
 
 \end{frame}
 %------------------------------------------------
-\begin{frame}{Lasso regression}
+\begin{frame}{LASSO regression}
 \begin{itemize}
 \item Ridge regression has one empirical disadvantage:
 unlike subset selection, which will generally select models
 that involve just a subset of the variables, ridge regression
 will include all $p$ predictors in the final model (with potentially small but nonzero $\hat{\beta}_{j}$ values).
 \medskip
-\item The Lasso is a relatively recent alternative to ridge
-regression that overcomes this disadvantage. The lasso
+\item The LASSO is a relatively recent alternative to ridge
+regression that overcomes this disadvantage. The LASSO
 coefficients,  $\bm{\hat{\beta}}_{\!L}$ estimates 
 are the values that minimize the penalized RSS:
 $$
@@ -551,47 +560,47 @@ $$
 - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
 \! + \lambda \sum_{j=1}^p  | \hat{\beta}_j | \right]$$
 again, $\lambda > 0$ is a tuning parameter, determined separately ($k$FCV).
-\item In statistical parlance, the lasso uses an $\ell_1$ (pronounced ``ell 1'') penalty instead of an $\ell_2$ penalty. The $\ell_1$ norm of a coefficient vector  is given by 
+\item In statistical parlance, the LASSO uses an $\ell_1$ (pronounced ``ell 1'') penalty instead of an $\ell_2$ penalty. The $\ell_1$ norm of a coefficient vector  is given by 
 $\| \beta \|_1 = \sum | \beta |$.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
-\begin{frame}{Lasso regression - example}
+\begin{frame}{LASSO regression - example}
 \vspace{-1cm}
 \begin{figure}
 \includegraphics[scale=0.30]{IMG/Lasso.jpg}
 \end{figure}
 \vspace{-0.5cm}
-\centering Lasso regression example output: \\coefficient estimates are plotted as a function of $\lambda$.
+\centering LASSO regression example output: \\coefficient estimates are plotted as a function of $\lambda$.
 \end{frame}
 %------------------------------------------------
-\begin{frame}{Lasso regression}
+\begin{frame}{LASSO regression}
 
 \begin{itemize}
 \item LASSO: Least Absolute Shrinkage and Selection Operator
 \medskip
-\item As with ridge regression, lasso shrinks the coefficient
+\item As with ridge regression, LASSO shrinks the coefficient
 estimates towards zero.
 \medskip
-\item In the case of the lasso, the $\ell_1$ penalty has the
+\item In the case of the LASSO, the $\ell_1$ penalty has the
 effect of forcing some of the coefficient estimates to be
 exactly zero when the tuning parameter $\lambda$ is
 sufficiently large (see \textcolor{blue}{\underline{\href{http://www-bcf.usc.edu/~gareth/ISL/}{ISLR textbook}}}).
 \medskip
-\item Much like stepwise model selection, the lasso regression performs variable selection.
+\item Much like stepwise model selection, the LASSO regression performs variable selection.
 \medskip
-\item Lasso yields sparse models - that is, models that involve only \\a subset of the variables.
+\item LASSO yields sparse models - that is, models that involve only \\a subset of the variables.
 \medskip
 \item As in ridge regression, selecting a good value of $\lambda$ for the
-lasso is critical; cross-validation is used.
+LASSO is critical; cross-validation is used.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
-\begin{frame}{Ridge \& Lasso - discussion}
+\begin{frame}{Ridge \& LASSO - discussion}
 \begin{itemize}
-\item Neither ridge regression nor the lasso will universally dominate the other.
+\item Neither ridge regression nor the LASSO will universally dominate the other.
 \medskip
-\item In general, one might expect the lasso to perform better
+\item In general, one might expect the LASSO to perform better
 when the response is a function of only a relatively small
 number of predictors.
 \medskip
@@ -602,7 +611,7 @@ response is never known a priori for real data sets.
 \end{itemize}
 \end{frame}
 %------------------------------------------------
-\begin{frame}{Ridge \& Lasso - $\lambda$ selection}
+\begin{frame}{Ridge \& LASSO - $\lambda$ selection}
 Cross-validation is used to determine $\lambda$, as follows:
 \bigskip
 \begin{enumerate}
@@ -617,9 +626,9 @@ observations and the selected value of the tuning
 parameter $\lambda$.
 \end{enumerate}
 \bigskip
-The above steps 1 and 2 can be performed for both ridge and lasso.\\
+The above steps 1 and 2 can be performed for both ridge and LASSO.\\
 ~~\dots cross-validation errors are compared to select ``best'' $\lambda$ \\
-~~\dots and to choose between ridge and lasso.
+~~\dots and to choose between ridge and LASSO.
 
 \end{frame}
 %------------------------------------------------
@@ -631,7 +640,7 @@ $$\min \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0
 $$
 \small
 \begin{itemize}
-\item \textbf{Lasso penalty} (for $\alpha = 1$) encourages sparse solutions (in terms of coefficients), yet it is somewhat indifferent to the choice among a set of strong but correlated regressors.
+\item \textbf{LASSO penalty} (for $\alpha = 1$) encourages sparse solutions (in terms of coefficients), yet it is somewhat indifferent to the choice among a set of strong but correlated regressors.
 \smallskip
 \item \textbf{Ridge penalty} (for $\alpha = 0$) shrinks coefficients of correlated variables toward each other, no sparse solution effect.
 \smallskip
@@ -659,7 +668,7 @@ Logit (GLM/MLE) example of elastic net penalty generalization:\\
 \right]$}
 \smallskip
 \normalsize{
-\item Parameter $\alpha$ determines the relative mix of ridge and lasso penalties. It is set prior to model estimation.
+\item Parameter $\alpha$ determines the relative mix of ridge and LASSO penalties. It is set prior to model estimation.
 \medskip
 \item CV can be used to chose $\alpha$ and $\lambda$.}
 \end{itemize}
@@ -683,7 +692,7 @@ The following discussion uses PCA-based approach.
 %------------------------------------------------
 \begin{frame}{Dimension reduction methods}
 \begin{itemize}
-\item Stepwise regression, ridge and lasso involve fitting linear regression models (by OLS or by parameter shrinkage) using the original predictors: $x_1, x_2, \dots , x_p$.
+\item Stepwise regression, ridge and LASSO involve fitting linear regression models (by OLS or by parameter shrinkage) using the original predictors: $x_1, x_2, \dots , x_p$.
 \medskip
 \item \textbf{Dimension reduction methods}\\ \medskip Transform the
 predictors and then fit a least squares model using the
@@ -1106,7 +1115,7 @@ Different approaches are discussed (from simple to more complex), QREG is includ
 \medskip
 \item QREG-based predictions: Conditional quantiles (expected values) can be produced.
 \medskip
-\item To optimize prediction properties, QREG may be combined with parameter-shrinkage methods (lasso, ridge).
+\item To optimize prediction properties, QREG may be combined with parameter-shrinkage methods (LASSO, ridge).
 \end{itemize}
 \end{frame}
 %------------------------------------------------
