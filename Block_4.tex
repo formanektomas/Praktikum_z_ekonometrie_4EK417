@@ -70,9 +70,9 @@
 LME generalization of a linear regression model:
 \medskip
 $$
-    \bm{y} = \bm{X \beta} + \bm{Z u} + \bm{\omega},  
+    \bm{y} = \bm{X \beta} + \bm{Z u} + \bm{\varepsilon},  
     \qquad \bm{u} \sim N(\bm{0}, \bm{G}),
-    \qquad \bm{\omega} \sim N(\bm{0}, \bm{R}),
+    \qquad \bm{\varepsilon} \sim N(\bm{0}, \bm{R}),
 $$
 \medskip
 \small
@@ -82,8 +82,8 @@ where
     \item[] $\bm{X}$ is a $(N\! \times \! p)$ matrix of ``fixed effects'' with $N$ observations and $p$ predictor variables,
     \item[] $\bm{\beta}$ is a vector of ``fixed-effects'' regression coefficients,
     \item[] $\bm{Z}$ is a $(N\! \times \! s)$ design matrix for the $s$ ``random effects'' $\bm{u}$ that are complementary to $\bm{\beta}$,
-    \item[] $\bm{\omega}$ is the error term,
-    \item[] $\bm{u}$ and $\bm{\omega}$ are assumed normally distributed and mutually independent, with variance-covariance matrices $\bm{G}$ and $\bm{R}$ respectively.
+    \item[] $\bm{\varepsilon}$ is the error term,
+    \item[] $\bm{u}$ and $\bm{\varepsilon}$ are assumed normally distributed and mutually independent, with variance-covariance matrices $\bm{G}$ and $\bm{R}$ respectively.
 \end{itemize}   
 \end{frame}
 %---------------------------------------------------------------------
@@ -100,9 +100,9 @@ where
 \begin{frame}{Introduction}
 
 LME generalization of a linear regression model -- example: 
-$$y_i = \beta_0 + \beta_1 x_i + \omega_i.$$ 
+$$y_i = \beta_0 + \beta_1 x_i + \varepsilon_i.$$ 
 If observations $i=1,\dots,N$ are organized into $j=1,\dots,J$ relevant groups, and assuming there are random effects on both $\beta$-coefficients, we may generalize the model into a LME (after re-arranging):
-$$y_{ij} = (\beta_0 + u_{0j}) + (\beta_1 + u_{1j}) x_{ij} + \omega_{ij},$$
+$$y_{ij} = (\beta_0 + u_{0j}) + (\beta_1 + u_{1j}) x_{ij} + \varepsilon_{ij},$$
 where the combined $ij$ subscript refers to an $i$th observation that belongs to a $j$th group. 
 
 \medskip
