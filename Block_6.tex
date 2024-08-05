@@ -28,7 +28,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
-\usepackage{caption} % remove "Figure1:"  from figures
+\usepackage{caption} 
 \usepackage{color}
 \usepackage[czech]{babel}
 \usepackage{lmodern}  
@@ -37,7 +37,7 @@
 \usepackage{pifont}
 \usepackage{hyperref}
 \usepackage{bm}
-\usepackage{tikz}%boxy  
+\usepackage{tikz}
 \usetikzlibrary{arrows,positioning}
 \usetikzlibrary{calc}
 %
@@ -58,81 +58,95 @@
 \tikz[baseline={([yshift=-1ex]current bounding box.center)}] \node [rectangle,semithick, minimum width=1ex,draw, dashed] {\normalcolor\m@th$\displaystyle#1$};}}
  \makeatother
 %
-%----------------------------------------------------------------------------------------
+%------------------------------
 %	TITLE PAGE
-%----------------------------------------------------------------------------------------
-\title[Block 6]{Praktikum z ekonometrie} % The short title appears at the bottom of every slide, the full title is only on the title page
-\author{VŠE Praha} % Your name
-\institute[4EK417] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+\title[Block 6]{Praktikum z ekonometrie} 
+\author{VŠE Praha} 
+\institute[4EK417] 
 {
 % Your institution for the title page
 \medskip
 \textit{Tomáš Formánek} % Your email address
 }
 \date{} % Date, can be changed to a custom date
-%----------------------------------------------------------------------------------------
+%------------------------------
 \begin{document}
 \begin{frame}
 \titlepage % Print the title page as the first slide
 \end{frame}
-%---------------------------------------------------------------------
+%------------------------------
 \begin{frame}
 \frametitle{Block 6 – Treatment effects – Outline
-} % Table of contents slide, comment this block out to remove it
-\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+} 
+\tableofcontents 
 \end{frame}
-
-%----------------------------------------------------------------------------------------
-%	PRESENTATION SLIDES
-%---------------------------------------------------------------------
+%------------------------------
 \section{Treatment effects: Introduction}
 \begin{frame}{Treatment effects: Introduction}
 \begin{itemize}
-    \item Evaluation focuses on the impact of intervention (treatment) on some \textbf{outcome} of interest.
-    \medskip
-    \item We are interested in measuring response to treatment. Such response is evaluated relative to a benchmark: no treatment or different treatment. 
-    \medskip
-    \item \textbf{Outcome} typically refers to (changes in)  `status' (economic, social, medical, etc.) of individuals / companies / CS units.
-    \medskip
-    \item Analysis of treatment effect is typically based on regression models, with \textbf{outcome} as the dependent variable.
+    \item \textbf{Treatment effect analysis:} to evaluate the impact of intervention (treatment) on some \textbf{outcome} of interest.
+    \bigskip
+    \item Response to treatment is evaluated relative to a benchmark:  \\no treatment (control) or different treatment. 
+    \bigskip
+    \item Analysis of treatment effect is typically based on regression models, with outcome as the dependent variable.
+    \bigskip
+    \item Treatment effect analysis is generally based on the framework of Rubin's causal model. 
 \end{itemize}
 \end{frame}
-%---------------------------------------------------------------------
+%------------------------------
 \begin{frame}{Treatment effects: Introduction}
-\textbf{Examples of treatment} in the socio-economic context \\ \medskip
+\textbf{Examples}\\ \medskip
 \begin{itemize}
-    \item Enrollment in some form of labor training program
+    \item Wage effect of enrollment in a skill-training program.
     \medskip
-    \item Becoming member of trade union
+    \item Health effects (speed of recovery), if new drug / medical procedure is used.
     \medskip
-    \item Receiving transfer payment from a social program
-    \medskip
-    \item Changes in regulations (imposing/alleviating restrictions)
-    \medskip
-    \item Being educated in small classes (as opposed to large classes) 
+    \item Student performance upon being educated in small classes as opposed to large classes (being in a small class is the treatment). 
 \end{itemize}
 \bigskip
-\textbf{Multiple treatments:} If treatment can vary in intensity or type. Comparing a single type of treatment to benchmark does not add complexity, yet the choice of benchmark is more flexible.
+\textbf{Key topics of the analysis:}\\
+Treatment participation: random assignment or self selection?\\
+Treatment effects: actual effects or influence by confounding factors?\\
+\bigskip
+\textbf{Multiple treatments:} If treatment varies in intensity or type. Same principle of analysis, the choice of benchmark is more flexible.
 \end{frame}
-%---------------------------------------------------------------------
-
+%------------------------------
 % Define box and box title style
 \tikzstyle{mybox} = [draw=blue!35, fill=white, very thick,
     rectangle, rounded corners, inner sep=1pt, inner ysep=10pt]
 \tikzstyle{fancytitle} =[fill=blue!35, text=black]
 %---------------------------------
-\begin{frame}{Treatment effects: Introduction}
-\textbf{Studies of treatment effects:} types of studies and types of data used for evaluation:\\
+\begin{frame}{Treatment effects: Basic notation \& terminology}
 \begin{itemize}
-    \item ``Proper'' (controlled) scientific experiments: assignment into treated and control groups is random. \\ \medskip Relatively rare in socio-economic studies (common/required in medical studies, etc.). 
+    \item Every $i$th individual in a population has a potential outcome $y_i$ and can be exposed to treatment $C_i=\{0;1\}$. 
+    \medskip
+    \item $y_{i1} = y_i | (C_i = 1) $ for the treated, and \\
+    $y_{i0} = y_i | (C_i = 0)$ for the non-treated.
+    \medskip
+    \item Average treatment effect (averaged across population):
+    $$\textnormal{ATE} = E \left[ y_{i1}-y_{i0}\right],$$
+    and the $i$th observation only exist in one of the two states.
+    \medskip
+    \item \textbf{Average treatment effect of the treated} is more of interest:
+    $$\textnormal{ATET} = E \left[ y_{i1}-y_{i0} | C_i = 1\right],$$
+    and the second term $y_{i0}$ is a missing counterfactual. 
+    \medskip
+    \item Individuals will only exist in one state: treated/untreated. Multiple assumptions apply for ATE/ATET estimation.
+\end{itemize}  
+\end{frame}
+%------------------------------
+\begin{frame}{Treatment effects: Study \& data types}
+\textbf{Types of studies and data used for TE analysis}:\\
+\begin{itemize}
+    \item Scientific experiments under randomisation: assignment into treated and control groups is random. \\ \medskip Relatively rare in socio-economic studies. 
     \bigskip
-    \item Observational studies -- natural experiments, quasi-experiments (assignment into treatment and control group is not random) \\ \medskip
+    \item Observational studies (natural experiments, quasi-experiments): assignment into treatment and control group is not random. \\ \medskip
     
-    Self-selection bias (treatment participation is optional, individuals who choose to participate may be systematically different from non-participant)
+    Self-selection bias: if treatment (participation) is optional, individuals who choose to participate may be systematically different from non-participants.
 \end{itemize}
 \end{frame}
 %---------------------------------
-\begin{frame}{Treatment effects: Introduction}
+\begin{frame}{Treatment effects: Study \& data types}
 \begin{tikzpicture}
 \node [mybox] (box){%
 \begin{minipage}{0.50\textwidth}
@@ -143,7 +157,7 @@
 \item Measure: Effect at different catalyst volumes (reaction speed, product volume, \dots)
 \item Perform the experiment $n$-times
 \item Control for other factors (heat, \dots)
-\item Estimate average effect \\(\& standard error)
+\item Estimate average effects \& standard errors
 \end{itemize}
 \end{minipage}
 };
@@ -160,14 +174,20 @@ suburban area over time
 \item How do we estimate the effect on
 individual house-prices?
 \item Identical control group does not exist…
-\item Different estimators exist\\
-(assumptions apply!)
+\item Different estimators exist -- multiple
+assumptions apply!
 \end{itemize}
 \end{minipage}
 };
 \node[fancytitle, right=5pt,  rounded corners] at (box.north west) {\scriptsize Natural experiment (quasi-experiment)};
 \end{tikzpicture}%
 \end{frame}
+%---------------------------------
+
+
+
+
+
 %---------------------------------
 \begin{frame}{Treatment effects: Introduction}
 \small
