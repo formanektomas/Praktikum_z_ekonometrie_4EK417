@@ -138,12 +138,19 @@ Treatment effects: actual effects or influence by confounding factors?\\
 \begin{frame}{Treatment effects: Study \& data types}
 \textbf{Types of studies and data used for TE analysis}:\\
 \begin{itemize}
-    \item Scientific experiments under randomisation: assignment into treated and control groups is random. \\ \medskip Relatively rare in socio-economic studies. 
-    \bigskip
+    \item Scientific experiments under randomisation: assignment into treated and control groups is random. Relatively rare in socio-economic studies. 
+    \medskip
     \item Observational studies (natural experiments, quasi-experiments): assignment into treatment and control group is not random. \\ \medskip
-    
-    Self-selection bias: if treatment (participation) is optional, individuals who choose to participate may be systematically different from non-participants.
 \end{itemize}
+\bigskip
+\textbf{Main problems of TE analysis:}
+\begin{itemize}
+    \item \textbf{Endogeneity of treatment} and self-selection bias: if treatment participation is optional, individuals who choose to participate may be systematically different from non-participants.
+    \medskip
+    \item \textbf{Missing counterfactual:}  Individuals always measured as either treated or untreated, we cannot observe both $y_{i1}$ and $y_{i0}$.
+\end{itemize}
+    
+
 \end{frame}
 %---------------------------------
 \begin{frame}{Treatment effects: Study \& data types}
@@ -183,13 +190,130 @@ assumptions apply!
 \end{tikzpicture}%
 \end{frame}
 %---------------------------------
-
-
-
-
-
+\begin{frame}{Treatment effects: Three main approaches to analysis}
+Types of analysis, key assumptions \& requirements:\\
+\bigskip
+\begin{itemize}
+    \item \textbf{Differences in differences (DiD) estimator}\\
+        \begin{itemize}
+            \item Independence of treatment on the outcome at the base ($y_{i0}$), \\i.e. treatment assignment exogenous/random
+            \item Parallel trends assumed
+        \end{itemize}
+    \bigskip
+    \item \textbf{Propensity score matching (PSM):}
+        \begin{itemize}
+            \item Unconfoundedness (random after accounting for covariates)
+            \item Common support (for the treated and untreated)
+            \item Large sample 
+        \end{itemize}
+    \bigskip
+    \item \textbf{Regression discontinuity design (RDD):}
+        \begin{itemize}
+            \item Assignment variable \& assignment threshold exist
+            \item Local randomization assumed
+        \end{itemize}
+\end{itemize}
+\end{frame}
 %---------------------------------
-\begin{frame}{Treatment effects: Introduction}
+\begin{frame}{Treatment effects: Unconfoundedness}
+\begin{center}
+\begin{tikzpicture}[
+    box/.style={rectangle, draw, minimum size=0.6cm},
+    arrow/.style={thick,->,>=stealth}
+]
+\node[box] (box4) at (-3,0) {Exposure};
+\node[box] (box5) at (3,0) {Outcome};
+\draw [dotted, ->] (box4) -- (box5) node[midway, above, red] {Treatment effect};
+\end{tikzpicture}
+\end{center}
+%
+\begin{center}
+\begin{tikzpicture}[
+    box/.style={rectangle, draw, minimum size=0.6cm},
+    arrow/.style={thick,->,>=stealth}
+]
+\node[box] (box1) at (0,0) {Confounder};
+\node[box] (box2) at (-3,-0.6) {Exposure};
+\node[box] (box3) at (3,-0.6) {Outcome};
+\draw[arrow] (box1) -> (box2);
+\draw[arrow] (box1) -> (box3);
+\draw [dotted, ->] (box2) -- (box3) node[midway, red] {$\times$};
+\end{tikzpicture}
+\end{center}
+Often: combination of actual TE \& confounding factor influence.\\
+\bigskip
+\small  
+\textbf{Example:} Company has two types of trucks, A and B (using the new A-Truck is the treatment). We want to compare fuel efficiency (outcome). Using MPG, we find A-Trucks are more efficient. However, A-Trucks often drive on highways, while B-Trucks are mostly in the city. This route difference is a confounding variable, making our results unreliable as highway driving is generally more fuel-efficient. \\
+\smallskip
+To improve the study, we could randomize truck assignments for equal city and highway driving, introduce city driving as another independent variable to a model, or segment the study into city and highway driving comparisons.
+\end{frame}
+%---------------------------------
+\begin{frame}{Treatment effects: Unconfoundedness}
+\textbf{Unconfoundedness} states that the potential outcomes are independent of the treatment assignment, conditional on a set of observed covariates. Once we control for these covariates, the treatment \emph{assignment} does not provide any additional information about the \emph{potential} outcomes:
+$$
+(y_0, y_1) \perp  \textit{Tr} ~|~ \bm{X},
+$$
+- $(y_0)$ and $(y_1)$ are the potential outcomes under control and treatment,\\
+- $\textit{Tr}$ is the treatment assignment (dummy variable), \\
+- $\bm{X}$ is the set of observed covariates. \\
+\bigskip
+\textbf{Independence of treatment on the outcome at the base (for the untreated)} is a stronger assumption. Here, the potential outcome under control is independent of the treatment assignment, even without conditioning on covariates:
+$$
+y_0 \perp \textit{Tr}
+$$
+\end{frame}
+%---------------------------------
+\begin{frame}{Treatment effects: Unconfoundedness}
+\textbf{Unconfoundedness} assumption allows for the possibility that treatment assignment might be related to the potential outcomes through the observed covariates. Once we control for these covariates, the treatment assignment is assumed to be as good as random. \\
+\bigskip
+\textbf{Independence of treatment on the outcome} assumption requires the treatment assignment to be as good as random without conditioning on any covariates. This is a stronger assumption and is less likely to hold in real-world situations.
+\end{frame}
+%---------------------------------
+\begin{frame}{Treatment effects: Unconfoundedness \& \texttt{do()} notation}
+\small 
+$$P(Y|\texttt{do}(X)) = P(Y)$$ 
+This can be red as: ``the probability of $Y,$ given that you do  $X$''. The expression above describes the case where $Y$ is independent of doing $X$.\\
+\bigskip
+Say, we have an outcome $y$, a dummy treatment variable $\textit{Tr}$ and potential counfounding variable $z$ that influences both $y$ and $\textit{Tr}$. If unconfoundedness holds, the following equation holds
+$$P(y | \texttt{do}(\textit{Tr})) = P(y|\textit{Tr})$$
+for all values $\textit{Tr}$ and $y$, where $P(y|\textit{Tr})$ is the conditional probability. This equality states that $\textit{Tr}$ and $y$ are not confounded whenever the observationally witnessed association between them is the same as the association that would be measured in a controlled experiment, with $\textit{Tr}$ randomized. Otherwise, we have to account for the confounding factor $z$:
+$$P(y | \texttt{do}(\textit{Tr})) = \sum_z P(y|\textit{Tr},z)P(z). $$
+\centering
+\url{https://en.wikipedia.org/wiki/Confounding}
+\end{frame}
+%---------------------------------
+\begin{frame}{Treatment effects analysis}
+\textbf{Estimation approaches for TE analysis:}\\
+\bigskip
+\begin{enumerate}
+    \item Differences in differences (DiD)
+    \bigskip
+    \item Propensity score matching (PSM):
+    \bigskip
+    \item Regression discontinuity design (RDD):
+\end{enumerate}
+\end{frame}
+%---------------------------------
+\section{Differences in differences (DiD) estimator}
+\begin{frame}{DiD estimator: Assumptions}
+\begin{itemize}
+    \item \emph{Exchangeability (parallel trends)}: in the absence of treatment, the average outcomes for the treated and control groups would follow the same trend over time.
+    \item \emph{Positivity}: every individual (unit) has a positive probability of receiving the treatment.
+    \item \emph{Stable unit treatment value assumption (SUTVA)}: the potential outcomes for any individual do not depend on the treatment assignment of the other individuals.
+    \item \emph{No spillover effects}: the treatment of one individual does not affect the outcome of another individual.
+    \item \emph{Treatment unrelated to outcome at baseline}: the allocation of treatment is not determined by the outcome. 
+    \item \emph{Stable composition of treatment and control groups}: applies to repeated treatments/interventions.
+\end{itemize}
+\end{frame}
+%---------------------------------
+\begin{frame}{DiD: Introduction \& example}
+\vfill
+{\footnotesize \textbf{Treatment: employee training for women returning from maternal leave\\ Outcome: wage effect}} \\
+\medskip
+\includegraphics[width=\textwidth]{./IMG/Obrazek3}
+\end{frame}
+%---------------------------------
+\begin{frame}{DiD: Introduction}
 \small
 For evaluation of scientific experiments (if treatment/intervention is exogenous), one can formulate a regression model with a treatment-related dummy variable, as follows:
 $$
@@ -207,7 +331,7 @@ and $\hat{\delta} = [\overline{y}|_{D_i=1}] - [\overline{y}|_{D_i=0}]$ as the me
 \textbf{Note:} exogeneity of $D$ is crucial for estimation of the treatment effect. Inclusion of $\bm{x}_i^{\prime}\bm{\beta}$ in the equation doesn't change the general interpretation of $\delta$.
 \end{frame}
 %---------------------------------
-\section{Treatment effects analysis - exogenous assignment \& DiD estimator}
+
 \begin{frame}{DiD estimator: Policy analysis with pooled CS data} 
 \small
 DiD refers to a popular approach towards policy analysis \& evaluation, based on models with two dummy variables: $T$ differentiates between two time periods (before/after treatment) and $D$ distinguishes the two groups (treatment/control). \\ \medskip 
@@ -224,27 +348,7 @@ where:
 \end{itemize}
 \end{frame}
 %---------------------------------
-\begin{frame}{DiD estimator: Policy analysis with pooled CS data}
-\vfill
-{\footnotesize \underline{\textbf{DiD estimator example: In-house employee training for women}} \\
-\underline{\textbf{returning from maternal leave \& its wage effect}}} \\
-\medskip
-\includegraphics[width=\textwidth]{./IMG/Obrazek3}
-\end{frame}
-%---------------------------------
-\begin{frame}{DiD estimator: Policy analysis with pooled CS data}
-\small 
-\underline{\textbf{DiD estimator:}} we use LRMs to compare changes in conditional means for the treatment and control groups.
-\begin{itemize}
-\item Group specific (treatment/control) and time specific effects are addressed.
-\end{itemize}
-\medskip
-\underline{\textbf{Assumptions:}}
-\begin{itemize}
-\item Exogeneity of treatment (of the $D_i$ variable): unbiased DiD estimates require that the treatment (individual being subject to economic policy change) is not systematically related to factors affecting the outcome (dependent variable), that are not accounted for explicitly in our model and thus are ``hidden'' in the random element.\\ \smallskip
-\item DiD \textbf{attributes all differences in trends} between the treatment and control groups \textbf{to the intervention} (treatment). We assume there are no other factors that affect the difference in trends between the two groups.
-\end{itemize}
-\end{frame}
+
 %---------------------------------
 \begin{frame}{DiD estimator: Policy analysis with pooled CS data}
 $$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \varepsilon_{it}$$\\
