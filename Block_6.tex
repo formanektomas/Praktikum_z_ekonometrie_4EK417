@@ -272,7 +272,7 @@ $$
 \begin{frame}{Treatment effects: Unconfoundedness \& \texttt{do()} notation}
 \small 
 $$P(Y|\texttt{do}(X)) = P(Y)$$ 
-This can be red as: ``the probability of $Y,$ given that you do  $X$''. The expression above describes the case where $Y$ is independent of doing $X$.\\
+LHS can be red as: ``the probability of $Y,$ given that you do  $X$''. The expression above describes the case where $Y$ is independent of doing $X$.\\
 \bigskip
 Say, we have an outcome $y$, a dummy treatment variable $\textit{Tr}$ and potential counfounding variable $z$ that influences both $y$ and $\textit{Tr}$. If unconfoundedness holds, the following equation holds
 $$P(y | \texttt{do}(\textit{Tr})) = P(y|\textit{Tr})$$
@@ -295,6 +295,13 @@ $$P(y | \texttt{do}(\textit{Tr})) = \sum_z P(y|\textit{Tr},z)P(z). $$
 \end{frame}
 %---------------------------------
 \section{Differences in differences (DiD) estimator}
+\begin{frame}{DiD: Introduction \& example}
+\vfill
+{\footnotesize \textbf{Treatment: employee training for women returning from maternal leave\\ Outcome: wage effect}} \\
+\medskip
+\includegraphics[width=\textwidth]{./IMG/Obrazek3}
+\end{frame}
+%---------------------------------
 \begin{frame}{DiD estimator: Assumptions}
 \begin{itemize}
     \item \emph{Exchangeability (parallel trends)}: in the absence of treatment, the average outcomes for the treated and control groups would follow the same trend over time.
@@ -306,36 +313,20 @@ $$P(y | \texttt{do}(\textit{Tr})) = \sum_z P(y|\textit{Tr},z)P(z). $$
 \end{itemize}
 \end{frame}
 %---------------------------------
-\begin{frame}{DiD: Introduction \& example}
-\vfill
-{\footnotesize \textbf{Treatment: employee training for women returning from maternal leave\\ Outcome: wage effect}} \\
-\medskip
-\includegraphics[width=\textwidth]{./IMG/Obrazek3}
-\end{frame}
-%---------------------------------
-\begin{frame}{DiD: Introduction}
+\begin{frame}{DiD: Model motivation}
 \small
-For evaluation of scientific experiments (if treatment/intervention is exogenous), one can formulate a regression model with a treatment-related dummy variable, as follows:
+With cross-sectional data and \textbf{exogenous}  treatment variable $D = \{0;1\}$, \\we can formulate (estimate, interpret) a regression model such as:
 $$
-y_i = \bm{x}_i^{\prime}\bm{\beta} + \delta D_i + \varepsilon_i,
-$$
-where $D_i = 1$ if the $i$th individual (CS unit) is in the treatment group and zero otherwise (for the control group). \\
+y_i = \bm{x}_i^{\prime}\bm{\beta} + \delta D_i + \varepsilon_i.
+$$\\
 \medskip
-For a simplified scenario, we can leave out covariates $\bm{x}$ and compare two groups (treated/untreated):
-$$
-y_i = \beta_0 + \delta D_i + \varepsilon_i,
-$$    
-with $\hat{\beta}_0 = [\overline{y}|_{D_i=0}]$ being the average outcome for the untreated,\\
-and $\hat{\delta} = [\overline{y}|_{D_i=1}] - [\overline{y}|_{D_i=0}]$ as the mean difference between the two groups.\\
-\bigskip
-\textbf{Note:} exogeneity of $D$ is crucial for estimation of the treatment effect. Inclusion of $\bm{x}_i^{\prime}\bm{\beta}$ in the equation doesn't change the general interpretation of $\delta$.
-\end{frame}
-%---------------------------------
+\textbf{DiD estimator} refers to panel-based (or using pooled CS data) analysis, based on two dummy variables and their interaction: $T$ differentiates between two time periods (before/after treatment) and $D$ distinguishes the two groups (treatment/control):
+$$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \bm{x}_i^{\prime}\bm{\beta} + \varepsilon_{it}.$$
 
-\begin{frame}{DiD estimator: Policy analysis with pooled CS data} 
-\small
-DiD refers to a popular approach towards policy analysis \& evaluation, based on models with two dummy variables: $T$ differentiates between two time periods (before/after treatment) and $D$ distinguishes the two groups (treatment/control). \\ \medskip 
-DiD estimator is based on model: \\ 
+\end{frame}
+%---------------------------------
+\begin{frame}{DiD estimator: Model description} 
+\medskip 
 $$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \varepsilon_{it},$$
 where:
 \begin{itemize}
@@ -343,18 +334,18 @@ where:
 \item[$T_t$] is a time dummy, $T_1=0$ is the first (pre-treatment) period and \\$T_2 = 1$ is the second period (post treatment),
 \item[$D_i$] is a treatment dummy, $D_i=1$ for the treated,
 \item[$D_i T_t$] is an interaction element, i.e. $(D_i\! \cdot \! T_t)$,
-\item[$\delta_1$] is the DiD estimator (coefficient),
-\item adding $\bm{x}_{it}^{\prime}\bm{\beta}$ to model doesn't change the general interpretation of $\delta_1$.
+\item[$\delta_1$] is the DiD estimator (coefficient). 
 \end{itemize}
+\bigskip
+For simplicity, the term $\bm{x}_{it}^{\prime}\bm{\beta}$ is removed here. Note that adding $\bm{x}_{it}^{\prime}\bm{\beta}$ back to the model doesn't change the general interpretation of $\delta_1$.
 \end{frame}
 %---------------------------------
-
-%---------------------------------
-\begin{frame}{DiD estimator: Policy analysis with pooled CS data}
+\begin{frame}{DiD estimator: Interpretation of the DiD $\delta_1$ coefficient}
 $$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \varepsilon_{it}$$\\
 \bigskip
 \footnotesize
-\begin{table}[]
+\begin{table}
+\captionsetup{labelformat=empty}
 \centering
 \caption{Table: Illustration of the DiD estimator}\label{Tab1}
 \begin{tabular}{|l|c|c|c|}
@@ -364,27 +355,26 @@ Control $(D_i=0)$                                    & $\beta_0$           & $\b
 Treatment $(D_i=1)$                                  & $\beta_0 + \beta_1$ & $\beta_0 + \delta_0 + \beta_1 + \delta_1$ & $\delta_0 + \delta_1$ \\ \hline
 Treatment -- Control                        & $\beta_1$           & $\beta_1 + \delta_1$                      & \circled{$\delta_1$}            \\ \hline
 \end{tabular}
-\end{table} 
+\end{table}
 
 ~\\
-Again, if $\bm{x}_{it} \bm{\beta}$ is added back to the equation, interpretation of $\delta_1$ remains essentially unchanged.
+Again, if $\bm{x}_{it} \bm{\beta}$ is added back to the equation, interpretation of $\delta_1$ remains \\essentially unchanged.
 
 \end{frame}
 %---------------------------------
-\begin{frame}{DiD estimator: Policy analysis with pooled CS data}
-$$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \varepsilon_{it}$$\\
+\begin{frame}{DiD estimator: Interpretation of the DiD $\delta_1$ coefficient}
+$$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \varepsilon_{it},$$\\
 \bigskip
-In this simplified model (again, we drop $\bm{x}_{it} \bm{\beta}$), the estimated $\delta_1$ has \\a convenient DiD interpretation, as follows:\\
-\bigskip
+By rearranging an estimated model, we can express $\delta_1$ as follows:
 \begin{align*}
 \hat{\delta}_1 &= (\overline{y}_{Tr,\,t=2} - \overline{y}_{Co,\,t=2}) -  (\overline{y}_{Tr,\,t=1} - \overline{y}_{Co,\,t=1}), \\ ~& \\
-& \hspace{0.5cm} \textnormal{which may be rearranged as:} \\ ~& \\
+& \hspace{0.5cm} \textnormal{which may be also rearranged as:} \\ ~& \\
 &= (\overline{y}_{Tr,\,t=2} - \overline{y}_{Tr,\,t=1}) -  (\overline{y}_{Co,\,t=2} - \overline{y}_{\textit{Co},\,t=1}),
 \end{align*}
-where the \textit{Tr} subscript stands for treatment group and the \textit{Co} subscript identifies the control group.
+where \\ \textit{Tr} subscript stands for treatment group, and \\ \textit{Co} subscript identifies the control group.
 \end{frame}
 %---------------------------------
-\begin{frame}{Example: DiD estimator}
+\begin{frame}{DiD estimator: Example}
 \footnotesize{What is the effect of building garbage incinerator on housing prices?}
 \scriptsize
 \begin{table}[]
@@ -424,27 +414,27 @@ NEARINC – dummy for the treatment group}};
 \end{tikzpicture}
 \end{frame}
 %---------------------------------
-\begin{frame}{Example: DiD estimator (contnd.)}
+\begin{frame}{DiD estimator: selection bias}
 \begin{block}{Selection bias (treatment effect vs. selection bias):}
 \small
-\textbf{Assumption:} Unbiased DiD estimates require that the treatment is not systematically related to factors affecting the outcome that are not in model.  \\
+\textbf{Incinerator example:} Say, we have a “poor neighborhood” with relatively old and small houses and low house-prices. For complex reasons, it suffers from a representation deficit within the local city council (as compared to other “rich neighborhoods”) and is therefore more likely to get the incinerator. To address this problem, we would need variables to control for this factor.\\
 \medskip
-\textbf{Incinerator example:} Say, we have a “poor neighborhood” with relatively old and small houses and low house-prices. For complex reasons, it suffers from a representation deficit within the local city council (as compared to other “rich neighborhoods”) and is therefore more likely to get the incinerator. If we do not have variables to control for this factor $\rightarrow$ the DiD estimator may be severely biased. We may be measuring latent ``propensity'' of the neighborhood, rather than intervention effects. \\
-\medskip
-\textbf{Example 2:} In a scientific medical experiment, patients do not know whether they are in the control or in the treatment group. For a natural experiment with job-training effects, we have voluntary participation. If more agile workers tend to participate, we cannot assume treatment and control group are identical -- except for the treatment. Hence, instead/besides of treatment effect, DiD would measure latent ``propensity'' to participate.
+\textbf{Job training example:} For a natural experiment with job-training effects, we have voluntary participation. If more agile workers tend to participate more, we cannot assume treatment and control group are identical -- except for the treatment. Hence, besides of treatment effect, DiD would reflect latent ``propensity'' to participate.
 \end{block}
+\medskip 
+DiD will be biased and inconsistent in both cases.
 \end{frame}
 %---------------------------------
-\section{Dealing with endogeneity and the missing counterfactual}
-\subsection{Evaluating treatment effects}
-%---------------------------------
-\begin{frame}{Problems with evaluating treatment effects}
-    
-    Greene 19.6
-    
+\section{Propensity score matching: Introduction}
+\begin{frame}{Propensity score matching: Matching vs. PSM}
+\centering
+\includegraphics[trim = 0cm 0cm 0cm 6cm, clip, width=0.5\textwidth]{./IMG/PSM1}
+\\
+\medskip
+\includegraphics[trim = 0.1cm 0.15cm 0cm 0.15cm, clip, width=0.3\textwidth]{./IMG/PSM2}
 \end{frame}
 %---------------------------------
-\subsection{Regression discontinuity design}
+\section{Regression discontinuity design}
 \begin{frame}{Regression discontinuity design}
     Violates common support assumption
 \end{frame}
