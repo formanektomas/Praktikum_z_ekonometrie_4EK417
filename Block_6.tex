@@ -202,7 +202,7 @@ Types of analysis, key assumptions \& requirements:\\
     \bigskip
     \item \textbf{Propensity score matching (PSM):}
         \begin{itemize}
-            \item Unconfoundedness (random after accounting for covariates)
+            \item Unconfoundedness (treatment assignment as good as random \\after accounting for covariates)
             \item Common support (for the treated and untreated)
             \item Large sample 
         \end{itemize}
@@ -425,7 +425,7 @@ NEARINC – dummy for the treatment group}};
 DiD will be biased and inconsistent in both cases.
 \end{frame}
 %---------------------------------
-\section{Propensity score matching: Introduction}
+\section{Propensity score matching}
 \begin{frame}{Propensity score matching: Matching vs. PSM}
 \centering
 \includegraphics[trim = 0cm 0cm 0cm 6cm, clip, width=0.5\textwidth]{./IMG/PSM1}
@@ -434,6 +434,52 @@ DiD will be biased and inconsistent in both cases.
 \includegraphics[trim = 0.1cm 0.15cm 0cm 0.15cm, clip, width=0.3\textwidth]{./IMG/PSM2}
 \end{frame}
 %---------------------------------
+\begin{frame}{PSM: Assumptions and features}
+\begin{itemize}
+    \item \emph{Unconfoundedness:} assignment to the treatment is independent of the potential outcomes given a set of observed covariates.
+    \item \emph{Common Support} or overlap condition, meaning that individuals with the same characteristics have a positive probability of being both in the treatment and control group.
+    \item \emph{Large sample sizes:} PSM often requires large sample sizes because matching may not be possible if the overlap between treatment and control groups is not sufficient.
+    \bigskip
+    \item \emph{Matching}: PSM involves pairing treated and untreated subjects who have similar propensity scores.
+    \item \emph{Propensity score} is a balancing score. Conditional on the propensity score, distribution of observed baseline covariates will be similar between treated and untreated subjects.
+\end{itemize}
+\end{frame}
+%---------------------------------
+\begin{frame}{PSM: Main steps}
+\begin{enumerate}
+    \item Collect data, identify that PSM is viable and appropriate
+        \begin{itemize}
+            \item Assumptions
+        \end{itemize}
+    \item Calculate propensity scores
+        \begin{itemize}
+            \item Logit/probit with exposure (treatment) as dependent variable
+            \item Include all predictors of the exposure and none of effects of the exposure. We may include confounders and interaction variables.
+        \end{itemize}
+    \item Match subjects on the propensity scores
+        \begin{itemize}
+            \item 1-to-1 matching, 1-to-n matching
+            \item Nearest neighbor, Caliper (type of NN), Kernel, Radius, etc.
+        \end{itemize}
+    \item Assess quality of the matching\\
+        \begin{itemize}
+            \item Substantial overlap (covariates) between treated \& control groups
+            \item Use diagnostic metrics (e.g. standardized difference)
+        \end{itemize}
+    \item Analyze the propensity-matched data
+        \begin{itemize}
+            \item Multiple regression models (use treatment as model variable) 
+            \item DiD on matched data, survival analysis, etc.
+        \end{itemize}
+\end{enumerate}
+\end{frame}
+%---------------------------------
+% https://www.publichealth.columbia.edu/research/population-health-methods/propensity-score-analysis 
+% 
+% https://journals.lww.com/anesthesia-analgesia/fulltext/2018/10000/five_steps_to_successfully_implement_and_evaluate.37.aspx
+%---------------------------------
+
+
 \section{Regression discontinuity design}
 \begin{frame}{Regression discontinuity design}
     Violates common support assumption
