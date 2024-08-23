@@ -30,6 +30,7 @@
 \usepackage{amsmath}
 \usepackage{caption} 
 \usepackage{color}
+\usepackage{xcolor}
 \usepackage[czech]{babel}
 \usepackage{lmodern}  
 \usepackage{rotating}
@@ -205,6 +206,7 @@ Types of analysis, key assumptions \& requirements:\\
             \item Unconfoundedness (treatment assignment as good as random \\after accounting for covariates)
             \item Common support (for the treated and untreated)
             \item Large sample 
+            \item PS - essentially the probability of treatment participation
         \end{itemize}
     \bigskip
     \item \textbf{Regression discontinuity design (RDD):}
@@ -288,9 +290,9 @@ $$P(y | \texttt{do}(\textit{Tr})) = \sum_z P(y|\textit{Tr},z)P(z). $$
 \begin{enumerate}
     \item Differences in differences (DiD)
     \bigskip
-    \item Propensity score matching (PSM):
+    \item \textcolor{lightgray}{Propensity score matching (PSM)
     \bigskip
-    \item Regression discontinuity design (RDD):
+    \item Regression discontinuity design (RDD)}
 \end{enumerate}
 \end{frame}
 %---------------------------------
@@ -426,12 +428,24 @@ DiD will be biased and inconsistent in both cases.
 \end{frame}
 %---------------------------------
 \section{Propensity score matching}
+\begin{frame}{Treatment effects analysis}
+\textbf{Estimation approaches for TE analysis:}\\
+\bigskip
+\begin{enumerate}
+    \item \textcolor{lightgray}{Differences in differences (DiD)}
+    \bigskip
+    \item Propensity score matching (PSM)
+    \bigskip
+    \item \textcolor{lightgray}{Regression discontinuity design (RDD)}
+\end{enumerate}
+\end{frame}
+%---------------------------------
 \begin{frame}{Propensity score matching: Matching vs. PSM}
 \centering
-\includegraphics[trim = 0cm 0cm 0cm 6cm, clip, width=0.5\textwidth]{./IMG/PSM1}
+\includegraphics[trim = 0cm 0cm 0cm 6cm, clip, width=0.5\textwidth]{./IMG/PSM1.jpg}
 \\
 \medskip
-\includegraphics[trim = 0.1cm 0.15cm 0cm 0.15cm, clip, width=0.3\textwidth]{./IMG/PSM2}
+\includegraphics[trim = 0.1cm 0.15cm 0cm 0.15cm, clip, width=0.3\textwidth]{./IMG/PSM2.jpg}
 \end{frame}
 %---------------------------------
 \begin{frame}{PSM: Assumptions and features}
@@ -440,7 +454,7 @@ DiD will be biased and inconsistent in both cases.
     \item \emph{Common Support} or overlap condition, meaning that individuals with the same characteristics have a positive probability of being both in the treatment and control group.
     \item \emph{Large sample sizes:} PSM often requires large sample sizes because matching may not be possible if the overlap between treatment and control groups is not sufficient.
     \bigskip
-    \item \emph{Matching}: PSM involves pairing treated and untreated subjects who have similar propensity scores.
+    \item \emph{Matching}: PSM involves pairing treated and untreated subjects who have similar propensity scores (PS -- estimated probability of treatment participation).
     \item \emph{Propensity score} is a balancing score. Conditional on the propensity score, distribution of observed baseline covariates will be similar between treated and untreated subjects.
 \end{itemize}
 \end{frame}
@@ -449,16 +463,17 @@ DiD will be biased and inconsistent in both cases.
 \begin{enumerate}
     \item Collect data, identify that PSM is viable and appropriate
         \begin{itemize}
-            \item Assumptions
+            \item Check assumptions
+            \item Basic analysis using non-matched data
         \end{itemize}
     \item Calculate propensity scores
         \begin{itemize}
             \item Logit/probit with exposure (treatment) as dependent variable
-            \item Include all predictors of the exposure and none of effects of the exposure. We may include confounders and interaction variables.
+            \item Include all predictors of the exposure and none of effects of the exposure. Confounders and interaction variables can be included.
         \end{itemize}
     \item Match subjects on the propensity scores
         \begin{itemize}
-            \item 1-to-1 matching, 1-to-n matching
+            \item 1-to-1 matching, 1-to-$n$ matching
             \item Nearest neighbor, Caliper (type of NN), Kernel, Radius, etc.
         \end{itemize}
     \item Assess quality of the matching\\
@@ -474,15 +489,119 @@ DiD will be biased and inconsistent in both cases.
 \end{enumerate}
 \end{frame}
 %---------------------------------
+\begin{frame}{PSM-based analysis}
+\begin{enumerate}
+    \item[1] Basic analysis on non-matched data -- Difference-in-means for:\\ \medskip
+    \begin{itemize}
+        \item Outcome variable (before \& after treatment)
+        \item Regressors (covariates)
+        \item Regressors (before \& after treatment)
+    \end{itemize}
+    \bigskip
+    \item[2] Propensity score calculation\\ \medskip
+    \begin{itemize}
+        \item Estimate the propensity score by logit (probit) model
+        \item Predicted values $\hat{y}_i$ (on the response scale) are the propensities to treatment (expected probabilities of treatment participation)
+        \item Evaluate common support (e.g. by plotting histograms of estimated propensities by treatment status)     
+    \end{itemize}
+\end{enumerate}
+\end{frame}
+%---------------------------------
+\begin{frame}{PSM-based analysis}
+    \centering
+    PS -- Common support evaluation example \\(Going to catholic school is the treatment)\\
+\includegraphics[trim = 0cm 0cm 0cm 0cm, clip, width=0.7\textwidth]{./IMG/PSM_comm_supp.png}    
+\end{frame}
+%---------------------------------
+\begin{frame}{PSM-based analysis}
+    \centering
+    PS -- Common support evaluation example \\(General case)\\
+\includegraphics[trim = 0cm 0cm 0cm 0cm, clip, width=0.7\textwidth]{./IMG/PSM_comm_supp_2.jpg}    
+\end{frame}
+%---------------------------------
+\begin{frame}{PSM-based analysis}
+
+\textbf{Simple method for estimating the treatment effect:}\\
+(based on propensity scores)\\ \medskip
+\begin{itemize}
+    \item Restrict the sample to observations within the region of common support (based on estimated PS values).
+    \item Divide the sample within the region of common support into 5 quintiles, based on the estimated propensity scores.
+    \item For each of these 5 quintiles, estimate the mean difference in outcome variable by treatment status. 
+    \item Rubin and others suggest that this is sufficient to eliminate 95\% of the bias due to confounding of treatment status with a covariate.
+\end{itemize}
+\end{frame}
+%---------------------------------
+\begin{frame}{PSM-based analysis}
+\begin{enumerate}
+    \item[3] \textbf{PSM:} we seek to find pairs of observations that have very similar propensity scores, but that differ in their treatment status. \\
+    \smallskip
+    \textit{Many PSM methods exist}, we focus on common approaches that fit most types of data.
+\end{enumerate}
+\begin{itemize}
+    \item \textbf{Nearest neighbor:} for each $i$th treated person, the untreated with the closest propensity score is selected as the match using\\ the expression
+    $$
+    \underset{j}{\min}~|\hat{y}_i - \hat{y}_j|,
+    $$
+    where $\hat{y}_i$ is the PS for the $i$th participant (treated) and $\hat{y}_j \in \bm{y}_0$ is the PS of the $j$th non-participant (untreated). 
+\end{itemize}
+\end{frame}
+%---------------------------------
+\begin{frame}{PSM-based analysis}
+\begin{itemize}
+    \item \textbf{Caliper} is a variation of nearest neighbor matching: the $j$th non-participant is only selected as a match to the $i$th participant, if the PS distance is within the caliper limit 
+    $$
+    |\hat{y}_i - \hat{y}_j| < \varepsilon,
+    $$
+    where the typical value of the tolerance is $\varepsilon = 0.25 \sigma_{\hat{y}}$, i.e. it is \\given as 1/4 of the standard error of the estimated propensity scores.  \\ \medskip
+    Variants of caliper-based matching: \\ \medskip
+    \begin{itemize}
+        \item 1-to-1 using NNs within caliper (typical application)
+        \smallskip
+        \item 1-to-1 using Mahalanobis within caliper
+        \smallskip
+        \item 1-to-$n$ using NNs/Mahalanobis within caliper
+        \smallskip
+        \item selection with / without replacement
+        \item non-treated matches can be based on actually observed individuals or synthetic (combined) control group members, etc\dots
+    \end{itemize}
+\end{itemize}
+\end{frame}
+%---------------------------------
+\begin{frame}{PSM-based analysis}
+\begin{itemize}
+    \item \textbf{Mahalanobis \& caliper:} For each $i$th participant, we search \\for the 1 (or $n$) nearest available matching non-participants, based on Mahalandobis metric, within the $i$-specific caliper. Mahalanobis distance (metric) is defined as
+    $$
+    d(i,j) = (\bm{u}_i - \bm{v}_j)^{\prime} 
+    \bm{C}^{-1} (\bm{u}_i - \bm{v}_j),
+    $$
+    where $\bm{u}_i$ and $\bm{v}_j$ are vectors of selected matching variables for a given participant $i$ and for some $j$th non-participant (within caliper limit), and $\bm{C}$ is the sample variance-covariance matrix of the matching variables from the full set of non-participants. \\ \medskip Mahalanobis distances are calculated and evaluated for all $\{i,j\}$ pairs within the caliper for the $i$th participant.
+\end{itemize}
+\end{frame}
+%---------------------------------
 % R tutorial: 
 % https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8246231/
-%https://simonejdemyr.com/r-tutorials/statistics/tutorial8.html
+% https://simonejdemyr.com/r-tutorials/statistics/tutorial8.html
 % https://www.publichealth.columbia.edu/research/population-health-methods/propensity-score-analysis 
+% https://bookdown.org/cuborican/RE_STAT/propensity-score-match.html
 % 
 % https://journals.lww.com/anesthesia-analgesia/fulltext/2018/10000/five_steps_to_successfully_implement_and_evaluate.37.aspx
 %---------------------------------
-
-
+\begin{frame}{Frame Title}
+    
+\end{frame}
+%---------------------------------
+\begin{frame}{Treatment effects analysis}
+\textbf{Estimation approaches for TE analysis:}\\
+\bigskip
+\begin{enumerate}
+    \item \textcolor{lightgray}{Differences in differences (DiD)
+    \bigskip
+    \item Propensity score matching (PSM)}
+    \bigskip
+    \item Regression discontinuity design (RDD)
+\end{enumerate}
+\end{frame}
+%---------------------------------
 \section{Regression discontinuity design}
 \begin{frame}{Regression discontinuity design}
     Violates common support assumption
