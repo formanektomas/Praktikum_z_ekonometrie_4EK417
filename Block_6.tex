@@ -478,7 +478,7 @@ DiD will be biased and inconsistent in both cases.
         \end{itemize}
     \item Assess quality of the matching\\
         \begin{itemize}
-            \item Substantial overlap (covariates) between treated \& control groups
+            \item Substantial overlap in covariates between treated \& control groups
             \item Use diagnostic metrics (e.g. standardized difference)
         \end{itemize}
     \item Analyze the propensity-matched data
@@ -533,16 +533,16 @@ DiD will be biased and inconsistent in both cases.
 %---------------------------------
 \begin{frame}{PSM-based analysis}
 \begin{enumerate}
-    \item[3] \textbf{PSM:} we seek to find pairs of observations that have very similar propensity scores, but that differ in their treatment status. \\
+    \item[3] \textbf{Propensity score-based matching} \\ \smallskip We seek to find pairs of observations that have very similar propensity scores, but that differ in their treatment status. \\
     \smallskip
-    \textit{Many PSM methods exist}, we focus on common approaches that fit most types of data.
+    \textit{Many PSM-based methods exist}, we focus on common approaches that fit most types of data.
 \end{enumerate}
 \begin{itemize}
     \item \textbf{Nearest neighbor:} for each $i$th treated person, the untreated with the closest propensity score is selected as the match using\\ the expression
     $$
     \underset{j}{\min}~|\hat{y}_i - \hat{y}_j|,
     $$
-    where $\hat{y}_i$ is the PS for the $i$th participant (treated) and $\hat{y}_j \in \bm{y}_0$ is the PS of the $j$th non-participant (untreated). 
+    where $\hat{y}_i$ is the PS for the $i$th participant (treated) and $\hat{y}_j$ is the PS of the $j$th non-participant (untreated). 
 \end{itemize}
 \end{frame}
 %---------------------------------
@@ -552,7 +552,7 @@ DiD will be biased and inconsistent in both cases.
     $$
     |\hat{y}_i - \hat{y}_j| < \varepsilon,
     $$
-    where the typical value of the tolerance is $\varepsilon = 0.25 \sigma_{\hat{y}}$, i.e. it is \\given as 1/4 of the standard error of the estimated propensity scores.  \\ \medskip
+    where the typical value of the tolerance is $\varepsilon = 0.25 \sigma_{\hat{y}}$, i.e. it is \\given as $\pm \tfrac{1}{4}$ st.err.(estimated propensity scores).  \\ \medskip
     Variants of caliper-based matching: \\ \medskip
     \begin{itemize}
         \item 1-to-1 using NNs within caliper (typical application)
@@ -578,6 +578,63 @@ DiD will be biased and inconsistent in both cases.
 \end{itemize}
 \end{frame}
 %---------------------------------
+\begin{frame}{PSM-based analysis}
+\begin{enumerate}
+    \item[4] \textbf{Assessing quality of the matching} \\ \smallskip
+\end{enumerate}
+\begin{itemize}
+    \item Evaluate common support in covariates (follows the same logic \\as for the common support in PS)
+    \smallskip
+    \item Visual inspection of covariates (treated vs untreated)
+    \smallskip
+    \item $t$-tests of difference-in-means for covariates (treated vs untreated)
+    \smallskip
+    \item Calculate and assess the average absolute standardized difference (standardized imbalance)
+\end{itemize}    
+\end{frame}
+%---------------------------------
+\begin{frame}{PSM-based analysis}
+\begin{itemize}
+    \item Visual inspection of covariates (treated vs untreated)\\
+    \medskip
+    Plot the mean of each covariate against the estimated propensity score, separately by treatment status. \\ \medskip If matching is ``done well'', the treatment and control groups will have (near) identical means of each covariate at each value of the propensity score (recall the large sample assumption for PSM).\\ \medskip
+    \centering
+    PSM -- Common support in covariates example \\ \medskip
+\includegraphics[trim = 0.4cm 23cm 0cm 23cm, clip, width=0.7\textwidth]{./IMG/PSM_vis_insp.jpg} 
+\end{itemize}
+\end{frame}
+%---------------------------------
+\begin{frame}{PSM-based analysis}
+\begin{itemize}
+    \item Average absolute standardized difference (standardized imbalance) \\ \medskip
+    A popular measure of of the standardized average imbalance is the following metric: \\ \medskip
+    $$
+    \textit{SAI}_k = 
+    \frac{1}{k} \sum_x \frac{\vert \beta_x \vert }{\sigma_x},
+    $$
+    where $| \beta_x |$ is the absolute value of difference between the covariate $x$ means in the treated and control groups in the matched sample, $k$ is the number of covariates and $\sigma_x$ is the standard deviation of the covariate $x$ in the matched sample. \\ \medskip An average absolute standardized difference that is close to 0 is preferable, since that indicates small differences between the control and treatment groups in the matched sample.
+\end{itemize}
+\end{frame}
+%---------------------------------
+\begin{frame}{PSM-based analysis}
+\begin{enumerate}
+    \item[5] \textbf{Analyzing propensity-matched data} \\ \medskip
+    Estimating TE is simple, once we have a matched sample that \\we consider well balanced. 
+\end{enumerate}
+\medskip
+\begin{itemize}
+    \item We use a $t$-test on means of the outcome variable (treated vs untreated)
+    \smallskip
+    \item We use OLS: SLRM with outcome variable regressed on the treatment variable
+    \smallskip
+    \item We use OLS, expand model by covariates
+    \smallskip
+    \item DiD on matched sample (OLS-based analysis)
+    \smallskip
+    \item Apply any model / analysis tool of choice to the matched data.
+\end{itemize}    
+\end{frame}
+%---------------------------------
 % R tutorial: 
 % https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8246231/
 % https://simonejdemyr.com/r-tutorials/statistics/tutorial8.html
@@ -585,10 +642,6 @@ DiD will be biased and inconsistent in both cases.
 % https://bookdown.org/cuborican/RE_STAT/propensity-score-match.html
 % 
 % https://journals.lww.com/anesthesia-analgesia/fulltext/2018/10000/five_steps_to_successfully_implement_and_evaluate.37.aspx
-%---------------------------------
-\begin{frame}{Frame Title}
-    
-\end{frame}
 %---------------------------------
 \begin{frame}{Treatment effects analysis}
 \textbf{Estimation approaches for TE analysis:}\\
@@ -604,20 +657,37 @@ DiD will be biased and inconsistent in both cases.
 %---------------------------------
 \section{Regression discontinuity design}
 \begin{frame}{Regression discontinuity design}
-    Violates common support assumption
-\end{frame}
-%---------------------------------
-\subsection{Regression discontinuity design}
-\begin{frame}{Regression discontinuity design}
+\centering
+RDD-based treatment effect visualization example \\(linear model, common slope).
+
 \begin{figure}
-    \centering
-    \includegraphics[width=0.6\textwidth]{./IMG/RDD1.png} 
-    \caption*{RDD: treatment effect visualization example,\\ linear, common slope.}
+    \includegraphics[width=0.7\textwidth]{./IMG/RDD1.png}
     \label{fig:my_label}
 \end{figure}    
-  
+\end{frame}
+%---------------------------------
+\begin{frame}{RDD: Assumptions and features}
+ \footnotesize  
+\begin{itemize}
+    \item \emph{Assignment Variable}: RDD requires a measurable assignment variable that determines whether an observation falls into the treatment or control group.
+    \item \emph{Threshold}: specific value of the assignment variable that determines the assignment to treatment (deterministic and fuzzy variants of RDD exist).
+    \item \emph{Local Randomization}: Around threshold, the assignment to treatment is as good as random, which allows for causal interpretation of TE.
+    \item \emph{Continuity}: The expected outcome in the absence of treatment must be a continuous function of the assignment variable at the threshold.
+    \item \emph{Bandwidth Selection}: Bandwidth around threshold needs to be carefully chosen to balance bias and variance.
+    \bigskip
+    \item RDD estimates are local to the threshold and may not generalize to the whole population -- unlike PSM, which gives ATET (PSM-based TEs relate to the treated and assume that TEs are constant across all individuals).
+    \item RDD requires fewer data assumptions and can be used with fewer observations (compared to PSM) 
+
+
+
+
+\end{itemize}
     
 \end{frame}
+%---------------------------------
+
+
+
 %---------------------------------
 \begin{frame}{Regression discontinuity design -- potential problems}
 \begin{itemize}
@@ -664,8 +734,6 @@ DiD will be biased and inconsistent in both cases.
 \end{itemize}
 \end{frame}
 %---------------------------------
-
-\subsection{Propensity score matching}
 \begin{frame}{Propensity score matching}
     Greene 19.6.2
 \end{frame}
@@ -692,5 +760,7 @@ For detailed \& technical discussion, see:\\
 \end{itemize}
 \end{frame}
 %---------------------------------
+% PSM example - 
+% https://simonejdemyr.com/r-tutorials/statistics/tutorial8.html
 %---------------------------------------------------------------------
 \end{document}
