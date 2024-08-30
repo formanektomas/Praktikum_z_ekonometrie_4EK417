@@ -77,7 +77,7 @@
 \end{frame}
 %------------------------------
 \begin{frame}
-\frametitle{Block 6 – Treatment effects – Outline
+\frametitle{Block 6 –- Treatment effects analysis 
 } 
 \tableofcontents 
 \end{frame}
@@ -89,9 +89,9 @@
     \bigskip
     \item Response to treatment is evaluated relative to a benchmark:  \\no treatment (control) or different treatment. 
     \bigskip
-    \item Analysis of treatment effect is typically based on regression models, with outcome as the dependent variable.
+    \item Analysis of treatment effect typically involves regression models, with outcome as the dependent variable.
     \bigskip
-    \item Treatment effect analysis is generally based on the framework of Rubin's causal model. 
+    \item Treatment effect analysis is generally based on the framework of Rubin's causal models. 
 \end{itemize}
 \end{frame}
 %------------------------------
@@ -100,7 +100,7 @@
 \begin{itemize}
     \item Wage effect of enrollment in a skill-training program.
     \medskip
-    \item Health effects (speed of recovery), if new drug / medical procedure is used.
+    \item Health effects (speed of recovery), if new drug is used.
     \medskip
     \item Student performance upon being educated in small classes as opposed to large classes (being in a small class is the treatment). 
 \end{itemize}
@@ -109,7 +109,7 @@
 Treatment participation: random assignment or self selection?\\
 Treatment effects: actual effects or influence by confounding factors?\\
 \bigskip
-\textbf{Multiple treatments:} If treatment varies in intensity or type. Same principle of analysis, the choice of benchmark is more flexible.
+\textbf{Multiple treatments:}\\ If treatment varies in intensity or type. Same principle of analysis, the choice of benchmark is more flexible.
 \end{frame}
 %------------------------------
 % Define box and box title style
@@ -121,12 +121,12 @@ Treatment effects: actual effects or influence by confounding factors?\\
 \begin{itemize}
     \item Every $i$th individual in a population has a potential outcome $y_i$ and can be exposed to treatment $C_i=\{0;1\}$. 
     \medskip
-    \item $y_{i1} = y_i | (C_i = 1) $ for the treated, and \\
-    $y_{i0} = y_i | (C_i = 0)$ for the non-treated.
+    \item $y_{i1} \, = \, y_i | (C_i = 1)~~~~$ for the treated, and \\
+    $y_{i0} \, = \, y_i | (C_i = 0)~~~~$ for the non-treated.
     \medskip
     \item Average treatment effect (averaged across population):
     $$\textnormal{ATE} = E \left[ y_{i1}-y_{i0}\right],$$
-    and the $i$th observation only exist in one of the two states.
+    but the $i$th observation only exist in one of the two states.
     \medskip
     \item \textbf{Average treatment effect of the treated} is more of interest:
     $$\textnormal{ATET} = E \left[ y_{i1}-y_{i0} | C_i = 1\right],$$
@@ -191,8 +191,8 @@ assumptions apply!
 \end{tikzpicture}%
 \end{frame}
 %---------------------------------
-\begin{frame}{Treatment effects: Three main approaches to analysis}
-Types of analysis, key assumptions \& requirements:\\
+\begin{frame}{Treatment effects analysis \& natural experiments}
+Three main types of analysis, key assumptions \& requirements:\\
 \bigskip
 \begin{itemize}
     \item \textbf{Differences in differences (DiD) estimator}\\
@@ -206,7 +206,7 @@ Types of analysis, key assumptions \& requirements:\\
             \item Unconfoundedness (treatment assignment as good as random \\after accounting for covariates)
             \item Common support (for the treated and untreated)
             \item Large sample 
-            \item PS - essentially the probability of treatment participation
+            \item PS is essentially the probability of treatment participation
         \end{itemize}
     \bigskip
     \item \textbf{Regression discontinuity design (RDD):}
@@ -253,15 +253,15 @@ To improve the study, we could randomize truck assignments for equal city and hi
 \begin{frame}{Treatment effects: Unconfoundedness}
 \textbf{Unconfoundedness} states that the potential outcomes are independent of the treatment assignment, conditional on a set of observed covariates. Once we control for these covariates, the treatment \emph{assignment} does not provide any additional information about the \emph{potential} outcomes:
 $$
-(y_0, y_1) \perp  \textit{Tr} ~|~ \bm{X},
+(y_{i0}, y_{i1}) \, \perp \, C_i \, | \, \bm{X}_i\,, \quad \text{for~} \forall i,
 $$
-- $(y_0)$ and $(y_1)$ are the potential outcomes under control and treatment,\\
-- $\textit{Tr}$ is the treatment assignment (dummy variable), \\
+- $(y_{i0})$ and $(y_{i1})$ are potential outcomes under control and treatment,\\
+- $C$ is the treatment assignment (dummy variable), \\
 - $\bm{X}$ is the set of observed covariates. \\
 \bigskip
 \textbf{Independence of treatment on the outcome at the base (for the untreated)} is a stronger assumption. Here, the potential outcome under control is independent of the treatment assignment, even without conditioning on covariates:
 $$
-y_0 \perp \textit{Tr}
+y_{i0} \perp C_i \,, \quad \text{for~} \forall i.
 $$
 \end{frame}
 %---------------------------------
@@ -276,14 +276,15 @@ $$
 $$P(Y|\texttt{do}(X)) = P(Y)$$ 
 LHS can be red as: ``the probability of $Y,$ given that you do  $X$''. The expression above describes the case where $Y$ is independent of doing $X$.\\
 \bigskip
-Say, we have an outcome $y$, a dummy treatment variable $\textit{Tr}$ and potential counfounding variable $z$ that influences both $y$ and $\textit{Tr}$. If unconfoundedness holds, the following equation holds
-$$P(y | \texttt{do}(\textit{Tr})) = P(y|\textit{Tr})$$
-for all values $\textit{Tr}$ and $y$, where $P(y|\textit{Tr})$ is the conditional probability. This equality states that $\textit{Tr}$ and $y$ are not confounded whenever the observationally witnessed association between them is the same as the association that would be measured in a controlled experiment, with $\textit{Tr}$ randomized. Otherwise, we have to account for the confounding factor $z$:
-$$P(y | \texttt{do}(\textit{Tr})) = \sum_z P(y|\textit{Tr},z)P(z). $$
+Say, we have an outcome $y$, a dummy treatment variable $C$ and potentially counfounding variable $z$ that influences both $y$ and $C$. If unconfoundedness holds, the following equation holds
+$$P(y | \texttt{do}(C)) = P(y|C)$$
+for all values $C_i$ and $y_i$, where $P(y_i|C_i)$ is the conditional probability. This equality states that $C$ and $y$ are not confounded whenever the observationally witnessed association between them is the same as the association that would be measured in a controlled experiment, with $C$ randomized. Otherwise, we have to account for the confounding factor $z$:
+$$P(y | \texttt{do}(C)) = \sum_z P(y|C,z)P(z). $$
 \centering
 \url{https://en.wikipedia.org/wiki/Confounding}
 \end{frame}
 %---------------------------------
+\section{Differences in differences (DiD) estimator}
 \begin{frame}{Treatment effects analysis}
 \textbf{Estimation approaches for TE analysis:}\\
 \bigskip
@@ -296,7 +297,6 @@ $$P(y | \texttt{do}(\textit{Tr})) = \sum_z P(y|\textit{Tr},z)P(z). $$
 \end{enumerate}
 \end{frame}
 %---------------------------------
-\section{Differences in differences (DiD) estimator}
 \begin{frame}{DiD: Introduction \& example}
 \vfill
 {\footnotesize \textbf{Treatment: employee training for women returning from maternal leave\\ Outcome: wage effect}} \\
@@ -308,7 +308,7 @@ $$P(y | \texttt{do}(\textit{Tr})) = \sum_z P(y|\textit{Tr},z)P(z). $$
 \begin{itemize}
     \item \emph{Exchangeability (parallel trends)}: in the absence of treatment, the average outcomes for the treated and control groups would follow the same trend over time.
     \item \emph{Positivity}: every individual (unit) has a positive probability of receiving the treatment.
-    \item \emph{Stable unit treatment value assumption (SUTVA)}: the potential outcomes for any individual do not depend on the treatment assignment of the other individuals.
+    \item \emph{Stable unit treatment value assumption (SUTVA)}: the potential outcomes for any individual do not depend on the treatment assignment of the individual, nor of the other individuals.
     \item \emph{No spillover effects}: the treatment of one individual does not affect the outcome of another individual.
     \item \emph{Treatment unrelated to outcome at baseline}: the allocation of treatment is not determined by the outcome. 
     \item \emph{Stable composition of treatment and control groups}: applies to repeated treatments/interventions.
@@ -317,25 +317,25 @@ $$P(y | \texttt{do}(\textit{Tr})) = \sum_z P(y|\textit{Tr},z)P(z). $$
 %---------------------------------
 \begin{frame}{DiD: Model motivation}
 \small
-With cross-sectional data and \textbf{exogenous}  treatment variable $D = \{0;1\}$, \\we can formulate (estimate, interpret) a regression model such as:
+With cross-sectional data and \textbf{exogenous}  treatment variable $C = \{0;1\}$, \\we can formulate (estimate, interpret) a regression model such as:
 $$
-y_i = \bm{x}_i^{\prime}\bm{\beta} + \delta D_i + \varepsilon_i.
+y_i = \bm{x}_i^{\prime}\bm{\beta} + \delta C_i + \varepsilon_i.
 $$\\
 \medskip
-\textbf{DiD estimator} refers to panel-based (or using pooled CS data) analysis, based on two dummy variables and their interaction: $T$ differentiates between two time periods (before/after treatment) and $D$ distinguishes the two groups (treatment/control):
-$$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \bm{x}_i^{\prime}\bm{\beta} + \varepsilon_{it}.$$
+\textbf{DiD estimator} refers to panel-based (or using pooled CS data) analysis, based on two dummy variables and their interaction: $T$ differentiates between two time periods (before/after treatment) and $C$ distinguishes the two groups (treatment/control):
+$$y_{it}=\beta_0 + \beta_1 C_i + \beta_2 T_t + \delta_1 (C_i T_t) + \bm{x}_i^{\prime}\bm{\beta} + \varepsilon_{it}.$$
 
 \end{frame}
 %---------------------------------
 \begin{frame}{DiD estimator: Model description} 
 \medskip 
-$$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \varepsilon_{it},$$
+$$y_{it}=\beta_0 + \beta_1 C_i + \beta_2 T_t + \delta_1 (C_i T_t) + \varepsilon_{it},$$
 where:
 \begin{itemize}
 \item $i=1, \dots, N;~~t=1,2$. \\
 \item[$T_t$] is a time dummy, $T_1=0$ is the first (pre-treatment) period and \\$T_2 = 1$ is the second period (post treatment),
-\item[$D_i$] is a treatment dummy, $D_i=1$ for the treated,
-\item[$D_i T_t$] is an interaction element, i.e. $(D_i\! \cdot \! T_t)$,
+\item[$C_i$] is a treatment dummy, $C_i=1$ for the treated,
+\item[$C_i T_t$] is an interaction element, i.e. $(C_i\! \cdot \! T_t)$,
 \item[$\delta_1$] is the DiD estimator (coefficient). 
 \end{itemize}
 \bigskip
@@ -343,7 +343,7 @@ For simplicity, the term $\bm{x}_{it}^{\prime}\bm{\beta}$ is removed here. Note 
 \end{frame}
 %---------------------------------
 \begin{frame}{DiD estimator: Interpretation of the DiD $\delta_1$ coefficient}
-$$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \varepsilon_{it}$$\\
+$$y_{it}=\beta_0 + \beta_1 C_i + \beta_2 T_t + \delta_1 (C_i T_t) + \varepsilon_{it}$$\\
 \bigskip
 \footnotesize
 \begin{table}
@@ -352,9 +352,9 @@ $$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \varepsilon_
 \caption{Table: Illustration of the DiD estimator}\label{Tab1}
 \begin{tabular}{|l|c|c|c|}
 \hline
-\multicolumn{1}{|c|}{$E(y_{it} | D_i, T_t)$} & Before $(t = 1)$    & After $(t=2)$                             & After -- Before        \\ \hline
-Control $(D_i=0)$                                    & $\beta_0$           & $\beta_0 + \delta_0$                      & $\delta_0$            \\ \hline
-Treatment $(D_i=1)$                                  & $\beta_0 + \beta_1$ & $\beta_0 + \delta_0 + \beta_1 + \delta_1$ & $\delta_0 + \delta_1$ \\ \hline
+\multicolumn{1}{|c|}{$E(y_{it} | C_i, T_t)$} & Before $(t = 1)$    & After $(t=2)$                             & After -- Before        \\ \hline
+Control $(C_i=0)$                                    & $\beta_0$           & $\beta_0 + \delta_0$                      & $\delta_0$            \\ \hline
+Treatment $(C_i=1)$                                  & $\beta_0 + \beta_1$ & $\beta_0 + \delta_0 + \beta_1 + \delta_1$ & $\delta_0 + \delta_1$ \\ \hline
 Treatment -- Control                        & $\beta_1$           & $\beta_1 + \delta_1$                      & \circled{$\delta_1$}            \\ \hline
 \end{tabular}
 \end{table}
@@ -365,7 +365,7 @@ Again, if $\bm{x}_{it} \bm{\beta}$ is added back to the equation, interpretation
 \end{frame}
 %---------------------------------
 \begin{frame}{DiD estimator: Interpretation of the DiD $\delta_1$ coefficient}
-$$y_{it}=\beta_0 + \beta_1 D_i + \beta_2 T_t + \delta_1 (D_i T_t) + \varepsilon_{it},$$\\
+$$y_{it}=\beta_0 + \beta_1 C_i + \beta_2 T_t + \delta_1 (C_i T_t) + \varepsilon_{it},$$\\
 \bigskip
 By rearranging an estimated model, we can express $\delta_1$ as follows:
 \begin{align*}
@@ -411,7 +411,7 @@ Prob(F-statistic)               & 0.000000             & \multicolumn{2}{l}{}   
 \node[mynode] at (7.8, 0.3) (Table){
 \scriptsize{RPRICE - house price in real terms (USD) \\ 
 $Y81$ – dummy variable for $1981$, \ ($t=1978,1981$),\\
-~~$1978$ – before ``rumors''; $1981$ – incinerator operational \\
+$1978$ – before ``rumors''; $1981$ – incinerator operational \\
 NEARINC – dummy for the treatment group}};
 \end{tikzpicture}
 \end{frame}
@@ -450,8 +450,8 @@ DiD will be biased and inconsistent in both cases.
 %---------------------------------
 \begin{frame}{PSM: Assumptions and features}
 \begin{itemize}
-    \item \emph{Unconfoundedness:} assignment to the treatment is independent of the potential outcomes given a set of observed covariates.
-    \item \emph{Common Support} or overlap condition, meaning that individuals with the same characteristics have a positive probability of being both in the treatment and control group.
+    \item \emph{Unconfoundedness:} assignment to the treatment is independent of the potential outcomes, given a set of observed covariates.
+    \item \emph{Common Support} or overlap condition, meaning that individuals with the same characteristics (PS) have a nonzero probability of being in the treatment group and in the control group.
     \item \emph{Large sample sizes:} PSM often requires large sample sizes because matching may not be possible if the overlap between treatment and control groups is not sufficient.
     \bigskip
     \item \emph{Matching}: PSM involves pairing treated and untreated subjects who have similar propensity scores (PS -- estimated probability of treatment participation).
@@ -538,7 +538,7 @@ DiD will be biased and inconsistent in both cases.
     \textit{Many PSM-based methods exist}, we focus on common approaches that fit most types of data.
 \end{enumerate}
 \begin{itemize}
-    \item \textbf{Nearest neighbor:} for each $i$th treated person, the untreated with the closest propensity score is selected as the match using\\ the expression
+    \item \textbf{Nearest neighbor:} for each $i$th treated person, the $j$th untreated counterpart with the closest propensity score is selected as the match using the expression (with/without replacement):
     $$
     \underset{j}{\min}~|\hat{y}_i - \hat{y}_j|,
     $$
@@ -552,7 +552,7 @@ DiD will be biased and inconsistent in both cases.
     $$
     |\hat{y}_i - \hat{y}_j| < \varepsilon,
     $$
-    where the typical value of the tolerance is $\varepsilon = 0.25 \sigma_{\hat{y}}$, i.e. it is \\given as $\pm \tfrac{1}{4}$ st.err.(estimated propensity scores).  \\ \medskip
+    where the typical value of the tolerance is $\varepsilon = 0.25 \sigma_{\hat{y}}$, i.e. it is \\given as $\pm \tfrac{1}{4}$ st.err. (of the estimated propensity scores).  \\ \medskip
     Variants of caliper-based matching: \\ \medskip
     \begin{itemize}
         \item 1-to-1 using NNs within caliper (typical application)
@@ -569,12 +569,12 @@ DiD will be biased and inconsistent in both cases.
 %---------------------------------
 \begin{frame}{PSM-based analysis}
 \begin{itemize}
-    \item \textbf{Mahalanobis \& caliper:} For each $i$th participant, we search \\for the 1 (or $n$) nearest available matching non-participants, based on Mahalandobis metric, within the $i$-specific caliper. Mahalanobis distance (metric) is defined as
+    \item \textbf{Mahalanobis \& caliper:} For each $i$th participant, we search \\for the 1 (or $n$) nearest available matching non-participants, based on Mahalanobis metric, within the $i$-specific caliper. Mahalanobis distance (metric) is defined as
     $$
     d(i,j) = (\bm{u}_i - \bm{v}_j)^{\prime} 
-    \bm{C}^{-1} (\bm{u}_i - \bm{v}_j),
+    \bm{\Sigma}^{-1} (\bm{u}_i - \bm{v}_j),
     $$
-    where $\bm{u}_i$ and $\bm{v}_j$ are vectors of selected matching variables for a given participant $i$ and for some $j$th non-participant (within caliper limit), and $\bm{C}$ is the sample variance-covariance matrix of the matching variables from the full set of non-participants. \\ \medskip Mahalanobis distances are calculated and evaluated for all $\{i,j\}$ pairs within the caliper for the $i$th participant.
+    where $\bm{u}_i$ and $\bm{v}_j$ are vectors of selected matching variables for a given participant $i$ and for some $j$th non-participant (within caliper limit), and $\bm{\Sigma}$ is the sample variance-covariance matrix of the matching variables from the full set of non-participants. \\ \medskip Mahalanobis distances are calculated and evaluated for all $\{i,j\}$ pairs within the caliper for the $i$th participant.
 \end{itemize}
 \end{frame}
 %---------------------------------
@@ -609,10 +609,10 @@ DiD will be biased and inconsistent in both cases.
     \item Average absolute standardized difference (standardized imbalance) \\ \medskip
     A popular measure of of the standardized average imbalance is the following metric: \\ \medskip
     $$
-    \textit{SAI}_k = 
-    \frac{1}{k} \sum_x \frac{\vert \beta_x \vert }{\sigma_x},
+    \textit{SAI} = 
+    \frac{1}{K} \sum_{k=1}^K \frac{\vert \beta_k \vert }{\sigma_k},
     $$
-    where $| \beta_x |$ is the absolute value of difference between the covariate $x$ means in the treated and control groups in the matched sample, $k$ is the number of covariates and $\sigma_x$ is the standard deviation of the covariate $x$ in the matched sample. \\ \medskip An average absolute standardized difference that is close to 0 is preferable, since that indicates small differences between the control and treatment groups in the matched sample.
+    where $| \beta_k |$ is the absolute value of difference between the $k$th covariate means in the treated and control groups in the matched sample, $K$ is the number of covariates and $\sigma_k$ is the standard deviation of the $k$th covariate in the matched sample. \\ \medskip An average absolute standardized difference that is close to 0 is preferable, since that indicates small differences between the control and treatment groups in the matched sample.
 \end{itemize}
 \end{frame}
 %---------------------------------
@@ -635,7 +635,7 @@ DiD will be biased and inconsistent in both cases.
 \end{itemize}    
 \end{frame}
 %---------------------------------
-% R tutorial: 
+% R tutorials: 
 % https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8246231/
 % https://simonejdemyr.com/r-tutorials/statistics/tutorial8.html
 % https://www.publichealth.columbia.edu/research/population-health-methods/propensity-score-analysis 
@@ -643,6 +643,7 @@ DiD will be biased and inconsistent in both cases.
 % 
 % https://journals.lww.com/anesthesia-analgesia/fulltext/2018/10000/five_steps_to_successfully_implement_and_evaluate.37.aspx
 %---------------------------------
+\section{Regression discontinuity design}
 \begin{frame}{Treatment effects analysis}
 \textbf{Estimation approaches for TE analysis:}\\
 \bigskip
@@ -655,7 +656,6 @@ DiD will be biased and inconsistent in both cases.
 \end{enumerate}
 \end{frame}
 %---------------------------------
-\section{Regression discontinuity design}
 \begin{frame}{Regression discontinuity design}
 \centering
 RDD-based treatment effect visualization example \\(linear function \& common slopes assumed).
@@ -684,7 +684,7 @@ RDD-based treatment effect visualization example \\(linear function \& common sl
 \begin{frame}{RDD: description of main features}
 \textbf{Deterministic / sharp RDD}\\ \smallskip
 \begin{itemize}
-    \item There is a continuous variable $X_i$ that determines who gets treated, ($D_i = 1$ if treated). 
+    \item There is a continuous variable $X_i$ that determines who gets treated, ($C_i = 1$ if treated). 
     \item $X$ is called the running / assignment variable.
     \item In sharp RDD, a unit is treated if $X_i \geq c$ and not treated if $X_i < c$, with $c$ being a given threshold.
     \item We must observe $X$ and know the cutoff/threshold value $c$.
@@ -692,8 +692,8 @@ RDD-based treatment effect visualization example \\(linear function \& common sl
 \bigskip
 \textbf{Fuzzy RDD}\\ \smallskip
 \begin{itemize}
-    \item In fuzzy RDD, $D_i$ is a random variable, influenced by $X$.
-    \item $E[D_i|X_i] = P[D_i=1|X_i]$ is discontinuous at $X_i = c$.
+    \item In fuzzy RDD, $C_i$ is a random variable, influenced by $X$.
+    \item $E[C_i|X_i] = P[C_i=1|X_i]$ is discontinuous at $X_i = c$.
     \item $X$ with values close to $c$ (at $c$) is a predictor of treatment, but it does not completely determine treatment assignment.
 \end{itemize}
 \end{frame}
@@ -701,11 +701,11 @@ RDD-based treatment effect visualization example \\(linear function \& common sl
 \begin{frame}{RDD: description of main features}
 With sharp RDD, we can write the following limits \\(note the direction of arrows):\\ \medskip
 \begin{itemize}
-    \item $\lim_{x\rightarrow c}E[y_i|X_i =x, D_i=0] \approx E[y_{0i}|X_i = c],$
+    \item $\lim_{x\rightarrow c}E[y_i|X_i =x, C_i=0] \approx E[y_{i0}|X_i = c],$
     \medskip
-    \item $\lim_{x \leftarrow c}E[y_i|X_i =x, D_i=1] \approx E[y_{1i}|X_i = c],$
+    \item $\lim_{x \leftarrow c}E[y_i|X_i =x, C_i=1] \approx E[y_{i1}|X_i = c],$
 \end{itemize} \medskip
-where $y_{0i}$ and $y_{1i}$ relate to the potential outcome with/without treatment and the difference between the two expected outcomes at $X_i=c$ is the treatment effect (TE evaluated at $X_i=c$). \\ \bigskip
+where $y_{i0}$ and $y_{i1}$ relate to the potential outcome with/without treatment and the difference between the two expected outcomes at $X_i=c$ is the treatment effect (TE evaluated at $X_i=c$). \\ \bigskip
 In practical applications, RDD-based TE evaluation is calculated for a specific $X$-value range around $c$ (bandwidth selection).
 \end{frame}
 %---------------------------------
@@ -719,8 +719,8 @@ In practical applications, RDD-based TE evaluation is calculated for a specific 
 \bigskip
 \textbf{Sharp RDD: Lack of overlap}
 \begin{itemize}
-    \item Overlap requires $0 < P(D_i = 1|X_i ) < 1$ for the domain of $X_i$
-    \item Sharp RDD: $P(D_i = 1|X_i < c) = 0$ and $P(D_i = 1|X_i \geq c) = 1$
+    \item Overlap requires $0 < P(C_i = 1|X_i ) < 1$ for the domain of $X_i$
+    \item Sharp RDD: $P(C_i = 1|X_i < c) = 0$ and $P(C_i = 1|X_i \geq c) = 1$
     \item We rely on extrapolation (counterfactuals) to estimate TE.
     \item TE can be wrong, if we use a wrong functional form $y_i = f(X_i,\bm{x}_i )$.
     \item We never know the actual $f(\cdot)$. Model specification is a key issue: use non/semi/parametric method.
@@ -738,33 +738,22 @@ RDD-based treatment effect visualization example\\
 %---------------------------------
 \begin{frame}{RDD: estimation algorithm}
 \begin{enumerate}
-    \item Check the data and assumptions (sharp RDD)
+    \item Check the data and assumptions (e.g. for sharp RDD)
     \medskip
-    \item Estimate linear model, start with common slopes
+    \item Estimate linear model, start with common slopes \\ Calculate TE (make bandwidth selection around $c$).
     \medskip
     \item Include polynomials, allow for separate slopes
     \medskip
     \item Modify functional form: use semi/non parametric estimation, splines, LOESS (locally estimated scatterplot smoothing), etc.
     \medskip
-    \item Sensitivity analysis (w.r.t. to sample size, etc.)
+    \item Sensitivity analysis (compare results based on functional form, bandwidth, etc.)
 \end{enumerate}
 \bigskip
 With fuzzy RDD, TE estimation can follow the IV (instrumental variable) approach. We use the assignment/running variable as an IV. \textcolor{blue}{\underline{\href{https://clas.ucdenver.edu/marcelo-perraillon/teaching/health-services-research-methods-i-hsmp-7607}{(see lecture notes for RDD here)}}}
 \end{frame}
 %---------------------------------
-\begin{frame}{RDD -- potential problems}
-Misspecification of the model/functional form
-\begin{itemize}
-    \item Linearity is often the default approach in regression models. Can be addressed by using non-linear models.
-    \item Possibly, once a nonlinear relationship is modelled correctly, discontinuity disappears as it was caused by a misspecification in the functional form. In the plot below, the correct relationship is specified by a curve. If we use a linear relationship, we might observe a (spurious) discontinuity.
-\end{itemize}
-\begin{figure}
-    \centering
-    \includegraphics[width=0.55\textwidth]{./IMG/RDD3.png}
-\end{figure}    
-\end{frame}
-%---------------------------------
-\begin{frame}{Treatment effects - additional literature}
+\section{Treatment effects: self-study materials}
+\begin{frame}{Treatment effects -- additional literature}
 \textbf{Treatment effects analysis}\\
 \medskip
 For detailed \& technical discussion of TEs, see:\\
