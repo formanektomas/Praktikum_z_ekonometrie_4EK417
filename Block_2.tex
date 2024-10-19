@@ -1486,14 +1486,14 @@ MEM -- convenient subset of eigenvectors $\bm{v}$ -- can be used as a synthetic 
     \bm{u} & = \bm{E\gamma} + \bm{\varepsilon} \, ,
     \end{aligned}
     \end{equation*}
-    where $\bm{u}$ are the spatially autocorrelated disturbances that may be decomposed into $\bm{\varepsilon}$ (white noise) and $\bm{E}$: a set of missing (unobservable) exogenous variables that follow common spatial dependency pattern ($\bm{C}$) and $\bm{\gamma}$ is a vector of parameters.
-    \\ \medskip The $\bm{E\gamma}$ term is based on approximation and it is not directly comparable with the SEM parametric specification
+    where $\bm{u}$ are the spatially autocorrelated disturbances that may be decomposed into $\bm{\varepsilon}$ (white noise) and $\bm{E\gamma}$. Here, $\bm{E}$ is a set of missing (unobservable) exogenous variables that follow common spatial dependency pattern, and $\bm{\gamma}$ is a vector of corresponding parameters.
+    \\ \medskip The $\bm{E\gamma}$ term is based on approximating unobserved variables \\and it is not directly comparable with the spatial error (SEM) parametric specification
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Semiparametric model with MEM-filter}
 \begin{itemize}
-    \item[5] Using a stepwise algorithm described next, the misspecification term $\bm{E}$ is approximated by MEM -- a convenient subset of Morans eigenvectors
+    \item[5] Using a stepwise algorithm (described next), the misspecification term $\bm{E}$ is approximated by MEM -- a convenient subset of Morans eigenvectors
 \begin{equation*} 
 \left\lbrace
 \bm{v}_1, \dots , \bm{v}_{r} 
@@ -1503,7 +1503,7 @@ MEM -- convenient subset of eigenvectors $\bm{v}$ -- can be used as a synthetic 
 \left(\bm{\Omega}\right) \, ,
 \end{equation*}
 where $r=\textnormal{rank}(\Omega)$ is the number of distinct eigenvectors of $\bm{\Omega}$. 
-\\ \medskip 
+\\ \bigskip
 We can approximate $\bm{E}$ by a parsimonious subset of eigenvectors $\bm{v}$ such that $\bm{M} = \left\lbrace \bm{v}_1, \dots , \bm{v}_{\ell} \right\rbrace$ where $\ell \leq r$. 
 \\ \medskip 
 Since spatial misspecification term $\bm{E}$ is correlated with $\bm{X}$ (at least potentially), the explicit inclusion of proxy element (MEM) $\bm{M}$ corrects for the bias in estimated coefficients $\hat{\bm{\beta}}$.
@@ -1518,7 +1518,7 @@ Since spatial misspecification term $\bm{E}$ is correlated with $\bm{X}$ (at lea
 \end{equation*}
 where $\bm{y}$ is decomposed into a systematic component (featuring $\bm{X}$), stochastic spatial component and white-noise residuals. 
 \\ \medskip 
-For conveniently specified $\bm{M}$, the stochastic spatial term $\bm{M \hat{\gamma}}$ removes a significant portion of the mean squared error (MSE) term, attributable to spatial autocorrelation 
+For well-specified sets of eigenvectors $\bm{M}$, the stochastic spatial term $\bm{M \hat{\gamma}}$ removes a significant portion of the mean squared error (MSE) term, attributable to spatial autocorrelation 
 \\ \medskip 
 Hence, $\bm{M \hat{\gamma}}$ is often referred to as spatial filter. 
 \\ \medskip 
@@ -1527,7 +1527,7 @@ Filtering is fairly robust to model specification errors when compared with full
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Semiparametric model with MEM-filter}
-Stepwise algorithm for choosing $\bm{M}$:
+How to choose eigenvectors of $\bm{\Omega}$ to include in $\bm{M}\,$:
 \medskip
 \begin{itemize}
     \item We choose $\bm{M}$ so that the residuals $\bm{\hat{\varepsilon}}$ become spatially random (independent with respect to the underlying spatial domain). 
@@ -1541,18 +1541,19 @@ Stepwise algorithm for choosing $\bm{M}$:
 \end{frame}
 %---------------------------------------------------------------------
 \begin{frame}{Semiparametric model with MEM-filter}
-Stepwise algorithm for choosing $\bm{M}\,$:
+\small 
+Stepwise algorithm for choosing $\bm{M}$:
 \medskip
 \begin{itemize}
     \item $\textit{MC}_{\bm{v}_i} = \frac{N}{\bm{\iota}_N^{\prime} \, \bm{Z} \, \bm{\iota}_N } \, \bm{v}_i^{\prime} \bm{C} \bm{v}_i \, ,$\\ \smallskip
-    where $\bm{Z}$ is a distance-based similarity matrix with $[z_{ij}] = 1 - (\tfrac{h_{ij}}{\textnormal{max}(h_{ij})})^2$. Individual $z_{ij}$ vary between zero for $h_{ij} = \textnormal{max}(h_{ij})$ and 1 for $h_{ij} = 0$.
+    where $\bm{Z}$ is a distance-based similarity matrix with $[z_{ij}] = 1 - (\tfrac{d_{ij}}{\textnormal{max}(d_{ij})})^2$. Individual $z_{ij}$ vary between zero for $d_{ij} = \textnormal{max}(d_{ij})$ and 1 for $d_{ij} = 0$.
     \smallskip
-    \item First eigenvector is selected by maximizing $\textit{MC}_{\bm{v}_i}$. 
+    \item Calculate $\textit{MC}_{\bm{v}_i}$ for all distinct eigenvectors and sort output along the $\textit{MC}_{\bm{v}_i}$ values. Select the eigenvector that maximizes $\textit{MC}_{\bm{v}_i}$. 
     \smallskip 
     \item Using such $\bm{v}_i$ as a starting eigenvector subset for $\bm{M}$, equation $\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon}$ is estimated and residuals are evaluated for spatial autocorrelation (e.g. using Moran's $I$). 
     \smallskip
-    \item If residuals are spatially dependent, new eigenvector is added to $\bm{M}$ using the same $\textit{MC}$ criterion, model is re-estimated and spatial autocorrelation in residuals is tested again. \smallskip 
-    \item Eigenvectors are iteratively added to $\bm{M}$, until spatial autocorrelation in residuals $\bm{\hat{\varepsilon}}$ falls below a predetermined threshold (e.g. 5 \% significance level).
+    \item If residuals are spatially dependent, the second (third, etc.) eigenvector is added to $\bm{M}$ using the same $\textit{MC}$ criterion. Model is re-estimated and spatial autocorrelation in residuals is tested again. \smallskip 
+    \item Eigenvectors are iteratively added to $\bm{M}$, until spatial autocorrelation in residuals $\bm{\hat{\varepsilon}}$ falls below a predetermined threshold (e.g. $\alpha = 5 \%$).
 \end{itemize}
 \end{frame}
 %---------------------------------------------------------------------
@@ -1560,9 +1561,9 @@ Stepwise algorithm for choosing $\bm{M}\,$:
 $\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon}$
 \medskip
 \begin{itemize}
-    \item Eigenvectors in $\bm{M}$ are mutually orthogonal and follow a strictly decreasing sequence (along corresponding eigenvalues).
+    \item Eigenvectors in $\bm{M}$ are mutually orthogonal.
     \smallskip
-    \item Each eigenvector explains a specific proportion of variance in residuals of the model -- the largest proportion of variance is explained by the first eigenvector selected into $\bm{M}$, the second largest amount of variance is explained by the second eigenvector, etc. 
+    \item Each eigenvector explains a specific proportion of spatial variance in residuals of the model -- the largest proportion of variance is explained by the first eigenvector selected into $\bm{M}$, the second largest amount of variance is explained by the second eigenvector, etc. 
     \smallskip
     \item This leads to identical $\bm{M}$ matrices, obtained through forward and backward stepwise selection methods. 
     \smallskip
@@ -1578,7 +1579,7 @@ $\bm{y} = \bm{X \beta } + \bm{M \gamma} + \bm{\varepsilon}$\\
 Individual $\bm{v}$ elements of $\bm{M}$ bear the following interpretation:\\
 \bigskip
 \begin{itemize}
-    \item  MEMs -- spaces spanned by single or multiple $\bm{v}$ eigenvectors -- with associated ``large'' positive eigenvalues $\kappa_i$ represent global-scale spatial trends (say, landscape-wide dynamics in observed spatial data). 
+    \item  The space spanned by single or multiple $\bm{v}$ eigenvectors -- with associated ``large'' positive eigenvalues $\kappa_i$ represent global-scale spatial trends (say, landscape-wide dynamics in observed spatial data). 
     \medskip
     \item Eigenvectors with medium eigenvalues represent medium scale dynamics. 
     \medskip
