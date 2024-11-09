@@ -429,9 +429,11 @@ $$\underset{\bm{\beta}}{\textnormal{min:~}} RSS = \sum_{i=1}^n \left(y_i - \hat{
 \bigskip
 \item \textbf{Ridge regression} $\bm{\hat{\beta}}$ estimates 
 are the values that minimize:
-$$\underset{\bm{\beta}}{\textnormal{min:~}} \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0  - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
+$$\underset{\bm{\beta}}{\textnormal{min:}} \left[ \sum_{i=1}^n \left(y_i - \hat{\beta}_0  - \sum_{j=1}^p  \hat{\beta}_j x_{ij} \right)^2 
 \! + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right]
-\, = \, \left( RSS + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right),$$
+=
+\, \underset{\bm{\beta}}{\textnormal{min:}} 
+\left( RSS + \lambda \sum_{j=1}^p  \hat{\beta}_j^2 \right),$$
 where $\lambda > 0$ is a tuning parameter, determined separately,\\
 and ridge-estimated $\beta_j$ coefficients -- while not unbiased -- retain their 
 \textcolor{blue}{\underline{\href{https://online.stat.psu.edu/stat508/lesson/5/5.1}{interpretation as marginal effects.}}}
