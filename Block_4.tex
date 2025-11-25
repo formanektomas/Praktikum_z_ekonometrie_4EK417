@@ -92,7 +92,7 @@ where
     \item \textbf{Fixed effects:} variables with expected impacts (effects) on the dependent/response variable.\\ \medskip
     Essentially the same as explanatory variables in a standard linear regression models.
     \bigskip
-    \item \textbf{Random effects:} typically, grouping factors that we are trying to control for. \\ \medskip RE are always categorical variables (\texttt{R} cannot treat continuous variables as random effects). \\ \medskip 
+    \item \textbf{Random effects:} typically, grouping factors that we are trying to control for. \\ \medskip RE are always associated with categorical variables (\texttt{R} cannot treat continuous variables as random effects). \\ \medskip 
     Often, we are not interested in specific impacts of individual random effects on the response variable -- but we know RE might be influencing the patterns we see \& we want to control for such processes.
 \end{itemize}
 \end{frame}
@@ -135,7 +135,7 @@ In the LME model, $u_{0j}$ and $u_{1j}$ are stochastic deviations from $\beta$-c
 \begin{itemize}
 \item $N$ individual CS units are followed over time.
 \medskip
-\item The observation set $\{y_{ti},\bm{x}_{ti}\}$ denotes some $i$th individual  observed at a time period $t$. The number of observations in time may differ among CS units and observations may occur at different time points. \\ \medskip 
+\item The observation set $\{y_{ti},\bm{x}_{ti}\}$ denotes some $i$th individual  observed at a given time period $t$. The number of observations in time may differ among CS units and observations may occur at different time points. \\ \medskip 
 \textbf{Example:} For a medical study, we measure child's weight (plus other data) at birth and repeatedly over a period of one year. For some $y_{ti}$ observation, index $t$ denotes days from birth. Due to doctor visit scheduling, children are weighted at different $t$ ``values''. Typically, the number of doctor visits (observations) differs across children. Children in the study are born on different dates (say, Jan 2015 - Oct 2019). \\ \medskip Example extends easily to economic environment \\(we can follow newly founded companies, etc.).
 \end{itemize}
 \end{frame}
@@ -150,7 +150,7 @@ In the LME model, $u_{0j}$ and $u_{1j}$ are stochastic deviations from $\beta$-c
     \item within $j$ groups (Level 2) with group-specific observation sizes $n_j$.
 \end{itemize}
 \medskip
-\item One or more coefficient(s) can vary across groups \\(``random effects).
+\item One or more coefficient(s) can vary across groups \\(``random effects'').
 \end{itemize}
 \bigskip
 \textbf{LME: Longitudinal vs. hierarchical data structures:}
